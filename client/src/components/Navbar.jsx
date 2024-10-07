@@ -1,28 +1,34 @@
 import { useState, useContext } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Box, Button, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Box, Button, Drawer, List, ListItem, ListItemText, Badge, ToggleButtonGroup,
+  ToggleButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { Link } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { CartContext } from '../context/cart.context';
+import { LanguageContext } from '../context/language.context';
 import Cart from './Cart'
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
+  const { cart, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
+  const { language, setLanguage } = useContext(LanguageContext)
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
   const navLinks = [
-    {text: 'Home', route: '/'}, {text: 'About me', route: '/about'}, {text: 'Contact', route: '/contact'}, 
-    {text: 'Shop', route: '/shop'}, {text: 'Blog', route: "https://theroyalsweet.com/en/"}
+    {text: 'Home', route: '/'}, 
+    {text: language === 'en' ? 'About me' : 'Sobre mim', route: '/about'}, 
+    {text: language === 'en' ? 'Contact' : 'Contactos', route: '/contact'}, 
+    {text: language === 'en' ? 'Shop' : 'Loja', route: '/shop'}, 
+    {text: language === 'en' ? 'Blog' : 'Blogue', route: "https://theroyalsweet.com/en/"}
   ];
 
   return (
-    <AppBar position="static" sx={{bgcolor: 'rgb(253, 33, 155)'}}>
+    <AppBar position="fixed" sx={{bgcolor: 'rgb(253, 33, 155)'}}>
       <Toolbar>
         {/* Logo for Desktop */}
         <Typography variant="h6" noWrap sx={{ display: { xs: 'none', md: 'flex' }, flexGrow: 0 }}>
@@ -74,6 +80,39 @@ function Navbar() {
           ))}
         </Box>
 
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <ToggleButtonGroup
+            value={language}
+            exclusive
+            onChange={(e) => setLanguage(e.target.value)}
+            aria-label="language switch"
+            sx={{ borderRadius: 25 }}
+          >
+            <ToggleButton value="en" aria-label="English" sx={{ padding: '5px', textTransform: 'none' }}>
+              <img
+                loading="lazy"
+                width="20"
+                srcSet={`https://flagcdn.com/w40/gb.png 2x`}
+                src={`https://flagcdn.com/w20/gb.png`}
+                alt=""
+                style={{marginRight: 5}}
+              /> English
+            </ToggleButton>
+
+            <ToggleButton value="pt" aria-label="Portuguese" sx={{ padding: '5px', textTransform: 'none' }}>
+              <img
+                  loading="lazy"
+                  width="20"
+                  srcSet={`https://flagcdn.com/w40/pt.png 2x`}
+                  src={`https://flagcdn.com/w20/pt.png`}
+                  alt=""
+                  style={{marginRight: 5}}
+                /> Português
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
+        
+
         {/* Social Media Icons */}
         <Box sx={{ display: 'flex', gap: 2 }}>
           <IconButton color="inherit" href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank">
@@ -90,7 +129,9 @@ function Navbar() {
           onClick={() => setIsDrawerOpen(!isDrawerOpen)}
           sx={{ml: 2}}
         >
-          <ShoppingCartIcon />
+          <Badge badgeContent={cart.length} color="primary">
+            <ShoppingCartIcon />
+          </Badge>
         </IconButton>
       </Toolbar>
     </AppBar>

@@ -12,7 +12,7 @@ const images = [
 
 function HomePage() {
   return (
-    <Box>
+    <Box sx={{mt: 8}}>
       <Carousel 
         showThumbs={false} 
         showStatus={false} 

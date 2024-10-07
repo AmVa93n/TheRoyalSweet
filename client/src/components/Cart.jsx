@@ -1,12 +1,15 @@
-import { Typography, Box, Drawer, List, ListItem, ListItemText, ListItemAvatar, Avatar, TextField, IconButton } from '@mui/material';
+import { Typography, Box, Drawer, List, ListItem, ListItemText, TextField, IconButton, 
+    Button, Divider } from '@mui/material';
 import { CartContext } from '../context/cart.context';
 import { LanguageContext } from '../context/language.context';
 import { useContext } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import { Link } from 'react-router-dom';
 
 function Cart() {
     const { cart, removeProduct, changeQuantity, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
     const { language } = useContext(LanguageContext)
+    const totalPrice = cart.reduce((sum, item) => sum + item.product.price[item.size] * item.quantity, 0);
 
     return (
         <Drawer
@@ -16,24 +19,25 @@ function Cart() {
           sx={{ width: 350 }}
         >
           <Box
-            sx={{ width: 350, padding: 2 }}
+            sx={{ padding: 2, display: 'flex', flexDirection: 'column', height: '100%' }}
             role="presentation"
           >
             <Typography variant="h6" sx={{ mb: 2 }}>
-              Your Cart
+              {language === 'en' ? 'Your Cart' : 'Carrinho'}
             </Typography>
 
-            <List>
-              {cart.map((item) => (
+            <List sx={{ flexGrow: 1 }}>
+              {cart.map((item, index) => (
+                <>
                 <ListItem key={item.product._id} sx={{ display: 'flex', alignItems: 'center' }}>
                   {/* Product Image */}
-                  <ListItemAvatar>
-                    <Avatar
+                  <Box sx={{mr: 2}}>
+                  <img
                       src={item.product.images[0]}
                       alt={item.product.name[language]}
-                      sx={{ width: 64, height: 64, marginRight: 2 }}
+                      style={{ width: 80, height: 80 }}
                     />
-                  </ListItemAvatar>
+                  </Box>
 
                   {/* Product Details */}
                   <Box sx={{ flexGrow: 1 }}>
@@ -44,42 +48,42 @@ function Cart() {
                     
                     {/* Quantity Adjuster */}
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {/* Circular - Button */}
-                    <IconButton
-                        onClick={() => changeQuantity(item.product._id, item.quantity - 1)}
-                        sx={{ borderRadius: '50%', width: 36, height: 36 }}
-                    >
-                        -
-                    </IconButton>
+                        {/* Circular - Button */}
+                        <IconButton
+                            onClick={() => changeQuantity(item.product._id, item.quantity - 1)}
+                            sx={{ borderRadius: '50%', width: 36, height: 36 }}
+                        >
+                            -
+                        </IconButton>
 
-                    {/* Quantity Input (TextField) */}
-                    <TextField
-                        value={item.quantity}
-                        size='small'
-                        type="number"
-                        slotProps={{
-                            htmlInput: {min: 1, max: 99, style: { textAlign: 'center' }}
-                        }}
-                        sx={{
-                        width: 40,
-                        '& input[type=number]': {
-                            MozAppearance: 'textfield', // Removes arrows in Firefox
-                        },
-                        '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-                            WebkitAppearance: 'none', // Removes arrows in Chrome, Safari, Edge, etc.
-                            margin: 0,
-                        },
-                        }}
-                        onChange={(e) => changeQuantity(item.product._id, e.target.value)}
-                    />
+                        {/* Quantity Input (TextField) */}
+                        <TextField
+                            value={item.quantity}
+                            size='small'
+                            type="number"
+                            slotProps={{
+                                htmlInput: {min: 1, max: 99, style: { textAlign: 'center' }}
+                            }}
+                            sx={{
+                                width: 50,
+                                '& input[type=number]': {
+                                    MozAppearance: 'textfield', // Removes arrows in Firefox
+                                },
+                                '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+                                    WebkitAppearance: 'none', // Removes arrows in Chrome, Safari, Edge, etc.
+                                    margin: 0,
+                                },
+                            }}
+                            onChange={(e) => changeQuantity(item.product._id, e.target.value)}
+                        />
 
-                    {/* Circular + Button */}
-                    <IconButton
-                        onClick={() => changeQuantity(item.product._id, item.quantity + 1)}
-                        sx={{ borderRadius: '50%', width: 36, height: 36 }}
-                    >
-                        +
-                    </IconButton>
+                        {/* Circular + Button */}
+                        <IconButton
+                            onClick={() => changeQuantity(item.product._id, item.quantity + 1)}
+                            sx={{ borderRadius: '50%', width: 36, height: 36 }}
+                        >
+                            +
+                        </IconButton>
                     </Box>
 
                   </Box>
@@ -94,8 +98,29 @@ function Cart() {
                     <CloseIcon />
                   </IconButton>
                 </ListItem>
+                
+                {index < cart.length - 1 && <Divider sx={{ my: 1 }} />}
+                </>
               ))}
             </List>
+
+            {/* Footer Section with Total Price and Checkout Button */}
+            <Box 
+                sx={{ borderTop: '1px solid #ccc', pt: 2 }}>
+              <Typography variant="h6" sx={{ textAlign: 'left', mb: 2 }}>
+                Total: {totalPrice.toFixed(2).replace('.', ',')} €
+              </Typography>
+
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/checkout"
+                sx={{ textTransform: 'none', borderRadius: 25, width: 'fit-content', display: 'block', mx: 'auto' }}
+              >
+                {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
+              </Button>
+            </Box>
           </Box>
         </Drawer>
     )

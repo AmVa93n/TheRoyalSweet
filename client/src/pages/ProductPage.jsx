@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { Link } from 'react-router-dom';
 
 function ProductPage() {
     let { productId } = useParams();
@@ -34,10 +35,10 @@ function ProductPage() {
     }, [productId]);
     
     return (
-        <Container sx={{ py: 4 }}>
-            <Grid2 container spacing={4}>
+        <Container sx={{ py: 4, mt: 7 }}>
+            <Grid2 container spacing={4} columns={{ xs: 6, md: 12 }}>
                 {/* Product Image */}
-                <Grid2 size={6}>
+                <Grid2 size={{ xs: 12, md: 6 }}>
                     <Box sx={{ textAlign: 'center', mb: 4 }}>
                         <img
                         src={product.images?.[0]}
@@ -51,18 +52,18 @@ function ProductPage() {
                                 {product.intro?.[language]}
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 4 }}>
-                        <b>Description:</b> {product.description?.[language]}
+                        <b>{language === 'en' ? 'Description' : 'Descrição'}:</b> {product.description?.[language]}
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 4 }}>
-                        <b>Serve:</b> {product.serve?.[language]}
+                        <b>{language === 'en' ? 'Serve' : 'Servir'}:</b> {product.serve?.[language]}
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 4 }}>
-                        <b>Store:</b> {product.store?.[language]}
+                        <b>{language === 'en' ? 'Store' : 'Conservar'}:</b> {product.store?.[language]}
                     </Typography>
                 </Grid2>
 
                 {/* Order Info */}
-                <Grid2 size={6}>
+                <Grid2 size={{ xs: 12, md: 6 }}>
                     {/* Product Title */}
                     <Typography variant="h4" sx={{ mb: 2 }}>
                         {product.name?.[language]}
@@ -74,7 +75,7 @@ function ProductPage() {
                         </Typography>
                         
                         <FormControl sx={{ mb: 2 }}>
-                            <FormLabel id="size">Size</FormLabel>
+                            <FormLabel id="size">{language === 'en' ? 'Size' : 'Tamanho'}</FormLabel>
                             <Select
                                 size='small'
                                 labelId='size'
@@ -83,14 +84,14 @@ function ProductPage() {
                                 onChange={(e) => setSize(e.target.value)}
                                 MenuProps={{disableScrollLock: true}}
                                 >
-                                <MenuItem value={'small'}>small</MenuItem>
-                                <MenuItem value={'medium'}>medium</MenuItem>
-                                <MenuItem value={'big'}>big</MenuItem>
+                                <MenuItem value={'small'}>{language === 'en' ? 'Small' : 'Pequeno'}</MenuItem>
+                                <MenuItem value={'medium'}>{language === 'en' ? 'Medium' : 'Médio'}</MenuItem>
+                                <MenuItem value={'big'}>{language === 'en' ? 'Big' : 'Grande'}</MenuItem>
                             </Select>
                         </FormControl>
 
                         <FormControl sx={{ mb: 2 }}>
-                            <FormLabel>Date of delivery</FormLabel>
+                            <FormLabel>{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</FormLabel>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     value={date}
@@ -115,7 +116,7 @@ function ProductPage() {
                         </FormControl>
 
                         <FormControl sx={{ mb: 3 }}>
-                            <FormLabel>Quantity</FormLabel>
+                            <FormLabel>{language === 'en' ? 'Quantity' : 'Quantidade'}</FormLabel>
                             <TextField
                                 sx={{width: 100, bgcolor: 'white'}}
                                 type='number'
@@ -131,28 +132,33 @@ function ProductPage() {
                             variant="contained"
                             color="primary"
                             startIcon={<ShoppingCartIcon />}
-                            sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 180, ml: 7 }}
+                            sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 200, ml: 7 }}
                             onClick={()=> addProduct(product, size, quantity)}
                         >
-                            Add to Cart
+                            {language === 'en' ? 'Add to Cart' : 'Adicionar ao carrinho'}
                         </Button>
                     </Box>
                 </Grid2>
             </Grid2>
-            <Box sx={{width: '35%', mx: 'auto', display: 'flex', justifyContent: 'space-between'}}>
+
+            <Box sx={{width: {xs: '100%', md: '35%'}, mx: 'auto', display: 'flex', justifyContent: 'space-between'}}>
                 <Button
                     variant="contained"
                     color="primary"
                     sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 180 }}
+                    component={Link}
+                    to="/shop"
                 >
-                    Continue Order
+                    {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
                 </Button>
                 <Button
                     variant="contained"
                     color="primary"
                     sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 180 }}
+                    component={Link}
+                    to="/checkout"
                 >
-                    Proceed to Checkout
+                    {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
                 </Button>
             </Box>
         </Container>

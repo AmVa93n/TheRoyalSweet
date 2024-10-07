@@ -16,6 +16,7 @@ function CartProvider(props) {
     }
 
     function changeQuantity(id, newQuantity) {
+        if (newQuantity < 1 || newQuantity > 99) return
         setCart(prev => prev.map(item => item.product._id === id ? {...item, quantity: newQuantity} : item))
     }
 

@@ -30,7 +30,7 @@ function ShopPage() {
       }
 
     return (
-        <Container>
+        <Container sx={{mt: 10}}>
             {/* Navigation */}
             <Box sx={{ display: 'flex', justifyContent: 'space-around', my: 3, width: '70%', mx: 'auto' }}>
                 {categories.map((category) => (

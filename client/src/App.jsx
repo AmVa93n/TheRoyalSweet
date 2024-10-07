@@ -7,7 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 
 import Navbar from "./components/Navbar";
-import IsPrivate from "./components/IsPrivate/IsPrivate";
+//import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
 function App() {
