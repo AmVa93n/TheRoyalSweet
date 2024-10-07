@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box, Button, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { Link } from 'react-router-dom';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { CartContext } from '../context/cart.context';
+import Cart from './Cart'
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const navLinks = ['Home', 'Shop', 'About me', 'Contact'];
+  const navLinks = [
+    {text: 'Home', route: '/'}, {text: 'About me', route: '/about'}, {text: 'Contact', route: '/contact'}, 
+    {text: 'Shop', route: '/shop'}, {text: 'Blog', route: "https://theroyalsweet.com/en/"}
+  ];
 
   return (
     <AppBar position="static" sx={{bgcolor: 'rgb(253, 33, 155)'}}>
@@ -40,14 +48,17 @@ function Navbar() {
             onKeyDown={handleDrawerToggle}
           >
             <List>
-              {navLinks.map((text) => (
-                <ListItem key={text}>
-                  <ListItemText primary={text} />
+              {navLinks.map((link) => (
+                <ListItem key={link.text}>
+                  <ListItemText primary={link.text} component={Link} to={link.route} />
                 </ListItem>
               ))}
             </List>
           </Box>
         </Drawer>
+
+        {/* Cart Drawer */}
+        <Cart />
 
         {/* Logo for Mobile */}
         <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -56,22 +67,31 @@ function Navbar() {
 
          {/* Navigation Links for Desktop */}
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
-          {navLinks.map((text) => (
-            <Button key={text} sx={{ color: 'white', mx: 1, textTransform: 'none' }}>
-              {text}
+          {navLinks.map((link) => (
+            <Button key={link.text} sx={{ color: 'white', mx: 1, textTransform: 'none' }} component={Link} to={link.route}>
+              {link.text}
             </Button>
           ))}
         </Box>
 
         {/* Social Media Icons */}
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <IconButton color="inherit" href="https://facebook.com" target="_blank">
+          <IconButton color="inherit" href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank">
             <FacebookIcon />
           </IconButton>
-          <IconButton color="inherit" href="https://instagram.com" target="_blank">
+          <IconButton color="inherit" href="https://www.instagram.com/theroyalsweetblog/" target="_blank">
             <InstagramIcon />
           </IconButton>
         </Box>
+
+        {/* Cart Button */}
+        <IconButton 
+          color="inherit" 
+          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          sx={{ml: 2}}
+        >
+          <ShoppingCartIcon />
+        </IconButton>
       </Toolbar>
     </AppBar>
   );

@@ -1,0 +1,145 @@
+[
+	{
+		"name": {
+            "en": "Berry Pavlova", 
+            "pt": "Pavlova de Frutos do Bosque"
+        },
+        "intro": {
+            "en": "Our go-to dessert, it is a true crowd-pleaser with its unique texture and refreshing taste.", 
+            "pt": "A nossa sobremesa de eleição, agrada a todos com a sua textura única e sabor refrescante."
+        },
+        "description": {
+            "en": "Crispy meringue exterior and soft pillowy interior, topped with whipped cream and generous dose of wildberries (raspberries, blackberries and blueberries).", 
+            "pt": "Suspiro crocante por fora e suave por dentro, cobertura de chantilly e uma dose generosa de frutos do bosque (framboesas, amoras e mirtilos)."
+        },
+        "serve": {
+            "en": "Fresh.",
+            "pt": "Fresco."
+        },
+        "store": {
+            "en": "In the fridge.",
+            "pt": "No frigorífico."
+        },
+		"price": {
+			"small": 27.50,
+			"medium": 30.00,
+			"big": 38.00
+		},
+		"images": ["https://i0.wp.com/theroyalsweet.com/wp-content/uploads/2022/12/pav1-1200x1600.jpg?resize=800%2C840&ssl=1"]
+	},
+    {
+		"name": {
+            "en": "Orange Quindim", 
+            "pt": "Quindim de Laranja"
+        },
+        "intro": {
+            "en": "This tempting treat from Brazil is a showstopping dessert. The contrast of the sweet pudding with the orange gives it a divine flavor.", 
+            "pt": "Esta tentação da doçaria brasileira deslumbra tudo e todos. O contraste do pudim conventual docinho com a laranja confere-lhe um gosto divinal."
+        },
+        "description": {
+            "en": "A light and silky orange pudding with a shredded coconut bottom.", 
+            "pt": "Um pudim de laranja leve e sedoso com base coco ralado."
+        },
+        "serve": {
+            "en": "Fresh.",
+            "pt": "Fresco."
+        },
+        "store": {
+            "en": "In the fridge.",
+            "pt": "No frigorífico."
+        },
+		"price": {
+			"small": 22.00,
+			"medium": 24.50,
+			"big": 32.00
+		},
+		"images": ["https://i0.wp.com/theroyalsweet.com/wp-content/uploads/2022/12/quindim1-1200x1600.jpg?resize=800%2C840&ssl=1"]
+	},
+
+	{
+        "name": {
+            "en": "Banoffee Pie", 
+            "pt": "Tarte Banoffee"
+        },
+        "intro": {
+            "en": "With a timeless flavour combo, this pie will certainly delight both kids and grownups alike.", 
+            "pt": "Com uma combinação intemporal, esta tarte fará certamente as delícias de pequenos e graúdos"
+        },
+        "description": {
+            "en": "Speculoos cookie crust, followed by a banana and caramel layer, covered with whipped and chocolate shavings.", 
+            "pt": "Base de bolacha speculoos, seguida de uma camada de banana e caramelo, cobertas com chantilly e raspas de chocolate."
+        },
+        "serve": {
+            "en": "Fresh.",
+            "pt": "Fresca."
+        },
+        "store": {
+            "en": "In the fridge. Can be frozen to consume later (max. 2 months).",
+            "pt": "No frigorífico. Pode ser congelada para consumir mais tarde (máx. 2 meses)."
+        },
+		"price": {
+			"small": 27.50,
+			"medium": 30.00,
+			"big": 39.50
+		},
+		"images": ["https://i0.wp.com/theroyalsweet.com/wp-content/uploads/2023/01/banoffepie1-1138x1079.jpg?resize=800%2C840&ssl=1"]
+	},
+
+	{
+        "name": {
+            "en": "Chocolate Mississippi Mud Pie", 
+            "pt": "Tarte de Chocolate do Mississípi"
+        },
+        "intro": {
+            "en": "As the name suggests, this pie comes from the American state of Mississippi. For true chocolate lovers, it is an explosion of textures and flavours.", 
+            "pt": "Como o nome indica, esta tarte tem origem no estado americano do Mississípi. Para verdadeiros amantes de chocolate, é uma explosão de texturas e sabores."
+        },
+        "description": {
+            "en": "Crunchy oat cookie crust, followed up a 70% cocoa chocolate brownie, covered by a silky milk chocolate cream and topped with light whipped cream.333", 
+            "pt": "Base de bolacha de aveia crocante, seguida de uma camada de brownie chocolate 70%, coberto com um aveludado creme de chocolate de leite e terminando com um leve chantilly."
+        },
+        "serve": {
+            "en": "Room temperature. Remove from the fridge about 30 minutes before serving.",
+            "pt": "À temperatura ambiente. Retirar do frigorífico 30 minutos antes de servir."
+        },
+        "store": {
+            "en": "In the fridge. Can be frozen to consume later (max. 2 months).",
+            "pt": "No frigorífico. Pode ser congelada para consumir mais tarde (máx. 2 meses)."
+        },
+		"price": {
+			"small": 32.50,
+			"medium": 36.50,
+			"big": 47.00
+		},
+		"images": ["https://i0.wp.com/theroyalsweet.com/wp-content/uploads/2023/05/Tarte-Choco-1080x1079.jpeg?resize=800%2C840&ssl=1"]
+	},
+
+	{
+        "name": {
+            "en": "Apple Crumble Pie", 
+            "pt": "Tarte Crumble de Maçã"
+        },
+        "intro": {
+            "en": "This pie is a tribute to Autumn inspired by the british \"apple crumble\" dessert. The sweet apples, the dry fruits, and the scent of cinammon come together to create the perfect \"comfort dessert\".", 
+            "pt": "Esta tarte é uma homenagem ao Outono com inspiração na sobremesa britânica \"apple crumble\". A maçã docinha, os frutos secos, e o aroma a canela aliam-se para criar a sobremesa \"de comforto\" perfeita."
+        },
+        "description": {
+            "en": "Speculoos cookies crust, followed by a layer of Granny Smith apples purée scented with Port wine and cinammon, covered with dry fruits crumble (hazelnuts, walnuts and almonds).", 
+            "pt": "Base de bolacha speculoos, seguida de uma camada de puré de maçãs Granny Smith aromatizadas com vinho do Porto e canela, e coberto com crumble de frutos secos (avelãs, nozes, e amêndoas)."
+        },
+        "serve": {
+            "en": "At room tempetature or slightly warmed (a few seconds in the microwave). Serve with a scoop of plain ice cream on the side.",
+            "pt": "À temperatura ambiente, ou morna (aquecendo alguns segundos no microondoas). Acompanhar com uma bola de gelado de natas."
+        },
+        "store": {
+            "en": "In the fridge.",
+            "pt": "No frigorífico."
+        },
+		"price": {
+			"small": 29.50,
+			"medium": 32.50,
+			"big": 42.00
+		},
+		"images": ["https://i0.wp.com/theroyalsweet.com/wp-content/uploads/2023/02/tartemaca.png?resize=800%2C840&ssl=1"]
+	}
+]
