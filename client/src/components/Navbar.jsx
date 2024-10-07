@@ -86,7 +86,7 @@ function Navbar() {
             exclusive
             onChange={(e) => setLanguage(e.target.value)}
             aria-label="language switch"
-            sx={{ borderRadius: 25 }}
+            sx={{ borderRadius: 25, mr: 2 }}
           >
             <ToggleButton value="en" aria-label="English" sx={{ padding: '5px', textTransform: 'none' }}>
               <img
@@ -96,7 +96,7 @@ function Navbar() {
                 src={`https://flagcdn.com/w20/gb.png`}
                 alt=""
                 style={{marginRight: 5}}
-              /> English
+              /> EN
             </ToggleButton>
 
             <ToggleButton value="pt" aria-label="Portuguese" sx={{ padding: '5px', textTransform: 'none' }}>
@@ -107,14 +107,14 @@ function Navbar() {
                   src={`https://flagcdn.com/w20/pt.png`}
                   alt=""
                   style={{marginRight: 5}}
-                /> Português
+                /> PT
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>
         
 
         {/* Social Media Icons */}
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
           <IconButton color="inherit" href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank">
             <FacebookIcon />
           </IconButton>

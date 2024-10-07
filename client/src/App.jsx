@@ -1,11 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
-
 import Navbar from "./components/Navbar";
 //import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
@@ -19,6 +18,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/product/:productId" element={<ProductPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
 
         <Route
           path="/signup"

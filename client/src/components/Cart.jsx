@@ -16,20 +16,19 @@ function Cart() {
           anchor="right"
           open={isDrawerOpen}
           onClose={() => setIsDrawerOpen(!isDrawerOpen)}
-          sx={{ width: 350 }}
         >
           <Box
-            sx={{ padding: 2, display: 'flex', flexDirection: 'column', height: '100%' }}
+            sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%', boxSizing: 'border-box' }}
             role="presentation"
           >
             <Typography variant="h6" sx={{ mb: 2 }}>
               {language === 'en' ? 'Your Cart' : 'Carrinho'}
             </Typography>
 
-            <List sx={{ flexGrow: 1 }}>
+            <List sx={{ flexGrow: 1, overflowY: 'auto' }}>
               {cart.map((item, index) => (
                 <>
-                <ListItem key={item.product._id} sx={{ display: 'flex', alignItems: 'center' }}>
+                <ListItem key={item.product._id} sx={{ display: 'flex', alignItems: 'center', pl: 0, pr: 4, overflowX: 'hidden' }}>
                   {/* Product Image */}
                   <Box sx={{mr: 2}}>
                   <img
@@ -43,7 +42,7 @@ function Cart() {
                   <Box sx={{ flexGrow: 1 }}>
                     <ListItemText
                       primary={item.product.name[language]}
-                      secondary={`${item.product.price[item.size].toFixed(2).replace('.', ',')} €`}
+                      secondary={`${item.size}, ${item.product.price[item.size].toFixed(2).replace('.', ',')} €`}
                     />
                     
                     {/* Quantity Adjuster */}
@@ -90,6 +89,7 @@ function Cart() {
 
                   {/* Remove Button */}
                   <IconButton
+                    size='small'
                     edge="end"
                     color="inherit"
                     onClick={() => removeProduct(item.product._id)}
