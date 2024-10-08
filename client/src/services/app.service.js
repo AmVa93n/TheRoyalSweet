@@ -37,6 +37,16 @@ class AppService {
     return response.data
   }
 
+  async getIngredients() {
+    const response = await this.api.get(`/api/ingredients`);
+    return response.data.ingredients
+  }
+
+  async updateProduct(updatedProduct) {
+    const response = await this.api.put(`/api/product`, updatedProduct);
+    return response.data.product
+  }
+
 }
 
 // Create one instance (object) of the service

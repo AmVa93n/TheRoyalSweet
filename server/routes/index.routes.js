@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product.model");
 const Order = require("../models/Order.model");
+const Ingredient = require("../models/Ingredient.model");
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 router.get("/", (req, res, next) => {
@@ -65,6 +66,37 @@ router.post('/checkout', async (req, res) => {
     },
   });
   res.json({client_secret: paymentIntent.client_secret});
+});
+
+router.get("/ingredients", async (req, res, next) => {
+  try {
+    const ingredients = await Ingredient.find();
+    
+    if (!ingredients) {
+      return res.status(404).json({ message: "Ingredients not found" });
+    }
+
+    res.status(200).json({ ingredients });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/product", async (req, res, next) => {
+  try {
+    const newData = req.body;
+    const { _id } = newData;
+
+    const updatedProduct = await Product.findByIdAndUpdate(_id, newData, { new: true })
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json({ product: updatedProduct });
+  } catch (err) {
+    next(err);  // Pass the error to the error-handling middleware
+  }
 });
 
 module.exports = router;
