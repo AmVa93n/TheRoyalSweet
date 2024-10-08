@@ -1,45 +1,65 @@
 import { useState, useContext } from 'react';
-import { Container, Box, Button, Card, CardContent, Divider, Grid2, TextField, Typography } from '@mui/material';
+import { Container, Box, Card, CardContent, Divider, Grid2, TextField, Typography, FormControlLabel, Switch, Button } from '@mui/material';
 import { CartContext } from '../context/cart.context';
 import { LanguageContext } from '../context/language.context';
+import appService from '../services/app.service'
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import PaymentForm from '../components/PaymentForm';
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 function CheckoutPage() {
     const { cart } = useContext(CartContext)
     const { language } = useContext(LanguageContext)
-    const totalAmount = cart.reduce((sum, item) => sum + item.product.price[item.size] * item.quantity, 0);
-    const [shippingAddress, setShippingAddress] = useState({
+    const [isPickup, setIsPickup] = useState(false);
+    const deliveryFee = isPickup ? 0 : 5
+    const totalAmount = cart.reduce((sum, item) => sum + item.product.price[item.size] * item.quantity, 0) + deliveryFee
+    const [orderData, setOrderData] = useState({
         name: '',
+        email: '',
         address: '',
         city: '',
         zip: '',
     });
-
-    const [paymentDetails, setPaymentDetails] = useState({
-        cardNumber: '',
-        cardExpiry: '',
-        cardCvc: '',
-    });
-
-    function handleShippingChange(e) {
+    const [clientSecret, setClientSecret] = useState('');
+    
+    function handleDataChange(e) {
         const { name, value } = e.target;
-        setShippingAddress((prev) => ({ ...prev, [name]: value }));
+        setOrderData((prev) => ({ ...prev, [name]: value }));
     };
 
-    function handlePaymentChange(e) {
-        const { name, value } = e.target;
-        setPaymentDetails((prev) => ({ ...prev, [name]: value }));
+    async function createPayment() {
+        if (!orderData.name || !orderData.email) {
+            alert('Please fill your name and email')
+            return
+        }
+
+        if (!isPickup && (!orderData.city || !orderData.address || !orderData.zip)) {
+            alert('Missing shipping information!')
+            return
+        }
+
+        const requestBody = {
+        cart, 
+        orderData: !isPickup ? orderData : null,
+        deliveryFee
+        };
+
+        const response = await appService.placeOrder(requestBody);
+        const { client_secret } = await response;
+        setClientSecret(client_secret);
     };
 
-    function handleSubmit() {
-        // Handle the form submission logic here (e.g., send to server)
-        console.log('Order submitted:', { shippingAddress, paymentDetails });
+    const stripeOptions = {
+        appearance: {
+          theme: 'stripe', 
+        },
+        clientSecret: clientSecret || null
     };
 
     return (
-        <Container sx={{ padding: 4 }}>
-            <Typography variant="h4" gutterBottom>
-                Checkout
-            </Typography>
+        <Container sx={{ padding: 4, mt: 7 }}>
             
             <Grid2 container spacing={4} columns={{ xs: 6, md: 12 }}>
 
@@ -47,71 +67,101 @@ function CheckoutPage() {
                 <Grid2 size={{ xs: 12, md: 6 }}>
                     <Card>
                         <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                            Shipping Information
-                        </Typography>
-                        <TextField
-                            label="Name"
-                            fullWidth
-                            margin="normal"
-                            name="name"
-                            value={shippingAddress.name}
-                            onChange={handleShippingChange}
-                        />
-                        <TextField
-                            label="Address"
-                            fullWidth
-                            margin="normal"
-                            name="address"
-                            value={shippingAddress.address}
-                            onChange={handleShippingChange}
-                        />
-                        <TextField
-                            label="City"
-                            fullWidth
-                            margin="normal"
-                            name="city"
-                            value={shippingAddress.city}
-                            onChange={handleShippingChange}
-                        />
-                        <TextField
-                            label="Zip Code"
-                            fullWidth
-                            margin="normal"
-                            name="zip"
-                            value={shippingAddress.zip}
-                            onChange={handleShippingChange}
-                        />
+                            <TextField
+                                label="Name"
+                                fullWidth
+                                margin="normal"
+                                name="name"
+                                value={orderData.name}
+                                onChange={handleDataChange}
+                                variant="filled"
+                                size='small'
+                                disabled={!!clientSecret}
+                            />
+                            <TextField
+                                label="Email Address"
+                                name="email"
+                                margin="normal"
+                                fullWidth
+                                autoComplete="email"
+                                value={orderData.email}
+                                onChange={handleDataChange}
+                                variant="filled"
+                                size='small'
+                                disabled={!!clientSecret}
+                                />
+                        </CardContent>
+
+                        {/* Switch to toggle between Delivery and Self Pickup */}
+                        <CardContent>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={isPickup}
+                                        onChange={() => setIsPickup(!isPickup)}
+                                        color="primary"
+                                    />
+                                }
+                                label={"Self Pickup"}
+                            />
+                        </CardContent>
+
+                        <CardContent>
+                            <Typography variant="h6" gutterBottom>
+                                Shipping Information
+                            </Typography>
+                            
+                            <TextField
+                                label="Address"
+                                fullWidth
+                                margin="normal"
+                                name="address"
+                                value={orderData.address}
+                                onChange={handleDataChange}
+                                disabled={isPickup || !!clientSecret}
+                                variant="filled"
+                                size='small'
+                            />
+                            <TextField
+                                label="City"
+                                fullWidth
+                                margin="normal"
+                                name="city"
+                                value={orderData.city}
+                                onChange={handleDataChange}
+                                disabled={isPickup || !!clientSecret}
+                                variant="filled"
+                                size='small'
+                            />
+                            <TextField
+                                label="Zip Code"
+                                fullWidth
+                                margin="normal"
+                                name="zip"
+                                value={orderData.zip}
+                                onChange={handleDataChange}
+                                disabled={isPickup || !!clientSecret}
+                                variant="filled"
+                                size='small'
+                            />
                         </CardContent>
                     
                         <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                            Payment Information
-                        </Typography>
-                        <TextField
-                            label="Card Number"
-                            fullWidth
-                            margin="normal"
-                            name="cardNumber"
-                            value={paymentDetails.cardNumber}
-                            onChange={handlePaymentChange}
-                        />
-                        <TextField
-                            label="Expiry Date (MM/YY)"
-                            fullWidth
-                            margin="normal"
-                            name="cardExpiry"
-                            value={paymentDetails.cardExpiry}
-                            onChange={handlePaymentChange}
-                        />
-                        <TextField
-                            label="CVC"
-                            fullWidth
-                            margin="normal"
-                            name="cardCvc"
-                            value={paymentDetails.cardCvc}
-                            onChange={handlePaymentChange}
-                        />
+                            {clientSecret ?  
+
+                            <Elements stripe={stripePromise} options={stripeOptions}>
+                                <PaymentForm />
+                            </Elements> :
+
+                            <Button 
+                            variant="contained"
+                            color="primary"
+                            sx={{ textTransform: 'none', my: 2, borderRadius: 25 }}
+                            onClick={createPayment}
+                            >
+                                Proceed to Payment
+                            </Button>}
+                            
                         </CardContent>
                     </Card>
                 </Grid2>
@@ -137,19 +187,17 @@ function CheckoutPage() {
                             <Typography>{(item.product.price[item.size] * item.quantity).toFixed(2).replace('.', ',')} €</Typography>
                         </Box>
                     ))}
+                    <Box display="flex" sx={{ mb: 2, alignItems: 'center' }}>
+                        <Typography flexGrow={1}>Delivery fee</Typography>
+                        <Typography>{deliveryFee.toFixed(2).replace('.', ',')} €</Typography>
+                    </Box>
+
                     <Divider sx={{ mb: 2 }} />
                     <Typography variant="h6">Total: {totalAmount} €</Typography>
                     </CardContent>
                 </Card>
                 </Grid2>
             </Grid2>
-
-            {/* Submit Button */}
-            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-                <Button variant="contained" color="primary" sx={{textTransform: 'none', borderRadius: 25}} onClick={handleSubmit}>
-                Place Order
-                </Button>
-            </Box>
         </Container>
     );
 };

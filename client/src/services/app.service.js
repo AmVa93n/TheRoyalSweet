@@ -32,6 +32,11 @@ class AppService {
     return response.data.product
   }
 
+  async placeOrder(requestBody) {
+    const response = await this.api.post(`/api/checkout`, requestBody);
+    return response.data
+  }
+
 }
 
 // Create one instance (object) of the service

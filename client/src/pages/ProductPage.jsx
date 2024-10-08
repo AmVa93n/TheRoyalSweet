@@ -17,7 +17,6 @@ function ProductPage() {
     const [size, setSize] = useState('small')
     const [date, setDate] = useState(dayjs())
     const [quantity, setQuantity] = useState(1)
-    const [email, setEmail] = useState('')
     const { language } = useContext(LanguageContext)
     const { addProduct } = useContext(CartContext)
 
@@ -100,19 +99,6 @@ function ProductPage() {
                                     format='DD/MM/YYYY'
                                 />
                             </LocalizationProvider>
-                        </FormControl>
-
-                        <FormControl sx={{ mb: 2 }}>
-                            <FormLabel>Email</FormLabel>
-                            <TextField
-                                required
-                                placeholder="your@email.com"
-                                autoComplete="email"
-                                sx={{width: 300, bgcolor: 'white'}}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                size='small'
-                            />
                         </FormControl>
 
                         <FormControl sx={{ mb: 3 }}>

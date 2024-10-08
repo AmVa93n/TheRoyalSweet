@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 //import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
+
 function App() {
   return (
     <div className="App">
