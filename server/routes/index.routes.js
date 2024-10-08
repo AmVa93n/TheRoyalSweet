@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/products", async (req, res, next) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate('recipe.ingredient');
     
     if (!products) {
       return res.status(404).json({ message: "Products not found" });
@@ -96,6 +96,42 @@ router.put("/product", async (req, res, next) => {
     res.status(200).json({ product: updatedProduct });
   } catch (err) {
     next(err);  // Pass the error to the error-handling middleware
+  }
+});
+
+router.put("/ingredient", async (req, res, next) => {
+  try {
+    const newData = req.body;
+    const { _id } = newData;
+
+    const updatedIngredient = await Ingredient.findByIdAndUpdate(_id, newData, { new: true })
+
+    if (!updatedIngredient) {
+      return res.status(404).json({ message: "Ingredient not found" });
+    }
+
+    res.status(200).json({ ingredient: updatedIngredient });
+  } catch (err) {
+    next(err);  // Pass the error to the error-handling middleware
+  }
+});
+
+router.get("/orders", async (req, res, next) => {
+  try {
+    const orders = await Order.find().populate({
+      path: 'items.product', // Populate the 'product' in 'items'
+      populate: {
+        path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+      },
+    })
+    
+    if (!orders) {
+      return res.status(404).json({ message: "Orders not found" });
+    }
+
+    res.status(200).json({ orders });
+  } catch (err) {
+    next(err);
   }
 });
 

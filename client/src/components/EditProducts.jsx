@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Button, Box, 
-    Typography, Autocomplete, Avatar } from "@mui/material";
+    Typography, Autocomplete, Avatar, List, ListItem} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -195,18 +195,24 @@ function EditProducts() {
         <>
         <Box sx={{ padding: 2 }}>
           <Typography variant="body2">Ingredients:</Typography>
-          <ul>
-            {products.find(p => p._id === editRowId).recipe.map((ingredient, index) => (
-              <li key={index}>
-                {ingredient.ingredient.name} - {ingredient.amount}
+          <List>
+            {products.find(p => p._id === editRowId).recipe.map((i, index) => (
+              <ListItem key={index}>
+                <Box sx={{mr: 1}}>
+                    {i.ingredient.image ? <img src={i.ingredient.image} alt={i.ingredient.name} /> :
+                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)' }}>
+                        <ImageNotSupportedIcon />
+                    </Avatar>}
+                </Box>
+                <Typography variant="body2">{i.ingredient.name}: {i.amount} {i.ingredient.units}</Typography>
                 <IconButton
                   onClick={() => handleDeleteIngredient(index)}
                 >
                   <DeleteIcon />
                 </IconButton>
-              </li>
+              </ListItem>
             ))}
-          </ul>
+          </List>
         </Box>
 
         <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between', width: '37%'}}>

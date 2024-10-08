@@ -29,13 +29,16 @@ function AdminPage() {
         setEditValues(ingredient); // Initialize editing values
     };
 
-    function handleSaveClick() {
+    async function handleSaveClick() {
+        const updatedIngredient = { ...editValues }; // Use the edit values for the updated ingredient
         setIngredients((prevRows) =>
             prevRows.map((row) =>
                 row._id === editRowId ? { ...row, ...editValues } : row
             )
         );
         setEditRowId(null); // Stop editing mode
+        // Use the updated ingredient data to make the API call
+        await appService.updateIngredient(updatedIngredient);
     };
 
     function handleCancelClick() {
