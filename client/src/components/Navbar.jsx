@@ -20,12 +20,19 @@ function Navbar() {
   };
 
   const navLinks = [
-    {text: 'Home', route: '/'}, 
-    {text: language === 'en' ? 'About me' : 'Sobre mim', route: '/about'}, 
-    {text: language === 'en' ? 'Contact' : 'Contactos', route: '/contact'}, 
+    {text: 'Home', route: '/', sectionId: 'carousel'}, 
+    {text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme'}, 
+    {text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts'}, 
     {text: language === 'en' ? 'Shop' : 'Loja', route: '/shop'}, 
     {text: language === 'en' ? 'Blog' : 'Blogue', route: "https://theroyalsweet.com/en/"}
   ];
+
+  function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <AppBar position="fixed" sx={{bgcolor: 'rgb(253, 33, 155)'}}>
@@ -55,8 +62,13 @@ function Navbar() {
           >
             <List>
               {navLinks.map((link) => (
-                <ListItem key={link.text}>
-                  <ListItemText primary={link.text} component={Link} to={link.route} />
+                <ListItem 
+                  key={link.text}
+                  component={Link} 
+                  to={link.route} 
+                  onClick={() => scrollToSection(link.sectionId)}
+                  >
+                  <ListItemText primary={link.text} />
                 </ListItem>
               ))}
             </List>
@@ -74,7 +86,13 @@ function Navbar() {
          {/* Navigation Links for Desktop */}
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
           {navLinks.map((link) => (
-            <Button key={link.text} sx={{ color: 'white', mx: 1, textTransform: 'none' }} component={Link} to={link.route}>
+            <Button 
+              key={link.text} 
+              sx={{ color: 'white', mx: 1, textTransform: 'none' }} 
+              component={Link} 
+              to={link.route}
+              onClick={() => scrollToSection(link.sectionId)}
+            >
               {link.text}
             </Button>
           ))}
