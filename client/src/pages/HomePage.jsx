@@ -3,8 +3,11 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Box, IconButton, Stack } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import ShopPreview from '../components/ShopPreview';
+import Testimonials from '../components/Testimonials';
 import AboutMe from '../components/AboutMe'
 import Contacts from '../components/Contacts'
+import Footer from '../components/Footer';
 
 const images = [
   './carousel1.jpg',
@@ -66,6 +69,10 @@ function HomePage() {
         </Carousel>
       </Box>
 
+      <ShopPreview />
+
+      <Testimonials />
+
       <Box id='aboutme'>
         <AboutMe />
       </Box>
@@ -73,6 +80,8 @@ function HomePage() {
       <Box id='contacts'>
         <Contacts />
       </Box>
+
+      <Footer />
     </Stack>
   );
 }

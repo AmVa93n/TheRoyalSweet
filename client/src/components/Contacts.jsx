@@ -40,11 +40,11 @@ function Contacts() {
             maxWidth: '1200px',         // Set max width to prevent it from stretching too wide
             textAlign: 'center'          // Centers the text for a more uniform layout
         }}>
-            <Typography variant="h4" textAlign={'center'} gutterBottom>
+            <Typography variant="h4" textAlign={'center'}>
                 {language === 'en' ? 'Contacts' : 'Contactos'}
             </Typography>
 
-            <Grid2 container spacing={4} justifyContent="center">
+            <Grid2 container spacing={4} sx={{ p: 4, justifyContent: 'center' }}>
                 {/* Email */}
                 <Grid2 size={{xs: 12, md: 4}}>
                     <Typography variant="h6" gutterBottom>{text.email}</Typography>

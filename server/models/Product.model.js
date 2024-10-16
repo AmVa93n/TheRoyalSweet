@@ -16,7 +16,8 @@ const productSchema = new Schema(
     recipe: [{
       ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
       amount: Number
-    }]
+    }],
+    category: String
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

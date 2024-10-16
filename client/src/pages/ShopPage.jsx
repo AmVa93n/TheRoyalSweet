@@ -4,7 +4,13 @@ import appService from '../services/app.service'
 import { LanguageContext } from '../context/language.context';
 import { useNavigate } from "react-router-dom";
 
-const categories = ['Cakes', 'Cookies', 'Pastries', 'Desserts'];
+const categories = [
+    {cat: 'cake', en: 'Cakes', pt: 'Bolos'}, 
+    {cat: 'pie', en: 'Pies', pt: 'Tartes'},
+    {cat: 'cheesecake', en: 'Cheesecakes', pt: 'Cheesecakes'},
+    {cat: 'dessert', en: 'Desserts', pt: 'Sobremesas'},
+    {cat: 'mini', en: 'Minis', pt: 'Individuais'},
+];
 
 function ShopPage() {
     const [products, setProducts] = useState([])
@@ -35,11 +41,11 @@ function ShopPage() {
             <Box sx={{ display: 'flex', justifyContent: 'space-around', my: 3, width: '70%', mx: 'auto' }}>
                 {categories.map((category) => (
                 <Button
-                    key={category}
+                    key={category.cat}
                     onClick={() => document.getElementById(category).scrollIntoView({ behavior: 'smooth' })}
                     sx={{textTransform: 'none'}}
                 >
-                    {category}
+                    {category[language]}
                 </Button>
                 ))}
             </Box>
@@ -56,11 +62,11 @@ function ShopPage() {
                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
                 {categories.map((category) => (
                     <Button
-                        key={category}
+                        key={category.cat}
                         onClick={() => document.getElementById(category).scrollIntoView({ behavior: 'smooth' })}
                         sx={{textTransform: 'none', textAlign: 'left'}}
                     >
-                    <ListItemText primary={category} />
+                    <ListItemText primary={category[language]} />
                     </Button>
                 ))}
                 </Box>
@@ -68,13 +74,12 @@ function ShopPage() {
 
             {/* Category Sections */}
             {categories.map((category) => (
-                <Box key={category} id={category} sx={{ my: 5 }}>
-                    <Typography variant="h4" sx={{ mb: 2, textAlign: 'center' }}>{category}</Typography>
+                <Box key={category.cat} id={category} sx={{ my: 5 }}>
+                    <Typography variant="h4" sx={{ mb: 2, textAlign: 'center' }}>{category[language]}</Typography>
                     {/* Add your product cards or content for each category here */}
                     
-                    {/* Dummy content */}
                     <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
-                        {products.map((product) => (
+                        {products.filter(product => product.category === category.cat).map((product) => (
                         <Grid2 xs={12} sm={6} md={4} key={product._id}>
                             <Card sx={{width: 340}}>
                                 <CardMedia
@@ -91,7 +96,7 @@ function ShopPage() {
                                         {product.name[language]}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        €{product.price.small}
+                                        {language === 'en' ? 'from' : 'A partir de '} €{product.price.small}
                                     </Typography>
                                 </CardContent>
                             </Card>
