@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
-import EditIngredients from "../components/EditIngredients";
-import EditProducts from "../components/EditProducts";
-import Orders from "../components/Orders";
+import EditIngredients from "../components/admin/EditIngredients";
+import EditProducts from "../components/admin/EditProducts";
+import Orders from "../components/admin/Orders";
 
 function AdminPage() {
     const [value, setValue] = useState(1);

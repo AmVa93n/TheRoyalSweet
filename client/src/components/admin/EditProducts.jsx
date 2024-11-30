@@ -6,7 +6,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import appService from '../services/app.service'
+import adminService from '../../services/admin.service'
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 
 function EditProducts() {
@@ -20,9 +20,9 @@ function EditProducts() {
   useEffect(() => {
     async function init() {
       try {
-        const products = await appService.getProducts()
+        const products = await adminService.getProducts()
         setProducts(products)
-        const ingredients = await appService.getIngredients()
+        const ingredients = await adminService.getIngredients()
         setIngredients(ingredients)
       } catch (error) {
         const errorDescription = error.response.data.message;
@@ -46,7 +46,7 @@ function EditProducts() {
     );
     setEditRowId(null); // Stop editing mode
     // Use the updated product data to make the API call
-    await appService.updateProduct(updatedProduct);
+    await adminService.updateProduct(updatedProduct);
   };
 
   function handleCancelClick() {

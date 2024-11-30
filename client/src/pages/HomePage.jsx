@@ -7,6 +7,7 @@ import ShopPreview from '../components/ShopPreview';
 import Testimonials from '../components/Testimonials';
 import AboutMe from '../components/AboutMe'
 import Contacts from '../components/Contacts'
+import Orders from '../components/Orders';
 import Footer from '../components/Footer';
 
 const images = [
@@ -73,12 +74,16 @@ function HomePage() {
 
       <Testimonials />
 
-      <Box id='aboutme'>
-        <AboutMe />
+      <Box id='orders'>
+        <Orders />
       </Box>
 
       <Box id='contacts'>
         <Contacts />
+      </Box>
+
+      <Box id='aboutme'>
+        <AboutMe />
       </Box>
 
       <Footer />

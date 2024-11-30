@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class AppService {
+class AdminService {
   constructor() {
     this.api = axios.create({
       baseURL: process.env.REACT_APP_DEV_SERVER_URL || process.env.REACT_APP_SERVER_URL,
@@ -22,23 +22,28 @@ class AppService {
     });
   }
 
-  async getProducts() {
-    const response = await this.api.get(`/api/products`);
-    return response.data.products
+  async getIngredients() {
+    const response = await this.api.get(`/admin/ingredients`);
+    return response.data.ingredients
   }
 
-  async getProduct(productId) {
-    const response = await this.api.get(`/api/product/${productId}`);
+  async updateProduct(updatedProduct) {
+    const response = await this.api.put(`/admin/product`, updatedProduct);
     return response.data.product
   }
 
-  async placeOrder(requestBody) {
-    const response = await this.api.post(`/api/checkout`, requestBody);
-    return response.data
+  async updateIngredient(updatedIngredient) {
+    const response = await this.api.put(`/admin/ingredient`, updatedIngredient);
+    return response.data.ingredient
+  }
+
+  async getOrders() {
+    const response = await this.api.get(`/admin/orders`);
+    return response.data.orders
   }
 }
 
 // Create one instance (object) of the service
-const appService = new AppService();
+const adminService = new AdminService();
 
-export default appService;
+export default adminService;

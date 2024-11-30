@@ -1,129 +1,62 @@
-import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider } from '@mui/material';
-import appService from '../services/app.service';  // Assuming you have a service for making requests
+import { Box, Typography, Grid2 } from '@mui/material';
+import { LanguageContext } from '../context/language.context';
+import { useContext } from 'react';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
+import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
+import RestaurantRoundedIcon from '@mui/icons-material/RestaurantRounded';
+import SmsRoundedIcon from '@mui/icons-material/SmsRounded';
 
 function Orders() {
-  const [orders, setOrders] = useState([]);
+    const { language } = useContext(LanguageContext)
 
-  useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const data = await appService.getOrders();  // Assuming you have an API endpoint that returns the data
-        console.log(data)
-        setOrders(data);
-      } catch (error) {
-        console.error('Failed to fetch orders', error);
-      }
+    const iconStyle = {
+        fontSize: 200,
     }
-    fetchOrders();
-  }, []);
 
-  function calculateAccumulativeIngredients(items) {
-    const ingredientsMap = {};
+    const text = [
+        {en: '', pt: 'Escolha os bolos que mais lhe agradam.', 
+            icon: <SearchRoundedIcon sx={iconStyle} />},
+        {en: '', pt: 'Faça a sua encomenda online com, pelo menos, 48 horas de antecedência.', 
+            icon: <ShoppingCartRoundedIcon sx={iconStyle} />},
+        {en: '', pt: 'Efectue o pagamento por MB way ou transferência multibanco.', 
+            icon: <CreditCardRoundedIcon sx={iconStyle} />},
+        {en: '', pt: 'Recolha a sua encomenda na nossa morada na zona do Areeiro, em Lisboa, ou opte por entrega por Ubereats.', 
+            icon: <Inventory2RoundedIcon sx={iconStyle} />},
+        {en: '', pt: 'A melhor parte: disfrute dos seus bolos.', 
+            icon: <RestaurantRoundedIcon sx={iconStyle} />},
+        {en: '', pt: 'Partilhe o seu feedback connosco. A sua opinião é importante para nós!', 
+            icon: <SmsRoundedIcon sx={iconStyle} />},
+    ]
 
-    items.forEach(item => {
-      item.product.recipe.forEach(({ ingredient, amount }) => {
-        if (!ingredientsMap[ingredient._id]) {
-          ingredientsMap[ingredient._id] = {
-            name: ingredient.name,
-            units: ingredient.units,
-            totalAmount: 0,
-            totalPrice: 0,
-          };
-        }
-
-        const ingredientData = ingredientsMap[ingredient._id];
-        ingredientData.totalAmount += amount * item.quantity;
-        ingredientData.totalPrice += ingredientData.totalAmount * ingredient.priceperunit;
-      });
-    });
-
-    return Object.values(ingredientsMap);
-  }
-
-  function calculateGrandTotalPrice(items) {
-    return items.reduce((total, item) => {
-      return total + item.product.price[item.size] * item.quantity;
-    }, 0);
-  }
-
-  return (
-    <Box sx={{ width: '90%', mx: 'auto' }}>
-      {orders.map((order, index) => {
-        const accumulativeIngredients = calculateAccumulativeIngredients(order.items);
-        const grandTotalPrice = calculateGrandTotalPrice(order.items);
-        const totalIngredientsPrice = accumulativeIngredients.reduce((total, ing) => total + ing.totalPrice, 0);
-
-        return (
-          <Paper key={index} sx={{ mb: 3, p: 2 }}>
-            <Typography variant="h6">Order by: {order.name} ({order.email})</Typography>
-            {order.pickup ? <Typography>Pickup</Typography> :
-              <Box>
-                <Typography>Shipping Details:</Typography>
-                <Typography>City: {order.shipping.city}</Typography>
-                <Typography>Address: {order.shipping.address}</Typography>
-                <Typography>ZIP: {order.shipping.zip}</Typography>
-              </Box>}
-            <Divider sx={{ my: 2 }} />
-
-            <TableContainer>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Product</TableCell>
-                    <TableCell>Size</TableCell>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>Price (each)</TableCell>
-                    <TableCell>Total</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {order.items.map((item, i) => (
-                    <TableRow key={i}>
-                      <TableCell>{item.product.name.en}</TableCell>
-                      <TableCell>{item.size}</TableCell>
-                      <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.product.price[item.size]}</TableCell>
-                      <TableCell>{item.product.price[item.size] * item.quantity}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle1">Total Ingredients</Typography>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Ingredient</TableCell>
-                      <TableCell>Total Amount</TableCell>
-                      <TableCell>Total Price</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {accumulativeIngredients.map((ingredient, i) => (
-                      <TableRow key={i}>
-                        <TableCell>{ingredient.name}</TableCell>
-                        <TableCell>{ingredient.totalAmount} {ingredient.units}</TableCell>
-                        <TableCell>{ingredient.totalPrice.toFixed(3)} €</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="h6">Grand Total Price: {grandTotalPrice} €</Typography>
-            <Typography variant="h6">Total Ingredients Price: {totalIngredientsPrice.toFixed(3)} €</Typography>
-            <Typography variant="h6">Net Gain: {(grandTotalPrice - totalIngredientsPrice).toFixed(3)} €</Typography>
-          </Paper>
-        );
-      })}
-    </Box>
-  );
+    return (
+        <Grid2 
+            container 
+            columns={3} 
+            width={'80%'} 
+            mx={'auto'} 
+            columnSpacing={12} 
+            rowSpacing={5}
+        >
+            {text.map(step => (
+                <Grid2 size={1}>
+                    <Box sx={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        {step.icon}
+                        <Typography fontSize={24}>
+                            {step[language]}
+                        </Typography>
+                    </Box>
+                </Grid2>
+            ))}
+        </Grid2>
+    )
 }
 
-export default Orders;
+export default Orders

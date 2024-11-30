@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProviderWrapper } from "./context/auth.context";
 import { LanguageProvider } from "./context/language.context";
 import { CartProvider } from "./context/cart.context";
+import '@fontsource/montserrat';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

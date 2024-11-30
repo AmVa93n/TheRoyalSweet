@@ -20,10 +20,11 @@ function Navbar() {
   };
 
   const navLinks = [
-    {text: 'Home', route: '/', sectionId: 'carousel'}, 
-    {text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme'}, 
-    {text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts'}, 
     {text: language === 'en' ? 'Shop' : 'Loja', route: '/shop'}, 
+    {text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'orders'},
+    {text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts'}, 
+    {text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme'}, 
+    {text: 'Menu', route: '/menu'}, 
     {text: language === 'en' ? 'Blog' : 'Blogue', route: "https://theroyalsweet.com/en/"}
   ];
 
@@ -84,11 +85,11 @@ function Navbar() {
         </Typography>
 
          {/* Navigation Links for Desktop */}
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 2 }}>
           {navLinks.map((link) => (
             <Button 
               key={link.text} 
-              sx={{ color: 'white', mx: 1, textTransform: 'none' }} 
+              sx={{ color: 'black', fontFamily: 'Montserrat' }}
               component={Link} 
               to={link.route}
               onClick={() => scrollToSection(link.sectionId)}
@@ -143,7 +144,7 @@ function Navbar() {
 
         {/* Cart Button */}
         <IconButton 
-          color="inherit" 
+          color="black" 
           onClick={() => setIsDrawerOpen(!isDrawerOpen)}
           sx={{ml: 2}}
         >
