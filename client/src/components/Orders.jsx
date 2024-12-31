@@ -31,31 +31,36 @@ function Orders() {
     ]
 
     return (
-        <Grid2 
-            container 
-            columns={3} 
-            width={'80%'} 
-            mx={'auto'} 
-            columnSpacing={12} 
-            rowSpacing={5}
-        >
-            {text.map(step => (
-                <Grid2 size={1}>
-                    <Box sx={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                        {step.icon}
-                        <Typography fontSize={24}>
-                            {step[language]}
-                        </Typography>
-                    </Box>
-                </Grid2>
-            ))}
-        </Grid2>
+        <Box my={2}>
+            <Typography variant="h4" textAlign={'center'} fontFamily={'Montserrat'} fontStyle={'italic'}>
+                {language === 'en' ? 'Orders' : 'Encomendas'}
+            </Typography>
+            <Grid2 
+                container 
+                columns={3} 
+                width={'80%'} 
+                mx={'auto'} 
+                columnSpacing={12} 
+                rowSpacing={5}
+            >
+                {text.map(step => (
+                    <Grid2 size={1}>
+                        <Box sx={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            {step.icon}
+                            <Typography fontSize={24}>
+                                {step[language]}
+                            </Typography>
+                        </Box>
+                    </Grid2>
+                ))}
+            </Grid2>
+        </Box>
     )
 }
 

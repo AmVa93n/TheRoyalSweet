@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 import { Navigate } from "react-router-dom";
-import Loading from "../Loading/Loading";
+import Loading from "./Loading";
 
-function IsAnon({ children }) {
+function IsPrivate({ children }) {
   const { isLoggedIn, isLoading } = useContext(AuthContext);
 
   // If the authentication is still loading ⏳
@@ -11,13 +11,12 @@ function IsAnon({ children }) {
     return <Loading />;
   }
 
-  if (isLoggedIn) {
-    // If the user is logged in, navigate to home page ❌
-    return <Navigate to="/" />;
+  if (!isLoggedIn) {
+    // If the user is not logged in navigate to the login page ❌
+    return <Navigate to="/login" />;
   }
-
-  // If the user is not logged in, allow to see the page ✅
+  // If the user is logged in, allow to see the page ✅
   return children;
 }
 
-export default IsAnon;
+export default IsPrivate;

@@ -29,9 +29,9 @@ function ShopPreview() {
     }
 
     return (
-        <Box>
-            <Typography variant="h4" textAlign={'center'}>
-                {language === 'en' ? 'Our Products' : 'Os nossos produtos'}
+        <Box my={2}>
+            <Typography variant="h4" textAlign={'center'} fontFamily={'Montserrat'} fontStyle={'italic'}>
+                {language === 'en' ? 'Our Dessers' : 'Os Nossos Doces'}
             </Typography>
 
             <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
@@ -62,12 +62,24 @@ function ShopPreview() {
             
             <Button
                 variant="contained"
-                color="primary"
-                sx={{ textTransform: 'none', borderRadius: 25, width: 180, display: 'block', mx: 'auto', textAlign: 'center' }}
+                sx={{ 
+                    textTransform: 'none', 
+                    borderRadius: 25, 
+                    width: 180, 
+                    display: 'block', 
+                    mx: 'auto', 
+                    textAlign: 'center', 
+                    bgcolor: 'transparent',
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontFamily: 'Montserrat',
+                    fontStyle: 'italic',
+                }}
+                disableElevation
                 component={Link}
                 to="/shop"
             >
-                {language === 'en' ? 'See all' : 'Ver todos'}
+                {language === 'en' ? 'See more...' : 'Ver Mais...'}
             </Button>
             
         </Box>

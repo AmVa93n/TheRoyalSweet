@@ -54,12 +54,12 @@ function AboutMe() {
 
                 {/* Text section */}
                 <Grid2 size={{xs: 12, md: 8}}>
-                    <Typography variant="h4" gutterBottom>
+                    <Typography variant="h4" gutterBottom fontFamily={'Montserrat'} fontStyle={'italic'}>
                         {language === 'en' ? 'About Me' : 'Sobre mim'}
                     </Typography>
 
-                    {text.map(line => (
-                        <Typography variant="body1" sx={{mb: 2}}>
+                    {text.map((line, index) => (
+                        <Typography key={'line-' + index} variant="body1" fontFamily={'Montserrat'} fontStyle={'italic'} sx={{mb: 2}}>
                             {line[language]}
                         </Typography>
                     ))}

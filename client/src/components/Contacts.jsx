@@ -26,7 +26,7 @@ function Contacts() {
         }
     };
 
-    const text = contactDetails[language];
+    const text = contactDetails[language || 'pt'];
 
     function handleMailTo() {
         window.open(`mailto:${text.emailValue}`, '_blank');
@@ -40,7 +40,7 @@ function Contacts() {
             maxWidth: '1200px',         // Set max width to prevent it from stretching too wide
             textAlign: 'center'          // Centers the text for a more uniform layout
         }}>
-            <Typography variant="h4" textAlign={'center'}>
+            <Typography variant="h4" textAlign={'center'} fontFamily={'Montserrat'} fontStyle={'italic'}>
                 {language === 'en' ? 'Contacts' : 'Contactos'}
             </Typography>
 

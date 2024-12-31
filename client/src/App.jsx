@@ -7,8 +7,8 @@ import AdminPage from "./pages/AdminPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
-//import IsPrivate from "./components/IsPrivate/IsPrivate";
-import IsAnon from "./components/IsAnon/IsAnon";
+//import IsPrivate from "./components/auth/IsPrivate";
+import IsAnon from "./components/auth/IsAnon";
 
 function App() {
   return (

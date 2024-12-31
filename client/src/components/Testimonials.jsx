@@ -63,8 +63,8 @@ function Testimonials() {
                         display: 'flex', 
                         flexDirection: 'column', 
                         justifyContent: 'center', 
-                        alignItems: 'center', 
-                        p: 3,
+                        alignItems: 'start', 
+                        py: 3, px: 25,
                         minHeight: '300px',
                         backgroundColor: 'rgba(0, 0, 0, 0.1)', // Background styling
                     }}
@@ -73,9 +73,9 @@ function Testimonials() {
                     variant="h5" 
                     sx={{
                       fontStyle: 'italic',
-                      textAlign: 'center',
-                      maxWidth: '80%',
+                      textAlign: 'left',
                       mb: 2,
+                      fontFamily: 'Montserrat'
                     }}
                   >
                     "{review.text}"
@@ -86,6 +86,7 @@ function Testimonials() {
                       textAlign: 'center', 
                       fontWeight: 'bold', 
                       fontSize: '1rem',
+                      fontFamily: 'Montserrat'
                     }}
                   >
                     - {review.name}

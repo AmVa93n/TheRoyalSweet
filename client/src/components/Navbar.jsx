@@ -9,11 +9,13 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { CartContext } from '../context/cart.context';
 import { LanguageContext } from '../context/language.context';
 import Cart from './Cart'
+import { ThemeContext } from '../context/theme.context';
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { cart, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
   const { language, setLanguage } = useContext(LanguageContext)
+  const theme = useContext(ThemeContext);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -36,7 +38,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="fixed" sx={{bgcolor: 'rgb(253, 33, 155)'}}>
+    <AppBar position="fixed" sx={{bgcolor: theme.primary_bg}}>
       <Toolbar>
         {/* Logo for Desktop */}
         <Typography variant="h6" noWrap sx={{ display: { xs: 'none', md: 'flex' }, flexGrow: 0 }}>
@@ -89,7 +91,7 @@ function Navbar() {
           {navLinks.map((link) => (
             <Button 
               key={link.text} 
-              sx={{ color: 'black', fontFamily: 'Montserrat' }}
+              sx={{ color: theme.primary_text, fontFamily: 'Montserrat' }}
               component={Link} 
               to={link.route}
               onClick={() => scrollToSection(link.sectionId)}
@@ -107,7 +109,13 @@ function Navbar() {
             aria-label="language switch"
             sx={{ borderRadius: 25, mr: 2 }}
           >
-            <ToggleButton value="en" aria-label="English" sx={{ padding: '5px', textTransform: 'none' }}>
+            <ToggleButton 
+              value="en" 
+              aria-label="English" 
+              sx={{ padding: '5px', textTransform: 'none', color: theme.primary_text, fontFamily: 'Montserrat',
+                '&.Mui-selected': { color: theme.primary_text }
+               }}
+            >
               <img
                 loading="lazy"
                 width="20"
@@ -118,7 +126,13 @@ function Navbar() {
               /> EN
             </ToggleButton>
 
-            <ToggleButton value="pt" aria-label="Portuguese" sx={{ padding: '5px', textTransform: 'none' }}>
+            <ToggleButton 
+              value="pt" 
+              aria-label="Portuguese" 
+              sx={{ padding: '5px', textTransform: 'none', color: theme.primary_text, fontFamily: 'Montserrat',
+                '&.Mui-selected': { color: theme.primary_text }
+               }}
+            >
               <img
                   loading="lazy"
                   width="20"
@@ -144,9 +158,8 @@ function Navbar() {
 
         {/* Cart Button */}
         <IconButton 
-          color="black" 
           onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-          sx={{ml: 2}}
+          sx={{ml: 2, color: theme.primary_text}}
         >
           <Badge badgeContent={cart.length} color="primary">
             <ShoppingCartIcon />

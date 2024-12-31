@@ -9,6 +9,8 @@ import AboutMe from '../components/AboutMe'
 import Contacts from '../components/Contacts'
 import Orders from '../components/Orders';
 import Footer from '../components/Footer';
+import { useContext } from 'react';
+import { ThemeContext } from '../context/theme.context';
 
 const images = [
   './carousel1.jpg',
@@ -17,8 +19,10 @@ const images = [
 ];
 
 function HomePage() {
+  const theme = useContext(ThemeContext);
+
   return (
-    <Stack gap={5}>
+    <Stack>
       <Box sx={{mt: 8}} id='carousel'>
         <Carousel 
           showThumbs={false} 
@@ -70,19 +74,23 @@ function HomePage() {
         </Carousel>
       </Box>
 
-      <ShopPreview />
+      <Box id='shop' sx={{bgcolor: theme.secondary_bg2}}>
+        <ShopPreview />
+      </Box>
 
-      <Testimonials />
+      <Box id='testimonials' sx={{bgcolor: theme.secondary_bg1}}>
+        <Testimonials />
+      </Box>
 
-      <Box id='orders'>
+      <Box id='orders' sx={{bgcolor: theme.secondary_bg2}}>
         <Orders />
       </Box>
 
-      <Box id='contacts'>
+      <Box id='contacts' sx={{bgcolor: theme.secondary_bg1}}>
         <Contacts />
       </Box>
 
-      <Box id='aboutme'>
+      <Box id='aboutme' sx={{bgcolor: theme.secondary_bg2}}>
         <AboutMe />
       </Box>
 
