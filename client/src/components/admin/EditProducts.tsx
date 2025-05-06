@@ -9,12 +9,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import adminService from '../../services/admin.service'
 import appService from '../../services/app.service'
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
+import type { Ingredient, Product } from "../../types";
 
 function EditProducts() {
-  const [products, setProducts] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
-  const [editRowId, setEditRowId] = useState(null); // Track the row being edited
-  const [editValues, setEditValues] = useState({}); // Store the values being edited
+  const [products, setProducts] = useState([] as Product[]); // Store the list of products
+  const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
+  const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
+  const [editValues, setEditValues] = useState({} as Product); // Store the values being edited
   const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
   const [newAmount, setNewAmount] = useState(0); // New amount input
 
@@ -26,14 +27,13 @@ function EditProducts() {
         const ingredients = await adminService.getIngredients()
         setIngredients(ingredients)
       } catch (error) {
-        const errorDescription = error.response.data.message;
-        alert(errorDescription);
+        alert(`Error fetching products or ingredients: ${error}`)
       }
     }
     init()
   }, [])
 
-  function handleEditClick(id, product) {
+  function handleEditClick(id: string, product: Product) {
     setEditRowId(id);
     setEditValues(product); // Initialize editing values
   };
@@ -54,15 +54,15 @@ function EditProducts() {
     setEditRowId(null); // Exit editing mode without saving
   };
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setEditValues({ ...editValues, [name]: value });
   };
 
   function handleAddIngredient() {
     const updatedProducts = [...products];
-    updatedProducts.find(p => p._id === editRowId).recipe.push({
-      ingredient: ingredients.find(i => i._id === newIngredientId),
+    updatedProducts.find(p => p._id === editRowId)?.recipe.push({
+      ingredient: ingredients.find(i => i._id === newIngredientId) as Ingredient,
       amount: newAmount,
     });
     setProducts(updatedProducts);
@@ -70,9 +70,9 @@ function EditProducts() {
     setNewAmount(0); // Clear amount
   };
 
-  function handleDeleteIngredient(ingredientIndex) {
+  function handleDeleteIngredient(ingredientIndex: number) {
     const updatedProducts = [...products];
-    updatedProducts.find(p => p._id === editRowId).recipe.splice(ingredientIndex, 1);
+    updatedProducts.find(p => p._id === editRowId)?.recipe.splice(ingredientIndex, 1);
     setProducts(updatedProducts);
   };
 
@@ -81,13 +81,13 @@ function EditProducts() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell padding="dense">Image</TableCell>
-            <TableCell padding="dense">Name (EN)</TableCell>
-            <TableCell padding="dense">Name (PT)</TableCell>
-            <TableCell padding="dense">Price (Small)</TableCell>
-            <TableCell padding="dense">Price (Medium)</TableCell>
-            <TableCell padding="dense">Price (Big)</TableCell>
-            <TableCell padding="dense">Actions</TableCell>
+            <TableCell padding="normal">Image</TableCell>
+            <TableCell padding="normal">Name (EN)</TableCell>
+            <TableCell padding="normal">Name (PT)</TableCell>
+            <TableCell padding="normal">Price (Small)</TableCell>
+            <TableCell padding="normal">Price (Medium)</TableCell>
+            <TableCell padding="normal">Price (Big)</TableCell>
+            <TableCell padding="normal">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -102,13 +102,13 @@ function EditProducts() {
                         size="small"
                     />
                     ) : (
-                        product.images[0] ? <img src={product.images[0]} alt={product.name} width={64} /> :
+                        product.images[0] ? <img src={product.images[0]} alt={product._id} width={64} /> :
                         <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)' }}>
                             <ImageNotSupportedIcon />
                         </Avatar>
                     )}
               </TableCell>
-              <TableCell padding="dense">
+              <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
                     name="name.en"
@@ -120,7 +120,7 @@ function EditProducts() {
                   product.name.en
                 )}
               </TableCell>
-              <TableCell padding="dense">
+              <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
                     name="name.pt"
@@ -132,7 +132,7 @@ function EditProducts() {
                   product.name.pt
                 )}
               </TableCell>
-              <TableCell padding="dense">
+              <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
                     name="price.small"
@@ -145,7 +145,7 @@ function EditProducts() {
                   product.price.small
                 )}
               </TableCell>
-              <TableCell padding="dense">
+              <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
                     name="price.medium"
@@ -158,7 +158,7 @@ function EditProducts() {
                   product.price.medium
                 )}
               </TableCell>
-              <TableCell padding="dense">
+              <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
                     name="price.big"
@@ -171,7 +171,7 @@ function EditProducts() {
                   product.price.big
                 )}
               </TableCell>
-              <TableCell padding="dense">
+              <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <>
                     <IconButton onClick={handleSaveClick}>
@@ -197,7 +197,7 @@ function EditProducts() {
         <Box sx={{ padding: 2 }}>
           <Typography variant="body2">Ingredients:</Typography>
           <List>
-            {products.find(p => p._id === editRowId).recipe.map((i, index) => (
+            {products.find(p => p._id === editRowId)?.recipe.map((i, index) => (
               <ListItem key={index}>
                 <Box sx={{mr: 1}}>
                     {i.ingredient.image ? <img src={i.ingredient.image} alt={i.ingredient.name} /> :
@@ -221,7 +221,7 @@ function EditProducts() {
                 options={ingredients} // Pass the whole ingredient object
                 getOptionLabel={(option) => option.name} // Display the ingredient name in the dropdown
                 value={ingredients.find(ingredient => ingredient._id === newIngredientId) || null} // Find the selected ingredient by ID
-                onChange={(event, newValue) => setNewIngredientId(newValue?._id || "")} // Store the ingredient's ID
+                onChange={(_, newValue) => setNewIngredientId(newValue?._id || "")} // Store the ingredient's ID
                 renderInput={(params) => (
                     <TextField {...params} placeholder="Select Ingredient" size="small" />
                 )}

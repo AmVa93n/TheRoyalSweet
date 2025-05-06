@@ -3,9 +3,10 @@ import { Grid as Grid2, Card, CardMedia, CardContent, Typography, Box, Button } 
 import appService from '../services/app.service'
 import { LanguageContext } from '../context/language.context';
 import { useNavigate, Link } from "react-router-dom";
+import type { Product } from '../types';
 
 function ShopPreview() {
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState([] as Product[]);
     const { language } = useContext(LanguageContext)
     const navigate = useNavigate();
 
@@ -16,15 +17,14 @@ function ShopPreview() {
             const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
             setProducts(preview)
           } catch (error) {
-            const errorDescription = error.response.data.message;
-            alert(errorDescription);
+            alert(`Error fetching products: ${error}`)
           }
         }
         init()
     }, [])
 
-    function handleCardClick(event) {
-        const productId = event.target.id
+    function handleCardClick(event: React.MouseEvent) {
+        const productId = (event.target as HTMLElement).id
         navigate(`/product/${productId}`);
     }
 
@@ -36,11 +36,11 @@ function ShopPreview() {
 
             <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
                 {products.map((product) => (
-                <Grid2 xs={12} sm={6} md={4} key={product._id}>
+                <Grid2 columns={{xs: 12, sm: 6, md: 4}} key={product._id}>
                     <Card sx={{width: 340}}>
                         <CardMedia
                             component="img"
-                            alt={product.title}
+                            alt={product._id}
                             height="250"
                             image={product.images[0]}
                             sx={{ objectFit: 'cover', cursor: 'pointer' }}
@@ -49,7 +49,7 @@ function ShopPreview() {
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h6" component="div">
-                                {product.name[language]}
+                                {product._id}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 {language === 'en' ? 'from' : 'A partir de '} €{product.price.small}

@@ -48,7 +48,7 @@ export type Order = {
     email: string,
     items: [{
         product: Product,
-        size: string,
+        size: Size,
         quantity: number
     }],
     pickup: boolean,

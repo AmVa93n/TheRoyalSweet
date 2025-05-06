@@ -6,9 +6,9 @@ function PaymentForm() {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
     event.preventDefault();

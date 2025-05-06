@@ -30,8 +30,8 @@ function Navbar() {
     {text: language === 'en' ? 'Blog' : 'Blogue', route: "https://theroyalsweet.com/en/"}
   ];
 
-  function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
+  function scrollToSection(sectionId?: string) {
+    const section = document.getElementById(sectionId || '');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }
@@ -105,7 +105,7 @@ function Navbar() {
           <ToggleButtonGroup
             value={language}
             exclusive
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e) => setLanguage((e.target as HTMLInputElement).value as 'en' | 'pt')}
             aria-label="language switch"
             sx={{ borderRadius: 25, mr: 2 }}
           >

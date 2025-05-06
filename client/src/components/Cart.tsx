@@ -73,7 +73,7 @@ function Cart() {
                                     margin: 0,
                                 },
                             }}
-                            onChange={(e) => changeQuantity(item.product._id, e.target.value)}
+                            onChange={(e) => changeQuantity(item.product._id, Number(e.target.value))}
                         />
 
                         {/* Circular + Button */}

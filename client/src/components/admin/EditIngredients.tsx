@@ -5,11 +5,12 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import adminService from '../../services/admin.service'
+import type { Ingredient } from "../../types";
 
 function AdminPage() {
-    const [ingredients, setIngredients] = useState([]);
-    const [editRowId, setEditRowId] = useState(null); // Track the row being edited
-    const [editValues, setEditValues] = useState({}); // Store the values being edited
+    const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
+    const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
+    const [editValues, setEditValues] = useState({} as Ingredient); // Store the values being edited
 
     useEffect(() => {
         async function init() {
@@ -17,14 +18,13 @@ function AdminPage() {
             const ingredients = await adminService.getIngredients()
             setIngredients(ingredients)
           } catch (error) {
-            const errorDescription = error.response.data.message;
-            alert(errorDescription);
+            alert(`Error fetching ingredients: ${error}`)
           }
         }
         init()
     }, [])
 
-    function handleEditClick(id, ingredient) {
+    function handleEditClick(id: string, ingredient: Ingredient) {
         setEditRowId(id);
         setEditValues(ingredient); // Initialize editing values
     };
@@ -43,9 +43,9 @@ function AdminPage() {
 
     function handleCancelClick() {
         setEditRowId(null); // Exit editing mode without saving
-      };
+    };
 
-    function handleChange(e) {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         setEditValues({ ...editValues, [name]: value });
     };

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider } from '@mui/material';
-import adminService from '../../services/admin.service';  // Assuming you have a service for making requests
+import adminService from '../../services/admin.service';
+import type { CartItem, Order } from '../../types';
 
 function Orders() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([] as Order[]);
 
   useEffect(() => {
     async function fetchOrders() {
@@ -18,8 +19,8 @@ function Orders() {
     fetchOrders();
   }, []);
 
-  function calculateAccumulativeIngredients(items) {
-    const ingredientsMap = {};
+  function calculateAccumulativeIngredients(items: CartItem[]) {
+    const ingredientsMap: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
 
     items.forEach(item => {
       item.product.recipe.forEach(({ ingredient, amount }) => {
@@ -41,7 +42,7 @@ function Orders() {
     return Object.values(ingredientsMap);
   }
 
-  function calculateGrandTotalPrice(items) {
+  function calculateGrandTotalPrice(items: CartItem[]) {
     return items.reduce((total, item) => {
       return total + item.product.price[item.size] * item.quantity;
     }, 0);
