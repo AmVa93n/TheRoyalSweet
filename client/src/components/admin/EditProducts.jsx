@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import adminService from '../../services/admin.service'
+import appService from '../../services/app.service'
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 
 function EditProducts() {
@@ -20,7 +21,7 @@ function EditProducts() {
   useEffect(() => {
     async function init() {
       try {
-        const products = await adminService.getProducts()
+        const products = await appService.getProducts()
         setProducts(products)
         const ingredients = await adminService.getIngredients()
         setIngredients(ingredients)
