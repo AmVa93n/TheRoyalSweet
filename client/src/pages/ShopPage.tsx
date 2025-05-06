@@ -3,8 +3,9 @@ import { Container, Grid as Grid2, Card, CardMedia, CardContent, Typography, But
 import appService from '../services/app.service'
 import { LanguageContext } from '../context/language.context';
 import { useNavigate } from "react-router-dom";
+import type { Category, Product } from '../types';
 
-const categories = [
+const categories: {cat: Category, en: string, pt: string}[] = [
     {cat: 'cake', en: 'Cakes', pt: 'Bolos'}, 
     {cat: 'pie', en: 'Pies', pt: 'Tartes'},
     {cat: 'cheesecake', en: 'Cheesecakes', pt: 'Cheesecakes'},
@@ -13,7 +14,7 @@ const categories = [
 ];
 
 function ShopPage() {
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState([] as Product[])
     const { language } = useContext(LanguageContext)
     const navigate = useNavigate();
 
@@ -23,17 +24,16 @@ function ShopPage() {
             const products = await appService.getProducts()
             setProducts(products)
           } catch (error) {
-            const errorDescription = error.response.data.message;
-            alert(errorDescription);
+            alert(`Error: ${error}`)
           }
         }
         init()
     }, [])
 
-    function handleCardClick(event) {
-        const productId = event.target.id
+    function handleCardClick(event: React.MouseEvent<HTMLElement>) {
+        const productId = (event.target as HTMLElement).id
         navigate(`/product/${productId}`);
-      }
+    }
 
     return (
         <Container sx={{mt: 10}}>
@@ -42,7 +42,7 @@ function ShopPage() {
                 {categories.map((category) => (
                 <Button
                     key={category.cat}
-                    onClick={() => document.getElementById(category).scrollIntoView({ behavior: 'smooth' })}
+                    onClick={() => document.getElementById(category.cat)?.scrollIntoView({ behavior: 'smooth' })}
                     sx={{textTransform: 'none'}}
                 >
                     {category[language]}
@@ -63,7 +63,7 @@ function ShopPage() {
                 {categories.map((category) => (
                     <Button
                         key={category.cat}
-                        onClick={() => document.getElementById(category).scrollIntoView({ behavior: 'smooth' })}
+                        onClick={() => document.getElementById(category.cat)?.scrollIntoView({ behavior: 'smooth' })}
                         sx={{textTransform: 'none', textAlign: 'left'}}
                     >
                     <ListItemText primary={category[language]} />
@@ -74,17 +74,17 @@ function ShopPage() {
 
             {/* Category Sections */}
             {categories.map((category) => (
-                <Box key={category.cat} id={category} sx={{ my: 5 }}>
+                <Box key={category.cat} id={category.cat} sx={{ my: 5 }}>
                     <Typography variant="h4" sx={{ mb: 2, textAlign: 'center' }}>{category[language]}</Typography>
                     {/* Add your product cards or content for each category here */}
                     
                     <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
                         {products.filter(product => product.category === category.cat).map((product) => (
-                        <Grid2 xs={12} sm={6} md={4} key={product._id}>
+                        <Grid2 columns={{xs: 12, sm: 6, md: 4}} key={product._id}>
                             <Card sx={{width: 340}}>
                                 <CardMedia
                                     component="img"
-                                    alt={product.title}
+                                    alt={product.name[language]}
                                     height="250"
                                     image={product.images[0]}
                                     sx={{ objectFit: 'cover', cursor: 'pointer' }}

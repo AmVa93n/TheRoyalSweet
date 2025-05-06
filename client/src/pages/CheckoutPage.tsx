@@ -4,7 +4,7 @@ import { CartContext } from '../context/cart.context';
 import { LanguageContext } from '../context/language.context';
 import appService from '../services/app.service'
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe, type StripeElementsOptions } from '@stripe/stripe-js';
 import PaymentForm from '../components/PaymentForm';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -24,7 +24,7 @@ function CheckoutPage() {
     });
     const [clientSecret, setClientSecret] = useState('');
     
-    function handleDataChange(e) {
+    function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         setOrderData((prev) => ({ ...prev, [name]: value }));
     };
@@ -55,8 +55,8 @@ function CheckoutPage() {
         appearance: {
           theme: 'stripe', 
         },
-        clientSecret: clientSecret || null
-    };
+        clientSecret: clientSecret
+    } as StripeElementsOptions;
 
     return (
         <Container sx={{ padding: 4, mt: 7 }}>

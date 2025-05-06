@@ -10,12 +10,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Link } from 'react-router-dom';
+import type { Product, Size } from '../types';
 
 function ProductPage() {
-    let { productId } = useParams();
-    const [product, setProduct] = useState({})
-    const [size, setSize] = useState('small')
-    const [date, setDate] = useState(dayjs())
+    const { productId } = useParams();
+    const [product, setProduct] = useState({} as Product)
+    const [size, setSize] = useState<Size>('small')
+    const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     const [quantity, setQuantity] = useState(1)
     const { language } = useContext(LanguageContext)
     const { addProduct } = useContext(CartContext)
@@ -23,11 +24,10 @@ function ProductPage() {
     useEffect(() => {
         async function init() {
             try {
-                const product = await appService.getProduct(productId)
+                const product = await appService.getProduct(productId || '')
                 setProduct(product)
             } catch (error) {
-                const errorDescription = error.response.data.message;
-                alert(errorDescription);
+                alert(`Error: ${error}`)
             }
         }
         init()
@@ -108,7 +108,7 @@ function ProductPage() {
                                 type='number'
                                 slotProps={{htmlInput: { min: 1, max: 99 }}}
                                 value={quantity}
-                                onChange={(e) => setQuantity(e.target.value)}
+                                onChange={(e) => setQuantity(Number(e.target.value))}
                                 size='small'
                             />
                         </FormControl>

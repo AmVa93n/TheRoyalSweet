@@ -40,7 +40,7 @@ export type Product = {
         ingredient: Ingredient,
         amount: number
     }],
-    category: string
+    category: Category
 }
 
 export type Order = {
@@ -67,3 +67,5 @@ export type CartItem = {
 }
 
 export type Size = "small" | "medium" | "big"
+
+export type Category = "cake" | "pie" | "cheesecake" | "dessert" | "mini"

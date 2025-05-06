@@ -7,7 +7,7 @@ import Orders from "../../src/components/admin/Orders";
 function AdminPage() {
     const [value, setValue] = useState(1);
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (_: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 

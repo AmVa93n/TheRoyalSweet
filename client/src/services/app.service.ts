@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
-import type { Product, Order } from "../types";
+import type { Product } from "../types";
 
 class AppService {
   api: AxiosInstance;
@@ -19,7 +19,7 @@ class AppService {
     return response.data.product
   }
 
-  async placeOrder(requestBody: Order): Promise<Order> {
+  async placeOrder(requestBody: any) {
     const response = await this.api.post(`/api/checkout`, requestBody);
     return response.data
   }
