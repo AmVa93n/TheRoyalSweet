@@ -3,7 +3,7 @@ import axios from "axios";
 class AdminService {
   constructor() {
     this.api = axios.create({
-      baseURL: process.env.REACT_APP_DEV_SERVER_URL || process.env.REACT_APP_SERVER_URL,
+      baseURL: import.meta.env.VITE_DEV_SERVER_URL || import.meta.env.VITE_SERVER_URL,
     });
 
     // Automatically set JWT token on the request headers for every request

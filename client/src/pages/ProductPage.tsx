@@ -1,4 +1,4 @@
-import { Container, Box, Typography, Button, Grid2, Select, MenuItem, FormControl, FormLabel, TextField } from '@mui/material';
+import { Container, Box, Typography, Button, Grid as Grid2, Select, MenuItem, FormControl, FormLabel, TextField } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useParams } from 'react-router-dom'
 import { useState, useEffect, useContext } from 'react';

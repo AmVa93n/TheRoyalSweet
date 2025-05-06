@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Container, Grid2, Card, CardMedia, CardContent, Typography, Button, Box, ListItemText } from '@mui/material';
+import { Container, Grid as Grid2, Card, CardMedia, CardContent, Typography, Button, Box, ListItemText } from '@mui/material';
 import appService from '../services/app.service'
 import { LanguageContext } from '../context/language.context';
 import { useNavigate } from "react-router-dom";

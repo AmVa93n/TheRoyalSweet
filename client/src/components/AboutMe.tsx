@@ -1,4 +1,4 @@
-import { Box, Grid2, Typography } from '@mui/material';
+import { Box, Grid as Grid2, Typography } from '@mui/material';
 import { LanguageContext } from '../context/language.context';
 import { useContext } from 'react';
 

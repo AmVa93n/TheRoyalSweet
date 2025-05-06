@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
-import EditIngredients from "../../../client vite/src/components/admin/EditIngredients";
-import EditProducts from "../../../client vite/src/components/admin/EditProducts";
-import Orders from "../../../client vite/src/components/admin/Orders";
+import EditIngredients from "../../src/components/admin/EditIngredients";
+import EditProducts from "../../src/components/admin/EditProducts";
+import Orders from "../../src/components/admin/Orders";
 
 function AdminPage() {
     const [value, setValue] = useState(1);

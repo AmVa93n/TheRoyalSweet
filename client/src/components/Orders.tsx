@@ -1,4 +1,4 @@
-import { Box, Typography, Grid2 } from '@mui/material';
+import { Box, Typography, Grid as Grid2 } from '@mui/material';
 import { LanguageContext } from '../context/language.context';
 import { useContext } from 'react';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';

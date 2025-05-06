@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Container, Box, Card, CardContent, Divider, Grid2, TextField, Typography, FormControlLabel, Switch, Button } from '@mui/material';
+import { Container, Box, Card, CardContent, Divider, Grid as Grid2, TextField, Typography, FormControlLabel, Switch, Button } from '@mui/material';
 import { CartContext } from '../context/cart.context';
 import { LanguageContext } from '../context/language.context';
 import appService from '../services/app.service'
