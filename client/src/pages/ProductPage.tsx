@@ -41,7 +41,7 @@ function ProductPage() {
                     <Box sx={{ textAlign: 'center', mb: 4 }}>
                         <img
                         src={product.images?.[0]}
-                        alt={product.name?.[language]}
+                        alt={product._id}
                         style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
                         />
                     </Box>

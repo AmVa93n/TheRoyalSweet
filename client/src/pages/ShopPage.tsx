@@ -84,7 +84,7 @@ function ShopPage() {
                             <Card sx={{width: 340}}>
                                 <CardMedia
                                     component="img"
-                                    alt={product.name[language]}
+                                    alt={product._id}
                                     height="250"
                                     image={product.images[0]}
                                     sx={{ objectFit: 'cover', cursor: 'pointer' }}

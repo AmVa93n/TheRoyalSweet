@@ -179,7 +179,7 @@ function CheckoutPage() {
                             <Box sx={{mr: 2}}>
                                 <img
                                     src={item.product.images[0]}
-                                    alt={item.product.name[language]}
+                                    alt={item.product._id}
                                     style={{ width: 40, height: 40 }}
                                     />
                             </Box>
