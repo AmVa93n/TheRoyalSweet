@@ -3,12 +3,12 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Box, IconButton, Stack } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import ShopPreview from '../components/ShopPreview';
-import Testimonials from '../components/Testimonials';
-import AboutMe from '../components/AboutMe'
-import Contacts from '../components/Contacts'
-import Orders from '../components/Orders';
-import Footer from '../components/Footer';
+import ShopPreview from '../../../client vite/src/components/ShopPreview';
+import Testimonials from '../../../client vite/src/components/Testimonials';
+import AboutMe from '../../../client vite/src/components/AboutMe'
+import Contacts from '../../../client vite/src/components/Contacts'
+import Orders from '../../../client vite/src/components/Orders';
+import Footer from '../../../client vite/src/components/Footer';
 import { useContext } from 'react';
 import { ThemeContext } from '../context/theme.context';
 

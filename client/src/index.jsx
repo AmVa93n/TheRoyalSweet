@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
-import { AuthProviderWrapper } from "./context/auth.context";
-import { LanguageProvider } from "./context/language.context";
-import { CartProvider } from "./context/cart.context";
+import { AuthProviderWrapper } from "../../client/src/context/auth.context";
+import { LanguageProvider } from "../../client/src/context/language.context";
+import { CartProvider } from "../../client/src/context/cart.context";
 import '@fontsource/montserrat';
-import { ThemeProvider } from "./context/theme.context";
+import { ThemeProvider } from "../../client/src/context/theme.context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
