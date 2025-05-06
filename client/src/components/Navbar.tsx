@@ -9,13 +9,12 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { CartContext } from '../context/cart.context';
 import { LanguageContext } from '../context/language.context';
 import Cart from './Cart'
-import { ThemeContext } from '../context/theme.context';
+import { theme } from '../style';
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { cart, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
   const { language, setLanguage } = useContext(LanguageContext)
-  const theme = useContext(ThemeContext);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);

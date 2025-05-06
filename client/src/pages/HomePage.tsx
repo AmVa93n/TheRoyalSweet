@@ -9,8 +9,7 @@ import AboutMe from '../../src/components/AboutMe'
 import Contacts from '../../src/components/Contacts'
 import Orders from '../../src/components/Orders';
 import Footer from '../../src/components/Footer';
-import { useContext } from 'react';
-import { ThemeContext } from '../context/theme.context';
+import { theme } from '../style';
 
 const images = [
   './carousel1.jpg',
@@ -19,7 +18,6 @@ const images = [
 ];
 
 function HomePage() {
-  const theme = useContext(ThemeContext);
 
   return (
     <Stack>
