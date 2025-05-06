@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Avatar } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
-import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
 
@@ -55,7 +54,6 @@ function AdminPage() {
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell><b>Image</b></TableCell>
                         <TableCell><b>Name</b></TableCell>
                         <TableCell><b>Supermarket</b></TableCell>
                         <TableCell><b>Brand</b></TableCell>
@@ -67,22 +65,6 @@ function AdminPage() {
                 <TableBody>
                 {ingredients.map((ingredient) => (
                     <TableRow key={ingredient._id}>
-                        <TableCell>
-                            {editRowId === ingredient._id ? (
-                                <TextField
-                                    name="image"
-                                    value={editValues.image || ''}
-                                    onChange={handleChange}
-                                    size="small"
-                                />
-                                ) : (
-                                    ingredient.image ? <img src={ingredient.image} alt={ingredient.name} /> :
-                                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)' }}>
-                                        <ImageNotSupportedIcon />
-                                    </Avatar>
-                                )}
-                        </TableCell>
-
                         <TableCell>
                             {editRowId === ingredient._id ? (
                             <TextField

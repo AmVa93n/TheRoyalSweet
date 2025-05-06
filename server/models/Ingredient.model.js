@@ -7,7 +7,6 @@ const ingredientSchema = new Schema(
     name: String,
     units: String,
     priceperunit: Number,
-    image: String
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

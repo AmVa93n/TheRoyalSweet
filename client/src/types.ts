@@ -5,7 +5,6 @@ export type Ingredient = {
     name: string,
     units: string,
     priceperunit: number,
-    image: string
 }
 
 export type Product = {
