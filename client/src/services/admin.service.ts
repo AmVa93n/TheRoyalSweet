@@ -1,43 +1,30 @@
-import axios from "axios";
+import axios, { type AxiosInstance } from "axios";
+import type { Ingredient, Product, Order } from "../types";
 
 class AdminService {
+  api: AxiosInstance;
   constructor() {
     this.api = axios.create({
       baseURL: import.meta.env.VITE_DEV_SERVER_URL || import.meta.env.VITE_SERVER_URL,
     });
-
-    // Automatically set JWT token on the request headers for every request
-    this.api.interceptors.request.use((config) => {
-      // Retrieve the JWT token from the local storage
-      const storedToken = localStorage.getItem("authToken");
-
-      if (storedToken) {
-        config.headers = {
-          ...config.headers, // Preserve existing headers
-          Authorization: `Bearer ${storedToken}`
-        };
-      }
-
-      return config;
-    });
   }
 
-  async getIngredients() {
+  async getIngredients(): Promise<Ingredient[]> {
     const response = await this.api.get(`/admin/ingredients`);
     return response.data.ingredients
   }
 
-  async updateProduct(updatedProduct) {
+  async updateProduct(updatedProduct: Product): Promise<Product> {
     const response = await this.api.put(`/admin/product`, updatedProduct);
     return response.data.product
   }
 
-  async updateIngredient(updatedIngredient) {
+  async updateIngredient(updatedIngredient: Ingredient): Promise<Ingredient> {
     const response = await this.api.put(`/admin/ingredient`, updatedIngredient);
     return response.data.ingredient
   }
 
-  async getOrders() {
+  async getOrders(): Promise<Order[]> {
     const response = await this.api.get(`/admin/orders`);
     return response.data.orders
   }

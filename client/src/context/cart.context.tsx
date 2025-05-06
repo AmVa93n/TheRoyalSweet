@@ -1,21 +1,31 @@
 import { createContext, useState } from 'react';
+import type { CartItem, Product, Size } from '../types';
 
-const CartContext = createContext();
+const CartContext = createContext({} as CartContextType);
 
-function CartProvider(props) {
-    const [cart, setCart] = useState([])
+type CartContextType = {
+    cart: CartItem[],
+    addProduct: (product: Product, size: Size, quantity: number) => void,
+    removeProduct: (id: string) => void,
+    changeQuantity: (id: string, newQuantity: number) => void,
+    isDrawerOpen: boolean,
+    setIsDrawerOpen: (isOpen: boolean) => void
+};
+
+function CartProvider({ children }: React.PropsWithChildren) {
+    const [cart, setCart] = useState([] as CartItem[]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-    function addProduct(product, size, quantity) {
+    function addProduct(product: Product, size: Size, quantity: number) {
         if (cart.some(item => item.product._id === product._id)) return // can't add two items with same product
         setCart(prev => [...prev, {product, size, quantity}])
     }
 
-    function removeProduct(id) {
+    function removeProduct(id: string) {
         setCart(prev => prev.filter(item => item.product._id !== id))
     }
 
-    function changeQuantity(id, newQuantity) {
+    function changeQuantity(id: string, newQuantity: number) {
         if (newQuantity < 1 || newQuantity > 99) return
         setCart(prev => prev.map(item => item.product._id === id ? {...item, quantity: newQuantity} : item))
     }
@@ -28,7 +38,7 @@ function CartProvider(props) {
             changeQuantity,
             isDrawerOpen, setIsDrawerOpen
         }}>
-            {props.children}
+            {children}
         </CartContext.Provider>
     );
 };

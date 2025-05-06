@@ -1,8 +1,13 @@
 import { createContext, useState } from 'react';
 
-const LanguageContext = createContext();
+const LanguageContext = createContext({} as LanguageContextType);
 
-function LanguageProvider(props) {
+type LanguageContextType = {
+    language: string;
+    setLanguage: (language: string) => void;
+};
+
+function LanguageProvider({ children }: React.PropsWithChildren) {
     const [language, setLanguage] = useState('pt')
 
     return (
@@ -10,7 +15,7 @@ function LanguageProvider(props) {
             language,
             setLanguage
         }}>
-            {props.children}
+            {children}
         </LanguageContext.Provider>
     );
 };

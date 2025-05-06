@@ -1,38 +1,25 @@
-import axios from "axios";
+import axios, { type AxiosInstance } from "axios";
+import type { Product, Order } from "../types";
 
 class AppService {
+  api: AxiosInstance;
   constructor() {
     this.api = axios.create({
       baseURL: import.meta.env.VITE_DEV_SERVER_URL || import.meta.env.VITE_SERVER_URL,
     });
-
-    // Automatically set JWT token on the request headers for every request
-    this.api.interceptors.request.use((config) => {
-      // Retrieve the JWT token from the local storage
-      const storedToken = localStorage.getItem("authToken");
-
-      if (storedToken) {
-        config.headers = {
-          ...config.headers, // Preserve existing headers
-          Authorization: `Bearer ${storedToken}`
-        };
-      }
-
-      return config;
-    });
   }
 
-  async getProducts() {
+  async getProducts(): Promise<Product[]> {
     const response = await this.api.get(`/api/products`);
     return response.data.products
   }
 
-  async getProduct(productId) {
+  async getProduct(productId: string): Promise<Product> {
     const response = await this.api.get(`/api/product/${productId}`);
     return response.data.product
   }
 
-  async placeOrder(requestBody) {
+  async placeOrder(requestBody: Order): Promise<Order> {
     const response = await this.api.post(`/api/checkout`, requestBody);
     return response.data
   }
