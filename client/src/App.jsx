@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "../../client/src/pages/HomePage";
+import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import AdminPage from "../../client/src/pages/AdminPage";
-import SignupPage from "../../client/src/pages/SignupPage";
+import AdminPage from "./pages/AdminPage";
+import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 //import IsPrivate from "./components/auth/IsPrivate";
