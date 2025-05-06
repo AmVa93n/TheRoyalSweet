@@ -3,8 +3,11 @@ export type Ingredient = {
     supermarket: string,
     brand: string,
     name: string,
-    units: string,
-    priceperunit: number,
+    recipeUnits: string,
+    pricePerUnit: number,
+    price: number,
+    unitsPerPackage: number,
+    packageUnits: string,
 }
 
 export type Product = {

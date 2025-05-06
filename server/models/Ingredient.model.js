@@ -5,8 +5,11 @@ const ingredientSchema = new Schema(
     supermarket: String,
     brand: String,
     name: String,
-    units: String,
-    priceperunit: Number,
+    recipeUnits: String,
+    pricePerUnit: Number,
+    price: Number,
+    unitsPerPackage: Number,
+    packageUnits: String,
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

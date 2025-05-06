@@ -57,8 +57,11 @@ function AdminPage() {
                         <TableCell><b>Name</b></TableCell>
                         <TableCell><b>Supermarket</b></TableCell>
                         <TableCell><b>Brand</b></TableCell>
-                        <TableCell><b>Units</b></TableCell>
-                        <TableCell><b>Price per unit</b></TableCell>
+                        <TableCell><b>Recipe Units</b></TableCell>
+                        <TableCell><b>Price / Unit</b></TableCell>
+                        <TableCell><b>Price</b></TableCell>
+                        <TableCell><b>Units / Package</b></TableCell>
+                        <TableCell><b>Package Units</b></TableCell>
                         <TableCell><b>Actions</b></TableCell>
                     </TableRow>
                 </TableHead>
@@ -106,26 +109,64 @@ function AdminPage() {
                         <TableCell>
                             {editRowId === ingredient._id ? (
                             <TextField
-                                name="units"
-                                value={editValues.units}
+                                name="recipeUnits"
+                                value={editValues.recipeUnits}
                                 onChange={handleChange}
                                 size="small"
                             />
                             ) : (
-                            ingredient.units
+                            ingredient.recipeUnits
                             )}
                         </TableCell>
                         <TableCell>
                             {editRowId === ingredient._id ? (
                             <TextField
-                                name="priceperunit"
-                                value={editValues.priceperunit}
+                                name="pricePerUnit"
+                                value={editValues.pricePerUnit}
                                 onChange={handleChange}
                                 type="number"
                                 size="small"
                             />
                             ) : (
-                            ingredient.priceperunit
+                            ingredient.pricePerUnit + " €"
+                            )}
+                        </TableCell>
+                        <TableCell>
+                            {editRowId === ingredient._id ? (
+                            <TextField
+                                name="price"
+                                value={editValues.price}
+                                onChange={handleChange}
+                                type="number"
+                                size="small"
+                            />
+                            ) : (
+                            ingredient.price + " €"
+                            )}
+                        </TableCell>
+                        <TableCell>
+                            {editRowId === ingredient._id ? (
+                            <TextField
+                                name="unitsPerPackage"
+                                value={editValues.unitsPerPackage}
+                                onChange={handleChange}
+                                type="number"
+                                size="small"
+                            />
+                            ) : (
+                            ingredient.unitsPerPackage
+                            )}
+                        </TableCell>
+                        <TableCell>
+                            {editRowId === ingredient._id ? (
+                            <TextField
+                                name="packageUnits"
+                                value={editValues.packageUnits}
+                                onChange={handleChange}
+                                size="small"
+                            />
+                            ) : (
+                            ingredient.packageUnits
                             )}
                         </TableCell>
 
