@@ -200,12 +200,11 @@ function EditProducts() {
             {products.find(p => p._id === editRowId)?.recipe.map((i, index) => (
               <ListItem key={index}>
                 <Box sx={{mr: 1}}>
-                    {i.ingredient.image ? <img src={i.ingredient.image} alt={i.ingredient.name} /> :
                     <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)' }}>
                         <ImageNotSupportedIcon />
-                    </Avatar>}
+                    </Avatar>
                 </Box>
-                <Typography variant="body2">{i.ingredient.name}: {i.amount} {i.ingredient.units}</Typography>
+                <Typography variant="body2">{i.ingredient.name}: {i.amount} {i.ingredient.recipeUnits}</Typography>
                 <IconButton
                   onClick={() => handleDeleteIngredient(index)}
                 >
