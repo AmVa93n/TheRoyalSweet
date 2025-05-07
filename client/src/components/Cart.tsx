@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 function Cart() {
     const { cart, removeProduct, changeQuantity, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
     const { language } = useContext(LanguageContext)
-    const totalPrice = cart.reduce((sum, item) => sum + item.product.price[item.size] * item.quantity, 0);
+    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
         <Drawer
@@ -42,7 +42,7 @@ function Cart() {
                   <Box sx={{ flexGrow: 1 }}>
                     <ListItemText
                       primary={item.product.name[language]}
-                      secondary={`${item.size}, ${item.product.price[item.size].toFixed(2).replace('.', ',')} €`}
+                      secondary={`${item.size}, ${item.price.toFixed(2).replace('.', ',')} €`}
                     />
                     
                     {/* Quantity Adjuster */}

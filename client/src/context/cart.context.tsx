@@ -1,5 +1,6 @@
 import { createContext, useState } from 'react';
 import type { CartItem, Product, Size } from '../types';
+import { calculatePrice } from '../utils';
 
 const CartContext = createContext({} as CartContextType);
 
@@ -18,7 +19,8 @@ function CartProvider({ children }: React.PropsWithChildren) {
 
     function addProduct(product: Product, size: Size, quantity: number) {
         if (cart.some(item => item.product._id === product._id)) return // can't add two items with same product
-        setCart(prev => [...prev, {product, size, quantity}])
+        const { price } = calculatePrice(product)
+        setCart(prev => [...prev, {product, size, quantity, price}])
     }
 
     function removeProduct(id: string) {

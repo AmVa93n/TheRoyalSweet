@@ -14,7 +14,7 @@ function CheckoutPage() {
     const { language } = useContext(LanguageContext)
     const [isPickup, setIsPickup] = useState(false);
     const deliveryFee = isPickup ? 0 : 5
-    const totalAmount = cart.reduce((sum, item) => sum + item.product.price[item.size] * item.quantity, 0) + deliveryFee
+    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + deliveryFee
     const [orderData, setOrderData] = useState({
         name: '',
         email: '',
@@ -184,7 +184,7 @@ function CheckoutPage() {
                                     />
                             </Box>
                             <Typography flexGrow={1}>{item.product.name[language]} x {item.quantity}</Typography>
-                            <Typography>{(item.product.price[item.size] * item.quantity).toFixed(2).replace('.', ',')} €</Typography>
+                            <Typography>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</Typography>
                         </Box>
                     ))}
                     <Box display="flex" sx={{ mb: 2, alignItems: 'center' }}>
