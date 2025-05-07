@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import EditIngredients from "../../src/components/admin/EditIngredients";
 import EditProducts from "../../src/components/admin/EditProducts";
-import Orders from "../../src/components/admin/Orders";
+import ManageOrders from "../components/admin/ManageOrders";
 
 function AdminPage() {
     const [value, setValue] = useState(1);
@@ -20,7 +20,7 @@ function AdminPage() {
             </Tabs>
             {value === 0 && <EditIngredients />}
             {value === 1 && <EditProducts />}
-            {value === 2 && <Orders />}
+            {value === 2 && <ManageOrders />}
         </Box>
     )
 }

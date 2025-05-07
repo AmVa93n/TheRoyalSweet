@@ -1,61 +1,46 @@
-import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider } from '@mui/material';
-import adminService from '../../services/admin.service';
-import type { CartItem, Order } from '../../types';
+import type { Order, CartItem } from '../../types';
 
-function Orders() {
-  const [orders, setOrders] = useState([] as Order[]);
+type Props = {
+    order: Order;
+}
 
-  useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const data = await adminService.getOrders();  // Assuming you have an API endpoint that returns the data
-        setOrders(data);
-      } catch (error) {
-        console.error('Failed to fetch orders', error);
-      }
+export default function OrderCard({ order }: Props) {
+    const accumulativeIngredients = calculateAccumulativeIngredients(order.items);
+    const grandTotalPrice = calculateGrandTotalPrice(order.items);
+    const totalIngredientsPrice = accumulativeIngredients.reduce((total, ing) => total + ing.totalPrice, 0);
+
+    function calculateAccumulativeIngredients(items: CartItem[]) {
+        const ingredientsMap: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
+    
+        items.forEach(item => {
+          item.product.recipe.forEach(({ ingredient, amount }) => {
+            if (!ingredientsMap[ingredient._id]) {
+              ingredientsMap[ingredient._id] = {
+                name: ingredient.name,
+                units: ingredient.recipeUnits,
+                totalAmount: 0,
+                totalPrice: 0,
+              };
+            }
+    
+            const ingredientData = ingredientsMap[ingredient._id];
+            ingredientData.totalAmount += amount * item.quantity;
+            ingredientData.totalPrice += ingredientData.totalAmount * ingredient.pricePerUnit;
+          });
+        });
+    
+        return Object.values(ingredientsMap);
     }
-    fetchOrders();
-  }, []);
+    
+    function calculateGrandTotalPrice(items: CartItem[]) {
+        return items.reduce((total, item) => {
+          return total + item.price * item.quantity;
+        }, 0);
+    }
 
-  function calculateAccumulativeIngredients(items: CartItem[]) {
-    const ingredientsMap: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
-
-    items.forEach(item => {
-      item.product.recipe.forEach(({ ingredient, amount }) => {
-        if (!ingredientsMap[ingredient._id]) {
-          ingredientsMap[ingredient._id] = {
-            name: ingredient.name,
-            units: ingredient.recipeUnits,
-            totalAmount: 0,
-            totalPrice: 0,
-          };
-        }
-
-        const ingredientData = ingredientsMap[ingredient._id];
-        ingredientData.totalAmount += amount * item.quantity;
-        ingredientData.totalPrice += ingredientData.totalAmount * ingredient.pricePerUnit;
-      });
-    });
-
-    return Object.values(ingredientsMap);
-  }
-
-  function calculateGrandTotalPrice(items: CartItem[]) {
-    return items.reduce((total, item) => {
-      return total + item.price * item.quantity;
-    }, 0);
-  }
-
-  return (
-    <Box sx={{ width: '90%', mx: 'auto' }}>
-      {orders.map((order, index) => {
-        const accumulativeIngredients = calculateAccumulativeIngredients(order.items);
-        const grandTotalPrice = calculateGrandTotalPrice(order.items);
-        const totalIngredientsPrice = accumulativeIngredients.reduce((total, ing) => total + ing.totalPrice, 0);
-
-        return (
-          <Paper key={index} sx={{ mb: 3, p: 2 }}>
+    return (
+        <Paper sx={{ mb: 3, p: 2 }}>
             <Typography variant="h6">Order by: {order.name} ({order.email})</Typography>
             {order.pickup ? <Typography>Pickup</Typography> :
               <Box>
@@ -119,11 +104,6 @@ function Orders() {
             <Typography variant="h6">Grand Total Price: {grandTotalPrice} €</Typography>
             <Typography variant="h6">Total Ingredients Price: {totalIngredientsPrice.toFixed(3)} €</Typography>
             <Typography variant="h6">Net Gain: {(grandTotalPrice - totalIngredientsPrice).toFixed(3)} €</Typography>
-          </Paper>
-        );
-      })}
-    </Box>
-  );
+        </Paper>
+    )
 }
-
-export default Orders;
