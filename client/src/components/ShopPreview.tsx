@@ -3,13 +3,11 @@ import { Grid as Grid2, Card, CardMedia, CardContent, Typography, Box, Button } 
 import appService from '../services/app.service'
 import { LanguageContext } from '../context/language.context';
 import { useNavigate, Link } from "react-router-dom";
-import type { Ingredient, Product } from '../types';
+import type { Product } from '../types';
 import { calculatePrice } from '../utils';
-import adminService from '../services/admin.service';
 
 function ShopPreview() {
     const [products, setProducts] = useState([] as Product[]);
-    const [ingredients, setIngredients] = useState([] as Ingredient[]);
     const { language } = useContext(LanguageContext)
     const navigate = useNavigate();
 
@@ -19,8 +17,6 @@ function ShopPreview() {
             const products = await appService.getProducts()
             const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
             setProducts(preview)
-            const ingredients = await adminService.getIngredients()
-            setIngredients(ingredients)
           } catch (error) {
             alert(`Error fetching products: ${error}`)
           }
@@ -57,7 +53,7 @@ function ShopPreview() {
                                 {product.name[language]}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                                {language === 'en' ? 'from' : 'A partir de '} €{calculatePrice(product, ingredients).price}
+                                {language === 'en' ? 'from' : 'A partir de '} €{calculatePrice(product).price}
                             </Typography>
                         </CardContent>
                     </Card>

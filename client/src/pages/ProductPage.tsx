@@ -11,7 +11,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Link } from 'react-router-dom';
 import type { Product, Size, Ingredient } from '../types';
-import adminService from '../services/admin.service';
 import { calculatePrice } from '../utils';
 
 function ProductPage() {
@@ -22,15 +21,12 @@ function ProductPage() {
     const [quantity, setQuantity] = useState(1)
     const { language } = useContext(LanguageContext)
     const { addProduct } = useContext(CartContext)
-    const [ingredients, setIngredients] = useState([] as Ingredient[]);
 
     useEffect(() => {
         async function init() {
             try {
                 const product = await appService.getProduct(productId || '')
                 setProduct(product)
-                const ingredients = await adminService.getIngredients()
-                setIngredients(ingredients)
             } catch (error) {
                 alert(`Error: ${error}`)
             }
@@ -75,7 +71,7 @@ function ProductPage() {
 
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant="h5" sx={{ mb: 2 }}>
-                            {calculatePrice(product, ingredients).price.toFixed(2).replace('.', ',')} €
+                            {calculatePrice(product).price.toFixed(2).replace('.', ',')} €
                         </Typography>
                         
                         <FormControl sx={{ mb: 2 }}>

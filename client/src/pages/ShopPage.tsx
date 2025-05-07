@@ -3,9 +3,8 @@ import { Container, Grid as Grid2, Card, CardMedia, CardContent, Typography, But
 import appService from '../services/app.service'
 import { LanguageContext } from '../context/language.context';
 import { useNavigate } from "react-router-dom";
-import type { Category, Product, Ingredient } from '../types';
+import type { Category, Product } from '../types';
 import { calculatePrice } from '../utils';
-import adminService from '../services/admin.service';
 
 const categories: {cat: Category, en: string, pt: string}[] = [
     {cat: 'cake', en: 'Cakes', pt: 'Bolos'}, 
@@ -17,7 +16,6 @@ const categories: {cat: Category, en: string, pt: string}[] = [
 
 function ShopPage() {
     const [products, setProducts] = useState([] as Product[])
-    const [ingredients, setIngredients] = useState([] as Ingredient[]);
     const { language } = useContext(LanguageContext)
     const navigate = useNavigate();
 
@@ -26,8 +24,6 @@ function ShopPage() {
           try {
             const products = await appService.getProducts()
             setProducts(products)
-            const ingredients = await adminService.getIngredients()
-            setIngredients(ingredients)
           } catch (error) {
             alert(`Error: ${error}`)
           }
@@ -101,7 +97,7 @@ function ShopPage() {
                                         {product.name[language]}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        {language === 'en' ? 'from' : 'A partir de '} €{calculatePrice(product, ingredients).price}
+                                        {language === 'en' ? 'from' : 'A partir de '} €{calculatePrice(product).price}
                                     </Typography>
                                 </CardContent>
                             </Card>

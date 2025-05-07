@@ -1,6 +1,6 @@
-import type { Product, Ingredient } from './types'
+import type { Product } from './types'
 
-export function calculatePrice(product: Product, ingredients: Ingredient[]) {
+export function calculatePrice(product: Product) {
     const workHourPrice = 10
     const electricityHourPrice = 0.54
     const fixedCosts = 2
@@ -8,8 +8,7 @@ export function calculatePrice(product: Product, ingredients: Ingredient[]) {
 
     const electricityCost = product.electricityHours * electricityHourPrice
     const ingredientsCost = product.recipe.reduce((total, item) => {
-        const ingredient = ingredients.find(i => i._id === item.ingredient._id)!;
-        return total + (ingredient?.pricePerUnit * item.amount);
+        return total + (item.ingredient.pricePerUnit * item.amount);
     }, 0);
 
     const totalCost = ingredientsCost + electricityCost + fixedCosts

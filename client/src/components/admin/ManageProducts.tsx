@@ -62,9 +62,9 @@ function ManageProducts() {
                 <TableCell padding="normal">{product.name.pt}</TableCell>
                 <TableCell padding="normal">{product.workHours}</TableCell>
                 <TableCell padding="normal">{product.electricityHours}</TableCell>
-                <TableCell padding="normal">{calculatePrice(product, ingredients).price.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(product, ingredients).totalCost.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(product, ingredients).netGain.toFixed(2)} €</TableCell>
+                <TableCell padding="normal">{calculatePrice(product).price.toFixed(2)} €</TableCell>
+                <TableCell padding="normal">{calculatePrice(product).totalCost.toFixed(2)} €</TableCell>
+                <TableCell padding="normal">{calculatePrice(product).netGain.toFixed(2)} €</TableCell>
                 
                 <TableCell padding="normal">
                   <IconButton onClick={() => handleEditClick(product._id, product)}>
