@@ -45,11 +45,7 @@ export type Product = {
 export type Order = {
     name: string,
     email: string,
-    items: [{
-        product: Product,
-        size: Size,
-        quantity: number
-    }],
+    items: CartItem[],
     pickup: boolean,
     shipping: {
         city: string,
@@ -63,6 +59,7 @@ export type CartItem = {
     product: Product,
     size: Size,
     quantity: number
+    price: number,
 }
 
 export type Size = "small" | "medium" | "big"

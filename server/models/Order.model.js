@@ -8,7 +8,8 @@ const orderSchema = new Schema(
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
         size: String,
-        quantity: Number
+        quantity: Number,
+        price: Number,
     }],
     pickup: Boolean,
     shipping: {

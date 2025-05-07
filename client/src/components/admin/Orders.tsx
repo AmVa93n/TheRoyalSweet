@@ -10,7 +10,6 @@ function Orders() {
     async function fetchOrders() {
       try {
         const data = await adminService.getOrders();  // Assuming you have an API endpoint that returns the data
-        console.log(data)
         setOrders(data);
       } catch (error) {
         console.error('Failed to fetch orders', error);
@@ -44,7 +43,7 @@ function Orders() {
 
   function calculateGrandTotalPrice(items: CartItem[]) {
     return items.reduce((total, item) => {
-      return total + item.product.price[item.size] * item.quantity;
+      return total + item.price * item.quantity;
     }, 0);
   }
 
@@ -84,8 +83,8 @@ function Orders() {
                       <TableCell>{item.product.name.en}</TableCell>
                       <TableCell>{item.size}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.product.price[item.size]}</TableCell>
-                      <TableCell>{item.product.price[item.size] * item.quantity}</TableCell>
+                      <TableCell>{item.price}</TableCell>
+                      <TableCell>{item.price * item.quantity}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
