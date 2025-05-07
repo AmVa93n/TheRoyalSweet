@@ -40,8 +40,7 @@ function ManageProducts() {
           <TableHead>
             <TableRow>
               <TableCell padding="normal">Image</TableCell>
-              <TableCell padding="normal">Name (EN)</TableCell>
-              <TableCell padding="normal">Name (PT)</TableCell>
+              <TableCell padding="normal">Name</TableCell>
               <TableCell padding="normal">Work Hours</TableCell>
               <TableCell padding="normal">Electricity Hours</TableCell>
               <TableCell padding="normal">Price</TableCell>
@@ -60,7 +59,6 @@ function ManageProducts() {
                     </Avatar>}
                 </TableCell>
 
-                <TableCell padding="normal">{product.name.en}</TableCell>
                 <TableCell padding="normal">{product.name.pt}</TableCell>
                 <TableCell padding="normal">{product.workHours}</TableCell>
                 <TableCell padding="normal">{product.electricityHours}</TableCell>
@@ -79,7 +77,7 @@ function ManageProducts() {
         </Table>
       </TableContainer>
 
-      <EditProductModal 
+      {editRowId && <EditProductModal 
         products={products} 
         setProducts={setProducts} 
         ingredients={ingredients} 
@@ -87,7 +85,7 @@ function ManageProducts() {
         setEditRowId={setEditRowId}
         editValues={editValues}
         setEditValues={setEditValues}
-      />
+      />}
     </>
   );
 };

@@ -17,7 +17,7 @@ type Props = {
     setEditValues: React.Dispatch<React.SetStateAction<Product>>;
 };
 
-export default function EditRecipe({ products, setProducts, ingredients, editRowId, setEditRowId, editValues, setEditValues }: Props) {
+export default function EditProductModal({ products, setProducts, ingredients, editRowId, setEditRowId, editValues, setEditValues }: Props) {
     const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
     const [newAmount, setNewAmount] = useState(0); // New amount input
 
@@ -131,13 +131,13 @@ export default function EditRecipe({ products, setProducts, ingredients, editRow
                     </Button>
                 </Box>
             </DialogContent>
-            <DialogActions>
-                <IconButton onClick={handleSave}>
-                    <DoneIcon />
-                </IconButton>
-                <IconButton onClick={handleCancel}>
-                    <CloseIcon />
-                </IconButton>
+            <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Button onClick={handleSave} startIcon={<DoneIcon />} color="success" variant="contained">
+                    Save Changes
+                </Button>
+                <Button onClick={handleCancel} startIcon={<CloseIcon />} color="error" variant="outlined">
+                    Discard
+                </Button>
             </DialogActions>
         </Dialog>
     )
