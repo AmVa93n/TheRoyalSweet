@@ -76,6 +76,26 @@ function EditProducts() {
     setProducts(updatedProducts);
   };
 
+  function calculatePrice(product: Product) {
+    const workHourPrice = 10
+    const electricityHourPrice = 0.54
+    const fixedCosts = 2
+    const gainMultiplier = 1.2 // 20% gain
+
+    const electricityCost = product.electricityHours * electricityHourPrice
+    const ingredientsCost = product.recipe.reduce((total, item) => {
+      const ingredient = ingredients.find(i => i._id === item.ingredient._id)!;
+      return total + (ingredient?.pricePerUnit * item.amount);
+    }, 0);
+
+    const totalCost = ingredientsCost + electricityCost + fixedCosts
+    const workHoursValue = product.workHours * workHourPrice
+    const rawPrice = (totalCost + workHoursValue) * gainMultiplier
+    const price = (Math.round(rawPrice * 10) / 10)
+    const netGain = price - totalCost
+    return {price, totalCost, netGain}
+  }
+
   return (
     <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
       <Table size="small">
@@ -84,9 +104,11 @@ function EditProducts() {
             <TableCell padding="normal">Image</TableCell>
             <TableCell padding="normal">Name (EN)</TableCell>
             <TableCell padding="normal">Name (PT)</TableCell>
-            <TableCell padding="normal">Price (Small)</TableCell>
-            <TableCell padding="normal">Price (Medium)</TableCell>
-            <TableCell padding="normal">Price (Big)</TableCell>
+            <TableCell padding="normal">Work Hours</TableCell>
+            <TableCell padding="normal">Electricity Hours</TableCell>
+            <TableCell padding="normal">Price</TableCell>
+            <TableCell padding="normal">Total Cost</TableCell>
+            <TableCell padding="normal">Net Gain</TableCell>
             <TableCell padding="normal">Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -135,42 +157,32 @@ function EditProducts() {
               <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
-                    name="price.small"
-                    value={editValues.price?.small || ""}
+                    name="workHours"
+                    value={editValues.workHours || ""}
                     onChange={handleChange}
                     type="number"
                     size="small"
                   />
                 ) : (
-                  product.price.small
+                  product.workHours
                 )}
               </TableCell>
               <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <TextField
-                    name="price.medium"
-                    value={editValues.price?.medium || ""}
+                    name="electricityHours"
+                    value={editValues.electricityHours || ""}
                     onChange={handleChange}
                     type="number"
                     size="small"
                   />
                 ) : (
-                  product.price.medium
+                  product.electricityHours
                 )}
               </TableCell>
-              <TableCell padding="normal">
-                {editRowId === product._id ? (
-                  <TextField
-                    name="price.big"
-                    value={editValues.price?.big || ""}
-                    onChange={handleChange}
-                    type="number"
-                    size="small"
-                  />
-                ) : (
-                  product.price.big
-                )}
-              </TableCell>
+              <TableCell padding="normal">{calculatePrice(product).price.toFixed(2)} €</TableCell>
+              <TableCell padding="normal">{calculatePrice(product).totalCost.toFixed(2)} €</TableCell>
+              <TableCell padding="normal">{calculatePrice(product).netGain.toFixed(2)} €</TableCell>
               <TableCell padding="normal">
                 {editRowId === product._id ? (
                   <>

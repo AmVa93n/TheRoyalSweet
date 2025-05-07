@@ -7,17 +7,14 @@ const productSchema = new Schema(
     description: {en: String, pt: String},
     serve: {en: String, pt: String},
     store: {en: String, pt: String},
-    price: {
-        small: Number,
-        medium: Number,
-        big: Number,
-    },
     images: [String],
     recipe: [{
       ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
       amount: Number
     }],
-    category: String
+    category: String,
+    workHours: Number,
+    electricityHours: Number,
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

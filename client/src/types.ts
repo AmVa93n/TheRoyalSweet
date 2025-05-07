@@ -32,17 +32,14 @@ export type Product = {
         en: string, 
         pt: string
     },
-    price: {
-        small: number,
-        medium: number,
-        big: number,
-    },
     images: string[],
     recipe: [{
         ingredient: Ingredient,
         amount: number
     }],
     category: Category
+    workHours: number,
+    electricityHours: number,
 }
 
 export type Order = {
