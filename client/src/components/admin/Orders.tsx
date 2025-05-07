@@ -27,7 +27,7 @@ function Orders() {
         if (!ingredientsMap[ingredient._id]) {
           ingredientsMap[ingredient._id] = {
             name: ingredient.name,
-            units: ingredient.units,
+            units: ingredient.recipeUnits,
             totalAmount: 0,
             totalPrice: 0,
           };
@@ -35,7 +35,7 @@ function Orders() {
 
         const ingredientData = ingredientsMap[ingredient._id];
         ingredientData.totalAmount += amount * item.quantity;
-        ingredientData.totalPrice += ingredientData.totalAmount * ingredient.priceperunit;
+        ingredientData.totalPrice += ingredientData.totalAmount * ingredient.pricePerUnit;
       });
     });
 
