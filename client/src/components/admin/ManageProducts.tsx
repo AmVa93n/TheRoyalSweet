@@ -53,8 +53,8 @@ function ManageProducts() {
             {products.map((product) => (
               <TableRow key={product._id}>
                 <TableCell>
-                  {product.images[0] ? <img src={product.images[0]} alt={product._id} width={64} /> :
-                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)' }}>
+                  {product.images[0] ? <img src={product.images[0]} alt={product._id} width={48} /> :
+                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)', width: 48, height: 48 }}>
                         <ImageNotSupportedIcon />
                     </Avatar>}
                 </TableCell>
