@@ -1,23 +1,19 @@
 import { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Button, Box, 
-    Typography, Autocomplete, Avatar, List, ListItem} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Avatar } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import adminService from '../../services/admin.service'
 import appService from '../../services/app.service'
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import type { Ingredient, Product } from "../../types";
+import EditRecipe from "./EditRecipe";
 
 function EditProducts() {
   const [products, setProducts] = useState([] as Product[]); // Store the list of products
   const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
   const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
   const [editValues, setEditValues] = useState({} as Product); // Store the values being edited
-  const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
-  const [newAmount, setNewAmount] = useState(0); // New amount input
 
   useEffect(() => {
     async function init() {
@@ -57,23 +53,6 @@ function EditProducts() {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setEditValues({ ...editValues, [name]: value });
-  };
-
-  function handleAddIngredient() {
-    const updatedProducts = [...products];
-    updatedProducts.find(p => p._id === editRowId)?.recipe.push({
-      ingredient: ingredients.find(i => i._id === newIngredientId) as Ingredient,
-      amount: newAmount,
-    });
-    setProducts(updatedProducts);
-    setNewIngredientId(""); // Clear input
-    setNewAmount(0); // Clear amount
-  };
-
-  function handleDeleteIngredient(ingredientIndex: number) {
-    const updatedProducts = [...products];
-    updatedProducts.find(p => p._id === editRowId)?.recipe.splice(ingredientIndex, 1);
-    setProducts(updatedProducts);
   };
 
   function calculatePrice(product: Product) {
@@ -205,57 +184,7 @@ function EditProducts() {
       </Table>
 
       {editRowId !== null && (
-        <>
-        <Box sx={{ padding: 2 }}>
-          <Typography variant="body2">Ingredients:</Typography>
-          <List>
-            {products.find(p => p._id === editRowId)?.recipe.map((i, index) => (
-              <ListItem key={index}>
-                <Box sx={{mr: 1}}>
-                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)' }}>
-                        <ImageNotSupportedIcon />
-                    </Avatar>
-                </Box>
-                <Typography variant="body2">{i.ingredient.name}: {i.amount} {i.ingredient.recipeUnits}</Typography>
-                <IconButton
-                  onClick={() => handleDeleteIngredient(index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-
-        <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between', width: '37%'}}>
-            <Autocomplete
-                options={ingredients} // Pass the whole ingredient object
-                getOptionLabel={(option) => option.name} // Display the ingredient name in the dropdown
-                value={ingredients.find(ingredient => ingredient._id === newIngredientId) || null} // Find the selected ingredient by ID
-                onChange={(_, newValue) => setNewIngredientId(newValue?._id || "")} // Store the ingredient's ID
-                renderInput={(params) => (
-                    <TextField {...params} placeholder="Select Ingredient" size="small" />
-                )}
-                sx={{ width: 300 }}
-            />
-            <TextField
-                value={newAmount}
-                onChange={(e) => setNewAmount(Number(e.target.value))}
-                placeholder="Amount"
-                type="number"
-                size="small"
-                sx={{ width: 100 }}
-            />
-            <Button
-                variant="contained"
-                onClick={() => handleAddIngredient()}
-                startIcon={<AddIcon />}
-                disabled={editRowId === null} // Disable if not editing a row
-            >
-            Add
-            </Button>
-        </Box>
-        </>
+        <EditRecipe products={products} setProducts={setProducts} ingredients={ingredients} editRowId={editRowId} />
       )}
     </TableContainer>
   );
