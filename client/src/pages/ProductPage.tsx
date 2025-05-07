@@ -10,22 +10,27 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Link } from 'react-router-dom';
-import type { Product, Size } from '../types';
+import type { Product, Size, Ingredient } from '../types';
+import adminService from '../services/admin.service';
+import { calculatePrice } from '../utils';
 
 function ProductPage() {
     const { productId } = useParams();
-    const [product, setProduct] = useState({} as Product)
+    const [product, setProduct] = useState({recipe: [] as {ingredient: Ingredient, amount: number}[]} as Product)
     const [size, setSize] = useState<Size>('small')
     const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     const [quantity, setQuantity] = useState(1)
     const { language } = useContext(LanguageContext)
     const { addProduct } = useContext(CartContext)
+    const [ingredients, setIngredients] = useState([] as Ingredient[]);
 
     useEffect(() => {
         async function init() {
             try {
                 const product = await appService.getProduct(productId || '')
                 setProduct(product)
+                const ingredients = await adminService.getIngredients()
+                setIngredients(ingredients)
             } catch (error) {
                 alert(`Error: ${error}`)
             }
@@ -70,7 +75,7 @@ function ProductPage() {
 
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant="h5" sx={{ mb: 2 }}>
-                            {product.price?.[size].toFixed(2).replace('.', ',')} €
+                            {calculatePrice(product, ingredients).price.toFixed(2).replace('.', ',')} €
                         </Typography>
                         
                         <FormControl sx={{ mb: 2 }}>

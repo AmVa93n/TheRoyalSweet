@@ -21,7 +21,7 @@ router.get("/products", async (req, res, next) => {
 router.get("/product/:productId", async (req, res, next) => {
   const productId = req.params.productId
   try {
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate('recipe.ingredient');
     
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
