@@ -23,6 +23,13 @@ export default function EditProductModal({ products, setProducts, ingredients, e
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
+        if (name.includes(".")) {
+            setEditValues((prev) => {
+                const [field, lang] = name.split(".");
+                return {...prev, [field]: {...prev[field], [lang]: value }};
+            });
+            return;
+        }
         setEditValues({ ...editValues, [name]: value });
     };
 
