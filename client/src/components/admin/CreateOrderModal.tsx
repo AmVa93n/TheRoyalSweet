@@ -44,7 +44,7 @@ export default function CreateOrderModal({ open, products, onSave, onClose }: Pr
     function handleAddItem() {
         const product = products.find(product => product._id === newProductId)!;
         const { price } = calculatePrice(product)
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newAmount, price: price, size: 'small' }] }));
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newAmount, price: price, size: 'medium' }] }));
         setNewProductId(""); // Clear input
         setNewAmount(0); // Clear amount
     };
