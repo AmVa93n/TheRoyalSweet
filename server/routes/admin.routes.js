@@ -71,4 +71,20 @@ router.get("/orders", async (req, res, next) => {
     }
 });
 
+router.post("/orders", async (req, res, next) => {
+    try {
+      const newOrder = req.body;
+  
+      const createdOrder = await Order.create(newOrder);
+  
+      if (!createdOrder) {
+        return res.status(404).json({ message: "Order not created" });
+      }
+  
+      res.status(201).json({ order: createdOrder });
+    } catch (err) {
+      next(err);  // Pass the error to the error-handling middleware
+    }
+});
+
 module.exports = router;

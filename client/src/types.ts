@@ -43,6 +43,7 @@ export type Product = {
 }
 
 export type Order = {
+    _id: string,
     name: string,
     email: string,
     items: CartItem[],

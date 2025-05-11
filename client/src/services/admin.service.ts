@@ -28,6 +28,11 @@ class AdminService {
     const response = await this.api.get(`/admin/orders`);
     return response.data.orders
   }
+
+  async createOrder(orderForm: Order): Promise<Order> {
+    const response = await this.api.post(`/admin/orders`, orderForm);
+    return response.data.order
+  }
 }
 
 // Create one instance (object) of the service
