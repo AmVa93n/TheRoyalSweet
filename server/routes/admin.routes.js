@@ -17,6 +17,31 @@ router.get("/ingredients", async (req, res, next) => {
       next(err);
     }
 });
+
+router.post("/product", async (req, res, next) => {
+    try {
+      const createdProduct = await Product.create({ 
+        name: {en: "", pt: ""},
+        intro: {en: "", pt: ""},
+        description: {en: "", pt: ""},
+        serve: {en: "", pt: ""},
+        store: {en: "", pt: ""},
+        images: [""],
+        recipe: [],
+        category: "",
+        workHours: 0,
+        electricityHours: 0,
+      })
+  
+      if (!createdProduct) {
+        return res.status(404).json({ message: "Product not created" });
+      }
+  
+      res.status(201).json({ product: createdProduct });
+    } catch (err) {
+      next(err);  // Pass the error to the error-handling middleware
+    }
+});
   
 router.put("/product", async (req, res, next) => {
     try {
@@ -30,6 +55,29 @@ router.put("/product", async (req, res, next) => {
       }
   
       res.status(200).json({ product: updatedProduct });
+    } catch (err) {
+      next(err);  // Pass the error to the error-handling middleware
+    }
+});
+
+router.post("/ingredient", async (req, res, next) => {
+    try {
+      const createdIngredient = await Ingredient.create({
+        supermarket: "",
+        brand: "",
+        name: "",
+        recipeUnits: "",
+        pricePerUnit: 0,
+        price: 0,
+        unitsPerPackage: 0,
+        packageUnits: "",
+      });
+  
+      if (!createdIngredient) {
+        return res.status(404).json({ message: "Ingredient not created" });
+      }
+  
+      res.status(201).json({ ingredient: createdIngredient });
     } catch (err) {
       next(err);  // Pass the error to the error-handling middleware
     }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
 import appService from '../../services/app.service'
@@ -31,6 +31,11 @@ function ManageProducts() {
   function handleEditClick(id: string, product: Product) {
     setEditRowId(id);
     setEditValues(product); // Initialize editing values
+  };
+
+  async function handleAddProduct() {
+    const newProduct = await adminService.createProduct();
+    setProducts((prev) => [...prev, newProduct]); // Add the new product to the list
   };
 
   return (
@@ -76,6 +81,10 @@ function ManageProducts() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Button variant="contained" onClick={handleAddProduct} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
+          Create Product
+      </Button>
 
       {editRowId && <EditProductModal 
         products={products} 

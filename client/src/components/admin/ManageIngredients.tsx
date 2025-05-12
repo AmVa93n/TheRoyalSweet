@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -48,8 +48,14 @@ function ManageIngredients() {
         const { name, value } = e.target;
         setEditValues({ ...editValues, [name]: value });
     };
+
+    async function handleAddIngredient() {
+        const newIngredient = await adminService.createIngredient();
+        setIngredients((prev) => [...prev, newIngredient]); // Add the new ingredient to the list
+    };
     
     return (
+        <>
         <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
             <Table size="small">
                 <TableHead>
@@ -191,6 +197,11 @@ function ManageIngredients() {
                 </TableBody>
             </Table>
         </TableContainer>
+
+        <Button variant="contained" onClick={handleAddIngredient} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
+          Create Ingredient
+        </Button>
+        </>
     )
 }
 
