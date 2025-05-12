@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
 
-function AdminPage() {
+function ManageIngredients() {
     const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
     const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
     const [editValues, setEditValues] = useState({} as Ingredient); // Store the values being edited
@@ -194,4 +194,4 @@ function AdminPage() {
     )
 }
 
-export default AdminPage
+export default ManageIngredients
