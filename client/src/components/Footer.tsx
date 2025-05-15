@@ -1,10 +1,9 @@
 import { Box, Typography, Link } from '@mui/material';
-import { useContext } from 'react';
-import { LanguageContext } from '../context/language.context';
 import { theme } from '../style';
+import { useStore } from '../store';
 
 function Footer() {
-    const { language } = useContext(LanguageContext)
+    const { language } = useStore();
 
     return (
         <Box

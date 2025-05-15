@@ -1,9 +1,8 @@
 import { Box, Grid as Grid2, Typography, Link } from '@mui/material';
-import { LanguageContext } from '../context/language.context';
-import { useContext } from 'react';
+import { useStore } from '../store';
 
 function Contacts() {
-    const { language } = useContext(LanguageContext)
+    const { language } = useStore();
 
     const contactDetails = {
         en: {

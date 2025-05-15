@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Grid as Grid2, Card, CardMedia, CardContent, Typography, Button, Box, ListItemText } from '@mui/material';
 import appService from '../services/app.service'
-import { LanguageContext } from '../context/language.context';
+import { useStore } from '../store';
 import { useNavigate } from "react-router-dom";
 import type { Category, Product } from '../types';
 import { calculatePrice } from '../utils';
@@ -16,7 +16,7 @@ const categories: {cat: Category, en: string, pt: string}[] = [
 
 function ShopPage() {
     const [products, setProducts] = useState([] as Product[])
-    const { language } = useContext(LanguageContext)
+    const { language } = useStore()
     const navigate = useNavigate();
 
     useEffect(() => {

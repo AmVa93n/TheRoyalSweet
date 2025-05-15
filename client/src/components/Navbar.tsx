@@ -7,14 +7,14 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import { Link } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { CartContext } from '../context/cart.context';
-import { LanguageContext } from '../context/language.context';
+import { useStore } from '../store';
 import Cart from './Cart'
 import { theme } from '../style';
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { cart, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
-  const { language, setLanguage } = useContext(LanguageContext)
+  const { language, setLanguage } = useStore()
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);

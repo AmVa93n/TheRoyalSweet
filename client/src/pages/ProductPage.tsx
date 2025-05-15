@@ -2,7 +2,7 @@ import { Container, Box, Typography, Button, Grid as Grid2, Select, MenuItem, Fo
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useParams } from 'react-router-dom'
 import { useState, useEffect, useContext } from 'react';
-import { LanguageContext } from '../context/language.context';
+import { useStore } from '../store';
 import { CartContext } from '../context/cart.context';
 import appService from '../services/app.service'
 import dayjs from 'dayjs';
@@ -19,7 +19,7 @@ function ProductPage() {
     const [size, setSize] = useState<Size>('small')
     const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     const [quantity, setQuantity] = useState(1)
-    const { language } = useContext(LanguageContext)
+    const { language } = useStore()
     const { addProduct } = useContext(CartContext)
 
     useEffect(() => {

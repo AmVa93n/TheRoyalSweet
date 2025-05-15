@@ -1,14 +1,14 @@
 import { Typography, Box, Drawer, List, ListItem, ListItemText, TextField, IconButton, 
     Button, Divider } from '@mui/material';
 import { CartContext } from '../context/cart.context';
-import { LanguageContext } from '../context/language.context';
+import { useStore } from '../store';
 import { useContext } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
 
 function Cart() {
     const { cart, removeProduct, changeQuantity, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
-    const { language } = useContext(LanguageContext)
+    const { language } = useStore()
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (

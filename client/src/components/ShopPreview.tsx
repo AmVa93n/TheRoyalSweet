@@ -1,14 +1,14 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Grid as Grid2, Card, CardMedia, CardContent, Typography, Box, Button } from '@mui/material';
 import appService from '../services/app.service'
-import { LanguageContext } from '../context/language.context';
 import { useNavigate, Link } from "react-router-dom";
 import type { Product } from '../types';
 import { calculatePrice } from '../utils';
+import { useStore } from '../store';
 
 function ShopPreview() {
     const [products, setProducts] = useState([] as Product[]);
-    const { language } = useContext(LanguageContext)
+    const { language } = useStore()
     const navigate = useNavigate();
 
     useEffect(() => {
