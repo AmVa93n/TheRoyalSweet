@@ -121,7 +121,17 @@ router.get("/orders", async (req, res, next) => {
 
 router.post("/orders", async (req, res, next) => {
     try {
-      const newOrder = req.body;
+      const newOrder = {
+        name: "",
+        email: "",
+        pickup: false,
+        shipping: {
+            city: "",
+            address: "",
+            zip: ""
+        },
+        items: [],
+      }
   
       const createdOrder = await Order.create(newOrder);
   
@@ -130,6 +140,22 @@ router.post("/orders", async (req, res, next) => {
       }
   
       res.status(201).json({ order: createdOrder });
+    } catch (err) {
+      next(err);  // Pass the error to the error-handling middleware
+    }
+});
+
+router.put("/orders", async (req, res, next) => {
+    try {
+      const data = req.body;
+  
+      const updatedOrder = await Order.findByIdAndUpdate(data._id, data, { new: true })
+  
+      if (!data) {
+        return res.status(404).json({ message: "Order not created" });
+      }
+  
+      res.status(201).json({ order: data });
     } catch (err) {
       next(err);  // Pass the error to the error-handling middleware
     }

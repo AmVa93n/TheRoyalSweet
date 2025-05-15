@@ -1,11 +1,13 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import type { Order, CartItem } from '../../types';
 
 type Props = {
     order: Order;
+    handleEdit: (orderId: string) => void;
 }
 
-export default function OrderCard({ order }: Props) {
+export default function OrderCard({ order, handleEdit }: Props) {
     const accumulativeIngredients = calculateAccumulativeIngredients(order.items);
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
     const totalIngredientsPrice = accumulativeIngredients.reduce((total, ing) => total + ing.totalPrice, 0);
@@ -40,7 +42,7 @@ export default function OrderCard({ order }: Props) {
     }
 
     return (
-        <Paper sx={{ mb: 3, p: 2 }}>
+        <Paper sx={{ mb: 3, p: 2, position: 'relative' }}>
             <Typography variant="h6">Order by: {order.name} ({order.email})</Typography>
             {order.pickup ? <Typography>Pickup</Typography> :
               <Box>
@@ -104,6 +106,10 @@ export default function OrderCard({ order }: Props) {
             <Typography variant="h6">Grand Total Price: {grandTotalPrice} €</Typography>
             <Typography variant="h6">Total Ingredients Price: {totalIngredientsPrice.toFixed(3)} €</Typography>
             <Typography variant="h6">Net Gain: {(grandTotalPrice - totalIngredientsPrice).toFixed(3)} €</Typography>
+
+            <IconButton onClick={() => handleEdit(order._id)} sx={{ position: 'absolute', top: 10, right: 10 }}>
+                <EditIcon />
+            </IconButton>
         </Paper>
     )
 }

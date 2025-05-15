@@ -39,8 +39,13 @@ class AdminService {
     return response.data.orders
   }
 
-  async createOrder(orderForm: Order): Promise<Order> {
-    const response = await this.api.post(`/admin/orders`, orderForm);
+  async createOrder(): Promise<Order> {
+    const response = await this.api.post(`/admin/orders`);
+    return response.data.order
+  }
+
+  async updateOrder(updatedOrder: Order): Promise<Order> {
+    const response = await this.api.put(`/admin/orders`, updatedOrder);
     return response.data.order
   }
 }

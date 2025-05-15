@@ -2,30 +2,21 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, Dialog, DialogContent, DialogActions, Switch } from "@mui/material";
 import { useState } from "react";
-import type { Product, Order, CartItem } from "../../types";
+import type { Product, Order } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { calculatePrice } from "../../utils";
 
 type Props = {
     open: boolean;
+    order?: Order;
     products: Product[];
     onSave: (orderForm: Order) => void;
     onClose: () => void;
 };
 
-export default function CreateOrderModal({ open, products, onSave, onClose }: Props) {
-    const [orderForm, setOrderForm] = useState<Order>({
-        name: "",
-        email: "",
-        pickup: false,
-        shipping: {
-            city: "",
-            address: "",
-            zip: ""
-        },
-        items: [] as CartItem[],
-    } as Order);
+export default function EditOrderModal({ open, order, products, onSave, onClose }: Props) {
+    const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
     const [newAmount, setNewAmount] = useState(0);
 
@@ -51,21 +42,6 @@ export default function CreateOrderModal({ open, products, onSave, onClose }: Pr
     
     function handleDeleteItem(itemIndex: number) {
         setOrderForm(prev => ({ ...prev, items: prev.items.filter((_, index) => index !== itemIndex) }));
-    };
-
-    function handleDiscard() {
-        setOrderForm({
-            name: "",
-            email: "",
-            pickup: false,
-            shipping: {
-                city: "",
-                address: "",
-                zip: ""
-            },
-            items: [] as CartItem[],
-        } as Order);
-        onClose();
     };
 
     return (
@@ -140,7 +116,7 @@ export default function CreateOrderModal({ open, products, onSave, onClose }: Pr
                 <Button onClick={() => onSave(orderForm)} startIcon={<DoneIcon />} color="success" variant="contained">
                     Save Order
                 </Button>
-                <Button onClick={handleDiscard} startIcon={<CloseIcon />} color="error" variant="outlined">
+                <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
                     Discard
                 </Button>
             </DialogActions>
