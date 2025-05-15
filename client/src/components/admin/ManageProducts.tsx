@@ -1,32 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
-import appService from '../../services/app.service'
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
-import type { Ingredient, Product } from "../../types";
+import type { Product } from "../../types";
 import { calculatePrice } from "../../utils";
 import EditProductModal from "./EditProductModal";
+import { useStore } from "../../store";
 
 function ManageProducts() {
-  const [products, setProducts] = useState([] as Product[]); // Store the list of products
-  const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
+  const { products, setProducts } = useStore(); // Access the products from the store
   const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
   const [editValues, setEditValues] = useState({} as Product); // Store the values being edited
-
-  useEffect(() => {
-    async function init() {
-      try {
-        const products = await appService.getProducts()
-        setProducts(products)
-        const ingredients = await adminService.getIngredients()
-        setIngredients(ingredients)
-      } catch (error) {
-        alert(`Error fetching products or ingredients: ${error}`)
-      }
-    }
-    init()
-  }, [])
 
   function handleEditClick(id: string, product: Product) {
     setEditRowId(id);
@@ -35,7 +20,8 @@ function ManageProducts() {
 
   async function handleAddProduct() {
     const newProduct = await adminService.createProduct();
-    setProducts((prev) => [...prev, newProduct]); // Add the new product to the list
+    const updatedProducts = [...products, newProduct];
+    setProducts(updatedProducts); // Add the new product to the list
   };
 
   return (
@@ -87,9 +73,6 @@ function ManageProducts() {
       </Button>
 
       {editRowId && <EditProductModal 
-        products={products} 
-        setProducts={setProducts} 
-        ingredients={ingredients} 
         editRowId={editRowId} 
         setEditRowId={setEditRowId}
         editValues={editValues}

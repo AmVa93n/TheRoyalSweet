@@ -2,20 +2,21 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, Dialog, DialogContent, DialogActions, Switch } from "@mui/material";
 import { useState } from "react";
-import type { Product, Order } from "../../types";
+import type { Order } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { calculatePrice } from "../../utils";
+import { useStore } from "../../store";
 
 type Props = {
     open: boolean;
     order?: Order;
-    products: Product[];
     onSave: (orderForm: Order) => void;
     onClose: () => void;
 };
 
-export default function EditOrderModal({ open, order, products, onSave, onClose }: Props) {
+export default function EditOrderModal({ open, order, onSave, onClose }: Props) {
+    const { products } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
     const [newAmount, setNewAmount] = useState(0);

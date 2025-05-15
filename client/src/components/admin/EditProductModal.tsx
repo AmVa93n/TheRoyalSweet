@@ -6,18 +6,17 @@ import type { Ingredient, Product } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import adminService from '../../services/admin.service'
+import { useStore } from "../../store";
 
 type Props = {
-    products: Product[];
-    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-    ingredients: Ingredient[];
     editRowId: string | null;
     setEditRowId: React.Dispatch<React.SetStateAction<string | null>>;
     editValues: Product;
     setEditValues: React.Dispatch<React.SetStateAction<Product>>;
 };
 
-export default function EditProductModal({ products, setProducts, ingredients, editRowId, setEditRowId, editValues, setEditValues }: Props) {
+export default function EditProductModal({ editRowId, setEditRowId, editValues, setEditValues }: Props) {
+    const { products, ingredients, setProducts } = useStore();
     const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
     const [newAmount, setNewAmount] = useState(0); // New amount input
 
@@ -52,11 +51,8 @@ export default function EditProductModal({ products, setProducts, ingredients, e
 
     async function handleSave() {
         const updatedProduct = { ...editValues }; // Use the edit values for the updated product
-        setProducts((prev) => 
-            prev.map((product) =>
-                product._id === editRowId ? { ...product, ...updatedProduct } : product
-            )
-        );
+        const updatedProducts = products.map((product) => product._id === editRowId ? { ...product, ...updatedProduct } : product);
+        setProducts(updatedProducts);
         setEditRowId(null); // Stop editing mode
         // Use the updated product data to make the API call
         await adminService.updateProduct(updatedProduct);

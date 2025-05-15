@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
 import { Container, Grid as Grid2, Card, CardMedia, CardContent, Typography, Button, Box, ListItemText } from '@mui/material';
-import appService from '../services/app.service'
 import { useStore } from '../store';
 import { useNavigate } from "react-router-dom";
-import type { Category, Product } from '../types';
+import type { Category } from '../types';
 import { calculatePrice } from '../utils';
 
 const categories: {cat: Category, en: string, pt: string}[] = [
@@ -15,21 +13,8 @@ const categories: {cat: Category, en: string, pt: string}[] = [
 ];
 
 function ShopPage() {
-    const [products, setProducts] = useState([] as Product[])
-    const { language } = useStore()
+    const { language, products } = useStore()
     const navigate = useNavigate();
-
-    useEffect(() => {
-        async function init() {
-          try {
-            const products = await appService.getProducts()
-            setProducts(products)
-          } catch (error) {
-            alert(`Error: ${error}`)
-          }
-        }
-        init()
-    }, [])
 
     function handleCardClick(event: React.MouseEvent<HTMLElement>) {
         const productId = (event.target as HTMLElement).id

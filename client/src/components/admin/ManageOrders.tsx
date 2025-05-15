@@ -1,34 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box, Button } from '@mui/material';
 import adminService from '../../services/admin.service';
-import type { Order, Product } from '../../types';
+import type { Order } from '../../types';
 import OrderCard from './OrderCard';
 import EditOrderModal from './EditOrderModal';
-import appService from '../../services/app.service';
+import { useStore } from '../../store';
 
 function ManageOrders() {
-  const [orders, setOrders] = useState([] as Order[]);
-  const [products, setProducts] = useState([] as Product[]); // Assuming you have a type for products
+  const { orders, setOrders } = useStore();
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
-
-  useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const data = await adminService.getOrders();  // Assuming you have an API endpoint that returns the data
-        setOrders(data);
-        const prodcts = await appService.getProducts(); // Fetch products for the modal
-        setProducts(prodcts); // Assuming you have a state to hold products
-      } catch (error) {
-        console.error('Failed to fetch orders', error);
-      }
-    }
-    fetchOrders();
-  }, []);
 
   async function handleSave(orderForm: Order) {
       try { 
           const newOrder = await adminService.updateOrder(orderForm);
-          setOrders((prev) => prev.map(order => order._id === newOrder._id ? newOrder : order)); // Update the orders state with the new order
+          const updatedOrders = orders.map(order => order._id === newOrder._id ? newOrder : order);
+          setOrders(updatedOrders); // Update the orders state with the new order
       } catch (error) {
           console.error("Error saving order:", error);
       }
@@ -37,7 +23,8 @@ function ManageOrders() {
 
   async function handleCreateOrder() {
     const newOrder = await adminService.createOrder();
-    setOrders((prev) => [...prev, newOrder]); // Update the orders state with the new order
+    const updatedOrders = [...orders, newOrder]
+    setOrders(updatedOrders); // Update the orders state with the new order
   };
 
   return (
@@ -53,7 +40,7 @@ function ManageOrders() {
       </Button>
 
       {editedOrder && 
-        <EditOrderModal open={!!editedOrder} order={editedOrder} products={products} onSave={handleSave} onClose={() => setEditedOrder(null)} />}
+        <EditOrderModal open={!!editedOrder} order={editedOrder} onSave={handleSave} onClose={() => setEditedOrder(null)} />}
     </>
   );
 }

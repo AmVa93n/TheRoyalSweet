@@ -1,38 +1,26 @@
 import { Container, Box, Typography, Button, Grid as Grid2, Select, MenuItem, FormControl, FormLabel, TextField } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useParams } from 'react-router-dom'
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useStore } from '../store';
 import { CartContext } from '../context/cart.context';
-import appService from '../services/app.service'
 import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Link } from 'react-router-dom';
-import type { Product, Size, Ingredient } from '../types';
+import type { Product, Size } from '../types';
 import { calculatePrice } from '../utils';
 
 function ProductPage() {
     const { productId } = useParams();
-    const [product, setProduct] = useState({recipe: [] as {ingredient: Ingredient, amount: number}[]} as Product)
+    const { products } = useStore();
+    const product = products.find((product: Product) => product._id === productId)!;
     const [size, setSize] = useState<Size>('small')
     const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     const [quantity, setQuantity] = useState(1)
     const { language } = useStore()
     const { addProduct } = useContext(CartContext)
-
-    useEffect(() => {
-        async function init() {
-            try {
-                const product = await appService.getProduct(productId || '')
-                setProduct(product)
-            } catch (error) {
-                alert(`Error: ${error}`)
-            }
-        }
-        init()
-    }, [productId]);
     
     return (
         <Container sx={{ py: 4, mt: 7 }}>

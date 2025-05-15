@@ -1,28 +1,12 @@
-import { useState, useEffect } from 'react';
 import { Grid as Grid2, Card, CardMedia, CardContent, Typography, Box, Button } from '@mui/material';
-import appService from '../services/app.service'
 import { useNavigate, Link } from "react-router-dom";
-import type { Product } from '../types';
 import { calculatePrice } from '../utils';
 import { useStore } from '../store';
 
 function ShopPreview() {
-    const [products, setProducts] = useState([] as Product[]);
-    const { language } = useStore()
+    const { language, products } = useStore()
     const navigate = useNavigate();
-
-    useEffect(() => {
-        async function init() {
-          try {
-            const products = await appService.getProducts()
-            const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
-            setProducts(preview)
-          } catch (error) {
-            alert(`Error fetching products: ${error}`)
-          }
-        }
-        init()
-    }, [])
+    const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
 
     function handleCardClick(event: React.MouseEvent) {
         const productId = (event.target as HTMLElement).id
@@ -36,7 +20,7 @@ function ShopPreview() {
             </Typography>
 
             <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
-                {products.map((product) => (
+                {preview.map((product) => (
                 <Grid2 columns={{xs: 12, sm: 6, md: 4}} key={product._id}>
                     <Card sx={{width: 340}}>
                         <CardMedia

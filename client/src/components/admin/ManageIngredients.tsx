@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, IconButton, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
@@ -10,18 +10,6 @@ function ManageIngredients() {
     const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
     const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
     const [editValues, setEditValues] = useState({} as Ingredient); // Store the values being edited
-
-    useEffect(() => {
-        async function init() {
-          try {
-            const ingredients = await adminService.getIngredients()
-            setIngredients(ingredients)
-          } catch (error) {
-            alert(`Error fetching ingredients: ${error}`)
-          }
-        }
-        init()
-    }, [])
 
     function handleEditClick(id: string, ingredient: Ingredient) {
         setEditRowId(id);
