@@ -28,7 +28,7 @@ function AdminPage() {
             const orders = await adminService.getOrders();
             setOrders(orders);
         } catch (error) {
-            alert(`Error fetching ingredients: ${error}`)
+            alert(`Error fetching data: ${error}`)
         }
     }
 
