@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button, Select, MenuItem, Box, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
@@ -7,10 +7,14 @@ import type { Product } from "../../types";
 import { calculatePrice } from "../../utils";
 import EditProductModal from "./EditProductModal";
 import { useStore } from "../../store";
+import AscIcon from '@mui/icons-material/ArrowUpward';
+import DescIcon from '@mui/icons-material/ArrowDownward';
 
 function ManageProducts() {
-  const { products, setProducts } = useStore(); // Access the products from the store
-  const [editedProduct, setEditedProduct] = useState<Product | null>(null); // Track the row being edited
+  const { products, setProducts } = useStore();
+  const [editedProduct, setEditedProduct] = useState<Product | null>(null);
+  const [sortCriteria, setSortCriteria] = useState<string>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   async function handleSave(productForm: Product) {
     const updatedProduct = await adminService.updateProduct(productForm);
@@ -25,8 +29,52 @@ function ManageProducts() {
     setProducts(updatedProducts); // Add the new product to the list
   };
 
+  function sortFunction(a: Product, b: Product) {
+    switch (sortCriteria) {
+      case 'name':
+        return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name.pt) : b.name.pt.localeCompare(a.name.pt);
+      case 'category':
+        return sortDirection === 'asc' ? a.category.localeCompare(b.category) : b.category.localeCompare(a.category);
+      case 'workHours':
+      case 'electricityHours':
+        return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
+      case 'price':
+      case 'totalCost':
+      case 'netGain':
+        return sortDirection === 'asc' ? calculatePrice(a)[sortCriteria] - calculatePrice(b)[sortCriteria] : calculatePrice(b)[sortCriteria] - calculatePrice(a)[sortCriteria];
+      default:
+        return 0;
+    }
+  }
+
   return (
     <>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
+        <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
+
+        <Select
+          value={sortCriteria}
+          onChange={(e) => setSortCriteria(e.target.value)}
+          size="small"
+        >
+          <MenuItem value="name">Name</MenuItem>
+          <MenuItem value="category">Category</MenuItem>
+          <MenuItem value="workHours">Work Hours</MenuItem>
+          <MenuItem value="electricityHours">Electricity Hours</MenuItem>
+          <MenuItem value="price">Price</MenuItem>
+          <MenuItem value="totalCost">Total Cost</MenuItem>
+          <MenuItem value="netGain">Net Gain</MenuItem>
+        </Select>
+        
+        <IconButton onClick={() => setSortDirection('desc')}>
+          <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
+        </IconButton>
+      
+        <IconButton onClick={() => setSortDirection('asc')}>
+          <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
+        </IconButton>
+      </Box>
+
       <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
         <Table size="small">
           <TableHead>
@@ -43,7 +91,7 @@ function ManageProducts() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
+            {products.sort(sortFunction).map((product) => (
               <TableRow key={product._id}>
                 <TableCell>
                   {product.images[0] ? <img src={product.images[0]} alt={product._id} width={48} /> :

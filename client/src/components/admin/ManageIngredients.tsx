@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Box, Typography, Select, MenuItem } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
 import { useStore } from "../../store";
 import EditIngredientModal from "./EditIngredientModal";
+import AscIcon from '@mui/icons-material/ArrowUpward';
+import DescIcon from '@mui/icons-material/ArrowDownward';
 
 function ManageIngredients() {
     const { ingredients, setIngredients } = useStore()
     const [editedIngredient, setEditedIngredient] = useState<Ingredient | null>(null);
+    const [sortCriteria, setSortCriteria] = useState<string>('name');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
     async function handleSave(ingredientForm: Ingredient) {
         const updatedIngredient = await adminService.updateIngredient(ingredientForm);
@@ -22,9 +26,53 @@ function ManageIngredients() {
         const updatedIngredients = [...ingredients, newIngredient];
         setIngredients(updatedIngredients); // Add the new ingredient to the list
     };
+
+    function sortFunction(a: Ingredient, b: Ingredient) {
+        switch (sortCriteria) {
+            case 'name':
+            case 'supermarket':
+            case 'brand':
+            case 'recipeUnits':
+            case 'packageUnits':
+                return sortDirection === 'asc' ? a[sortCriteria].localeCompare(b[sortCriteria]) : b[sortCriteria].localeCompare(a[sortCriteria]);
+            case 'pricePerUnit':
+            case 'price':
+            case 'unitsPerPackage':
+                return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
+            default:
+                return 0;
+        }
+    }
     
     return (
         <>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
+            <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
+
+            <Select
+                value={sortCriteria}
+                onChange={(e) => setSortCriteria(e.target.value)}
+                size="small"
+            >
+                <MenuItem value="name">Name</MenuItem>
+                <MenuItem value="supermarket">Supermarket</MenuItem>
+                <MenuItem value="brand">Brand</MenuItem>
+                <MenuItem value="recipeUnits">Recipe Units</MenuItem>
+                <MenuItem value="pricePerUnit">Price / Unit</MenuItem>
+                <MenuItem value="price">Price</MenuItem>
+                <MenuItem value="unitsPerPackage">Units / Package</MenuItem>
+                <MenuItem value="packageUnits">Package Units</MenuItem>
+            </Select>
+            
+            <IconButton onClick={() => setSortDirection('desc')}>
+                <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
+            </IconButton>
+        
+            <IconButton onClick={() => setSortDirection('asc')}>
+                <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
+            </IconButton>
+        </Box>
+
         <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
             <Table size="small">
                 <TableHead>
@@ -41,7 +89,7 @@ function ManageIngredients() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                {ingredients.map((ingredient) => (
+                {ingredients.sort(sortFunction).map((ingredient) => (
                     <TableRow key={ingredient._id}>
                         <TableCell>{ingredient.name}</TableCell>
                         <TableCell>{ingredient.supermarket}</TableCell>
