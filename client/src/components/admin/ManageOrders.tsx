@@ -12,8 +12,8 @@ function ManageOrders() {
 
   async function handleSave(orderForm: Order) {
       try { 
-          const newOrder = await adminService.updateOrder(orderForm);
-          const updatedOrders = orders.map(order => order._id === newOrder._id ? newOrder : order);
+          const updatedOrder = await adminService.updateOrder(orderForm);
+          const updatedOrders = orders.map(order => order._id === updatedOrder._id ? updatedOrder : order);
           setOrders(updatedOrders); // Update the orders state with the new order
       } catch (error) {
           console.error("Error saving order:", error);
