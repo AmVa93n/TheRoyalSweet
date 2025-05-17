@@ -5,41 +5,38 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
+import { useStore } from "../../store";
 
 function ManageIngredients() {
-    const [ingredients, setIngredients] = useState([] as Ingredient[]); // Store the list of ingredients
-    const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
-    const [editValues, setEditValues] = useState({} as Ingredient); // Store the values being edited
+    const { ingredients, setIngredients } = useStore()
+    const [editedIngredientId, setEditedIngredientId] = useState<string | null>(null); // Track the row being edited
+    const [ingredientForm, setIngredientForm] = useState({} as Ingredient); // Store the values being edited
 
     function handleEditClick(id: string, ingredient: Ingredient) {
-        setEditRowId(id);
-        setEditValues(ingredient); // Initialize editing values
+        setEditedIngredientId(id);
+        setIngredientForm(ingredient); // Initialize editing values
     };
 
-    async function handleSaveClick() {
-        const updatedIngredient = { ...editValues }; // Use the edit values for the updated ingredient
-        setIngredients((prevRows) =>
-            prevRows.map((row) =>
-                row._id === editRowId ? { ...row, ...editValues } : row
-            )
-        );
-        setEditRowId(null); // Stop editing mode
-        // Use the updated ingredient data to make the API call
-        await adminService.updateIngredient(updatedIngredient);
+    async function handleSave() {
+        await adminService.updateIngredient(ingredientForm);
+        const updatedIngredients = ingredients.map((row) => row._id === editedIngredientId ? { ...row, ...ingredientForm } : row );
+        setIngredients(updatedIngredients); // Update the ingredient in the list
+        setEditedIngredientId(null); // Stop editing mode
     };
 
-    function handleCancelClick() {
-        setEditRowId(null); // Exit editing mode without saving
+    function handleCancel() {
+        setEditedIngredientId(null); // Exit editing mode without saving
     };
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
-        setEditValues({ ...editValues, [name]: value });
+        setIngredientForm({ ...ingredientForm, [name]: value });
     };
 
     async function handleAddIngredient() {
         const newIngredient = await adminService.createIngredient();
-        setIngredients((prev) => [...prev, newIngredient]); // Add the new ingredient to the list
+        const updatedIngredients = [...ingredients, newIngredient];
+        setIngredients(updatedIngredients); // Add the new ingredient to the list
     };
     
     return (
@@ -63,10 +60,10 @@ function ManageIngredients() {
                 {ingredients.map((ingredient) => (
                     <TableRow key={ingredient._id}>
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="name"
-                                value={editValues.name}
+                                value={ingredientForm.name}
                                 onChange={handleChange}
                                 size="small"
                             />
@@ -76,10 +73,10 @@ function ManageIngredients() {
                         </TableCell>
 
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="supermarket"
-                                value={editValues.supermarket}
+                                value={ingredientForm.supermarket}
                                 onChange={handleChange}
                                 size="small"
                             />
@@ -89,10 +86,10 @@ function ManageIngredients() {
                         </TableCell>
 
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="brand"
-                                value={editValues.brand}
+                                value={ingredientForm.brand}
                                 onChange={handleChange}
                                 size="small"
                             />
@@ -101,10 +98,10 @@ function ManageIngredients() {
                             )}
                         </TableCell>
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="recipeUnits"
-                                value={editValues.recipeUnits}
+                                value={ingredientForm.recipeUnits}
                                 onChange={handleChange}
                                 size="small"
                             />
@@ -113,10 +110,10 @@ function ManageIngredients() {
                             )}
                         </TableCell>
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="pricePerUnit"
-                                value={editValues.pricePerUnit}
+                                value={ingredientForm.pricePerUnit}
                                 onChange={handleChange}
                                 type="number"
                                 size="small"
@@ -126,10 +123,10 @@ function ManageIngredients() {
                             )}
                         </TableCell>
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="price"
-                                value={editValues.price}
+                                value={ingredientForm.price}
                                 onChange={handleChange}
                                 type="number"
                                 size="small"
@@ -139,10 +136,10 @@ function ManageIngredients() {
                             )}
                         </TableCell>
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="unitsPerPackage"
-                                value={editValues.unitsPerPackage}
+                                value={ingredientForm.unitsPerPackage}
                                 onChange={handleChange}
                                 type="number"
                                 size="small"
@@ -152,10 +149,10 @@ function ManageIngredients() {
                             )}
                         </TableCell>
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <TextField
                                 name="packageUnits"
-                                value={editValues.packageUnits}
+                                value={ingredientForm.packageUnits}
                                 onChange={handleChange}
                                 size="small"
                             />
@@ -165,12 +162,12 @@ function ManageIngredients() {
                         </TableCell>
 
                         <TableCell>
-                            {editRowId === ingredient._id ? (
+                            {editedIngredientId === ingredient._id ? (
                             <>
-                                <IconButton onClick={handleSaveClick}>
+                                <IconButton onClick={handleSave}>
                                     <DoneIcon />
                                 </IconButton>
-                                <IconButton onClick={handleCancelClick}>
+                                <IconButton onClick={handleCancel}>
                                     <CloseIcon />
                                 </IconButton>
                             </>
