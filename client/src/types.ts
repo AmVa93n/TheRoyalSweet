@@ -33,10 +33,10 @@ export type Product = {
         pt: string
     },
     images: string[],
-    recipe: [{
+    recipe: {
         ingredient: Ingredient,
         amount: number
-    }],
+    }[],
     category: Category
     workHours: number,
     electricityHours: number,

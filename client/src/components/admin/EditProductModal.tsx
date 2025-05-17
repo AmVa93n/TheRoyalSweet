@@ -5,99 +5,91 @@ import { useState } from "react";
 import type { Ingredient, Product } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
-import adminService from '../../services/admin.service'
 import { useStore } from "../../store";
 
 type Props = {
-    editRowId: string | null;
-    setEditRowId: React.Dispatch<React.SetStateAction<string | null>>;
-    editValues: Product;
-    setEditValues: React.Dispatch<React.SetStateAction<Product>>;
+    open: boolean;
+    product?: Product;
+    onSave: (productForm: Product) => void;
+    onClose: () => void;
 };
 
-export default function EditProductModal({ editRowId, setEditRowId, editValues, setEditValues }: Props) {
-    const { products, ingredients, setProducts } = useStore();
+export default function EditProductModal({ open, product, onSave, onClose }: Props) {
+    const { ingredients } = useStore();
+    const [productForm, setProductForm] = useState(product as Product);
     const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
     const [newAmount, setNewAmount] = useState(0); // New amount input
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         if (name.includes(".")) {
-            setEditValues((prev) => {
+            setProductForm((prev) => {
                 const [field, lang] = name.split(".");
                 return {...prev, [field]: {...prev[field], [lang]: value }};
             });
             return;
         }
-        setEditValues({ ...editValues, [name]: value });
+        setProductForm({ ...productForm, [name]: value });
     };
 
     function handleAddIngredient() {
-        const updatedProducts = [...products];
-        updatedProducts.find(p => p._id === editRowId)?.recipe.push({
-          ingredient: ingredients.find(i => i._id === newIngredientId) as Ingredient,
-          amount: newAmount,
-        });
-        setProducts(updatedProducts);
+        setProductForm((prev) => ({
+            ...prev,
+            recipe: [
+                ...prev.recipe,
+                {
+                    ingredient: ingredients.find(ingredient => ingredient._id === newIngredientId) as Ingredient,
+                    amount: newAmount
+                }
+            ]
+        }));
         setNewIngredientId(""); // Clear input
         setNewAmount(0); // Clear amount
     };
     
-    function handleDeleteIngredient(ingredientIndex: number) {
-        const updatedProducts = [...products];
-        updatedProducts.find(p => p._id === editRowId)?.recipe.splice(ingredientIndex, 1);
-        setProducts(updatedProducts);
-    };
-
-    async function handleSave() {
-        const updatedProduct = { ...editValues }; // Use the edit values for the updated product
-        const updatedProducts = products.map((product) => product._id === editRowId ? { ...product, ...updatedProduct } : product);
-        setProducts(updatedProducts);
-        setEditRowId(null); // Stop editing mode
-        // Use the updated product data to make the API call
-        await adminService.updateProduct(updatedProduct);
-    };
-    
-    function handleCancel() {
-        setEditRowId(null); // Exit editing mode without saving
+    function handleDeleteIngredient(ingredientId: string) {
+        setProductForm((prev) => ({
+            ...prev,
+            recipe: prev.recipe.filter(item => item.ingredient._id !== ingredientId)
+        }));
     };
 
     return (
-        <Dialog open={!!editRowId} fullWidth maxWidth="lg">
+        <Dialog open={open} fullWidth maxWidth="lg">
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField name="name.en" label="Name (EN)" value={editValues.name.en} onChange={handleChange} size="small" fullWidth/>
-                    <TextField name="name.pt" label="Name (PT)" value={editValues.name.pt} onChange={handleChange} size="small" fullWidth/>
+                    <TextField name="name.en" label="Name (EN)" value={productForm.name.en} onChange={handleChange} size="small" fullWidth/>
+                    <TextField name="name.pt" label="Name (PT)" value={productForm.name.pt} onChange={handleChange} size="small" fullWidth/>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField name="intro.en" label="Intro (EN)" value={editValues.intro.en} onChange={handleChange} size="small" multiline fullWidth/>
-                    <TextField name="intro.pt" label="Intro (PT)" value={editValues.intro.pt} onChange={handleChange} size="small" multiline fullWidth/>
+                    <TextField name="intro.en" label="Intro (EN)" value={productForm.intro.en} onChange={handleChange} size="small" multiline fullWidth/>
+                    <TextField name="intro.pt" label="Intro (PT)" value={productForm.intro.pt} onChange={handleChange} size="small" multiline fullWidth/>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField name="description.en" label="Description (EN)" value={editValues.description.en} onChange={handleChange} size="small" multiline fullWidth/>
-                    <TextField name="description.pt" label="Description (PT)" value={editValues.description.pt} onChange={handleChange} size="small" multiline fullWidth/>
+                    <TextField name="description.en" label="Description (EN)" value={productForm.description.en} onChange={handleChange} size="small" multiline fullWidth/>
+                    <TextField name="description.pt" label="Description (PT)" value={productForm.description.pt} onChange={handleChange} size="small" multiline fullWidth/>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField name="serve.en" label="Serve (EN)" value={editValues.serve.en} onChange={handleChange} size="small" fullWidth/>
-                    <TextField name="serve.pt" label="Serve (PT)" value={editValues.serve.pt} onChange={handleChange} size="small" fullWidth/>
+                    <TextField name="serve.en" label="Serve (EN)" value={productForm.serve.en} onChange={handleChange} size="small" fullWidth/>
+                    <TextField name="serve.pt" label="Serve (PT)" value={productForm.serve.pt} onChange={handleChange} size="small" fullWidth/>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField name="store.en" label="Store (EN)" value={editValues.store.en} onChange={handleChange} size="small" fullWidth/>
-                    <TextField name="store.pt" label="Store (PT)" value={editValues.store.pt} onChange={handleChange} size="small" fullWidth/>
+                    <TextField name="store.en" label="Store (EN)" value={productForm.store.en} onChange={handleChange} size="small" fullWidth/>
+                    <TextField name="store.pt" label="Store (PT)" value={productForm.store.pt} onChange={handleChange} size="small" fullWidth/>
                 </Box>
                 
-                <TextField name="workHours" label="Work Hours" value={editValues.workHours} onChange={handleChange} type="number" size="small" />
-                <TextField name="electricityHours" label="Electricity Hours" value={editValues.electricityHours} onChange={handleChange} type="number" size="small" />
-                <TextField name="image" label="Image" value={editValues.images[0]} onChange={handleChange} size="small"/>
+                <TextField name="workHours" label="Work Hours" value={productForm.workHours} onChange={handleChange} type="number" size="small" />
+                <TextField name="electricityHours" label="Electricity Hours" value={productForm.electricityHours} onChange={handleChange} type="number" size="small" />
+                <TextField name="image" label="Image" value={productForm.images[0]} onChange={handleChange} size="small"/>
                 
                 <Box>
                     <Typography variant="body2">Ingredients:</Typography>
                     <List>
-                        {products.find(p => p._id === editRowId)?.recipe.map((i, index) => (
-                        <ListItem key={index} dense>
-                            <Typography variant="body2">{i.ingredient.name}: {i.amount} {i.ingredient.recipeUnits}</Typography>
-                            <IconButton onClick={() => handleDeleteIngredient(index)}>
+                        {productForm.recipe.map((item) => (
+                        <ListItem key={item.ingredient._id} dense>
+                            <Typography variant="body2">{item.ingredient.name}: {item.amount} {item.ingredient.recipeUnits}</Typography>
+                            <IconButton onClick={() => handleDeleteIngredient(item.ingredient._id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </ListItem>
@@ -128,17 +120,16 @@ export default function EditProductModal({ editRowId, setEditRowId, editValues, 
                         variant="contained"
                         onClick={() => handleAddIngredient()}
                         startIcon={<AddIcon />}
-                        disabled={editRowId === null} // Disable if not editing a row
                     >
                         Add
                     </Button>
                 </Box>
             </DialogContent>
             <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={handleSave} startIcon={<DoneIcon />} color="success" variant="contained">
+                <Button onClick={() => onSave(productForm)} startIcon={<DoneIcon />} color="success" variant="contained">
                     Save Changes
                 </Button>
-                <Button onClick={handleCancel} startIcon={<CloseIcon />} color="error" variant="outlined">
+                <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
                     Discard
                 </Button>
             </DialogActions>

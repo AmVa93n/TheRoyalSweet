@@ -10,12 +10,13 @@ import { useStore } from "../../store";
 
 function ManageProducts() {
   const { products, setProducts } = useStore(); // Access the products from the store
-  const [editRowId, setEditRowId] = useState<string | null>(null); // Track the row being edited
-  const [editValues, setEditValues] = useState({} as Product); // Store the values being edited
+  const [editedProduct, setEditedProduct] = useState<Product | null>(null); // Track the row being edited
 
-  function handleEditClick(id: string, product: Product) {
-    setEditRowId(id);
-    setEditValues(product); // Initialize editing values
+  async function handleSave(productForm: Product) {
+    const updatedProduct = await adminService.updateProduct(productForm);
+    const updatedProducts = products.map((product) => product._id === updatedProduct._id ? updatedProduct : product);
+    setProducts(updatedProducts);
+    setEditedProduct(null); // Stop editing mode
   };
 
   async function handleAddProduct() {
@@ -58,7 +59,7 @@ function ManageProducts() {
                 <TableCell padding="normal">{calculatePrice(product).netGain.toFixed(2)} €</TableCell>
                 
                 <TableCell padding="normal">
-                  <IconButton onClick={() => handleEditClick(product._id, product)}>
+                  <IconButton onClick={() => setEditedProduct(product)}>
                     <EditIcon />
                   </IconButton>
                 </TableCell>
@@ -72,11 +73,11 @@ function ManageProducts() {
           Create Product
       </Button>
 
-      {editRowId && <EditProductModal 
-        editRowId={editRowId} 
-        setEditRowId={setEditRowId}
-        editValues={editValues}
-        setEditValues={setEditValues}
+      {editedProduct && <EditProductModal 
+        open={!!editedProduct}
+        product={editedProduct}
+        onSave={handleSave}
+        onClose={() => setEditedProduct(null)}
       />}
     </>
   );
