@@ -31,14 +31,15 @@ function ManageProducts() {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="normal">Image</TableCell>
-              <TableCell padding="normal">Name</TableCell>
-              <TableCell padding="normal">Work Hours</TableCell>
-              <TableCell padding="normal">Electricity Hours</TableCell>
-              <TableCell padding="normal">Price</TableCell>
-              <TableCell padding="normal">Total Cost</TableCell>
-              <TableCell padding="normal">Net Gain</TableCell>
-              <TableCell padding="normal">Actions</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Image</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Name</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Category</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Work Hours</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Electricity Hours</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Price</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Total Cost</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Net Gain</TableCell>
+              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -52,6 +53,7 @@ function ManageProducts() {
                 </TableCell>
 
                 <TableCell padding="normal">{product.name.pt}</TableCell>
+                <TableCell padding="normal">{product.category}</TableCell>
                 <TableCell padding="normal">{product.workHours}</TableCell>
                 <TableCell padding="normal">{product.electricityHours}</TableCell>
                 <TableCell padding="normal">{calculatePrice(product).price.toFixed(2)} €</TableCell>

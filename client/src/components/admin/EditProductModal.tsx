@@ -79,6 +79,7 @@ export default function EditProductModal({ open, product, onSave, onClose }: Pro
                     <TextField name="store.pt" label="Store (PT)" value={productForm.store.pt} onChange={handleChange} size="small" fullWidth/>
                 </Box>
                 
+                <TextField name="category" label="Category" value={productForm.category} onChange={handleChange} size="small" fullWidth/>
                 <TextField name="workHours" label="Work Hours" value={productForm.workHours} onChange={handleChange} type="number" size="small" />
                 <TextField name="electricityHours" label="Electricity Hours" value={productForm.electricityHours} onChange={handleChange} type="number" size="small" />
                 <TextField name="image" label="Image" value={productForm.images[0]} onChange={handleChange} size="small"/>
