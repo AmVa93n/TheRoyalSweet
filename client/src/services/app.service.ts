@@ -14,11 +14,6 @@ class AppService {
     return response.data.products
   }
 
-  async getProduct(productId: string): Promise<Product> {
-    const response = await this.api.get(`/api/product/${productId}`);
-    return response.data.product
-  }
-
   async placeOrder(requestBody: any) {
     const response = await this.api.post(`/api/checkout`, requestBody);
     return response.data

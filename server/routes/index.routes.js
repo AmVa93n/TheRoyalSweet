@@ -18,21 +18,6 @@ router.get("/products", async (req, res, next) => {
   }
 });
 
-router.get("/product/:productId", async (req, res, next) => {
-  const productId = req.params.productId
-  try {
-    const product = await Product.findById(productId).populate('recipe.ingredient');
-    
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.status(200).json({ product });
-  } catch (err) {
-    next(err);
-  }
-});
-
 router.post('/checkout', async (req, res) => {
   const { cart, orderData, deliveryFee } = req.body;
   const { name, email, address, city, zip } = orderData || null
