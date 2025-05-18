@@ -1,15 +1,19 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const Product = require("../models/Product.model");
-const Order = require("../models/Order.model");
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Product from "../models/Product.model";
+import Order from "../models/Order.model";
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2024-09-30.acacia"
+});
 
 router.get("/products", async (req, res, next) => {
   try {
     const products = await Product.find().populate('recipe.ingredient');
     
     if (!products) {
-      return res.status(404).json({ message: "Products not found" });
+      res.status(404).json({ message: "Products not found" });
+      return;
     }
 
     res.status(200).json({ products });
@@ -21,12 +25,12 @@ router.get("/products", async (req, res, next) => {
 router.post('/checkout', async (req, res) => {
   const { cart, orderData, deliveryFee } = req.body;
   const { name, email, address, city, zip } = orderData || null
-  const total = cart.reduce((sum, item) => sum + item.product.price[item.size] * item.quantity, 0) + deliveryFee
+  const total = cart.reduce((sum: number, item: {price: number, quantity: number}) => sum + item.price * item.quantity, 0) + deliveryFee
 
   await Order.create({
     name, 
     email, 
-    items: cart.map(item => ({...item, product: item.product._id})),
+    items: cart.map((item: {product: { _id: string }}) => ({...item, product: item.product._id})),
     pickup: deliveryFee === 0,
     shipping: {address, city, zip},
     total
@@ -48,4 +52,4 @@ router.post('/checkout', async (req, res) => {
   res.json({client_secret: paymentIntent.client_secret});
 });
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose";
 
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
 const userSchema = new Schema(
@@ -27,4 +27,4 @@ const userSchema = new Schema(
 
 const User = model("User", userSchema);
 
-module.exports = User;
+export default User;

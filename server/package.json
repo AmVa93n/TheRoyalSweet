@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx --watch --env-file=.env src/server.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -17,5 +18,12 @@
     "mongoose": "^8.7.0",
     "morgan": "^1.10.0",
     "stripe": "^17.1.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.1",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.18",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
   }
 }

@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from "mongoose";
 
 const ingredientSchema = new Schema(
   {
@@ -19,4 +19,4 @@ const ingredientSchema = new Schema(
 
 const Ingredient = model("Ingredient", ingredientSchema);
 
-module.exports = Ingredient;
+export default Ingredient;

@@ -1,17 +1,17 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
 // ℹ️ Handles password encryption
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 // ℹ️ Handles password encryption
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 // Require the User model in order to interact with the database
-const User = require("../models/User.model");
+import User from "../models/User.model";
 
 // Require necessary (isAuthenticated) middleware in order to control access to specific routes
-const { isAuthenticated } = require("../middleware/jwt.middleware.js");
+import { isAuthenticated } from "../middleware/jwt.middleware.js";
 
 // How many rounds should bcrypt run the salt (default - 10 rounds)
 const saltRounds = 10;
@@ -128,4 +128,4 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 });
 
-module.exports = router;
+export default router;

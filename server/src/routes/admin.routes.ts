@@ -1,8 +1,8 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const Product = require("../models/Product.model");
-const Order = require("../models/Order.model");
-const Ingredient = require("../models/Ingredient.model");
+import Product from "../models/Product.model";
+import Order from "../models/Order.model";
+import Ingredient from "../models/Ingredient.model";
 
 router.post("/products", async (req, res, next) => {
     try {
@@ -20,7 +20,8 @@ router.post("/products", async (req, res, next) => {
       })
   
       if (!createdProduct) {
-        return res.status(404).json({ message: "Product not created" });
+        res.status(404).json({ message: "Product not created" });
+        return;
       }
   
       res.status(201).json({ product: createdProduct });
@@ -37,7 +38,8 @@ router.put("/products", async (req, res, next) => {
       const updatedProduct = await Product.findByIdAndUpdate(_id, newData, { new: true })
   
       if (!updatedProduct) {
-        return res.status(404).json({ message: "Product not found" });
+        res.status(404).json({ message: "Product not found" });
+        return;
       }
   
       res.status(200).json({ product: updatedProduct });
@@ -51,7 +53,8 @@ router.get("/ingredients", async (req, res, next) => {
       const ingredients = await Ingredient.find();
       
       if (!ingredients) {
-        return res.status(404).json({ message: "Ingredients not found" });
+        res.status(404).json({ message: "Ingredients not found" });
+        return;
       }
   
       res.status(200).json({ ingredients });
@@ -74,7 +77,8 @@ router.post("/ingredients", async (req, res, next) => {
       });
   
       if (!createdIngredient) {
-        return res.status(404).json({ message: "Ingredient not created" });
+        res.status(404).json({ message: "Ingredient not created" });
+        return;
       }
   
       res.status(201).json({ ingredient: createdIngredient });
@@ -91,7 +95,8 @@ router.put("/ingredients", async (req, res, next) => {
       const updatedIngredient = await Ingredient.findByIdAndUpdate(_id, newData, { new: true })
   
       if (!updatedIngredient) {
-        return res.status(404).json({ message: "Ingredient not found" });
+        res.status(404).json({ message: "Ingredient not found" });
+        return;
       }
   
       res.status(200).json({ ingredient: updatedIngredient });
@@ -110,7 +115,8 @@ router.get("/orders", async (req, res, next) => {
       })
       
       if (!orders) {
-        return res.status(404).json({ message: "Orders not found" });
+        res.status(404).json({ message: "Orders not found" });
+        return;
       }
   
       res.status(200).json({ orders });
@@ -137,7 +143,8 @@ router.post("/orders", async (req, res, next) => {
       const createdOrder = await Order.create(newOrder);
   
       if (!createdOrder) {
-        return res.status(404).json({ message: "Order not created" });
+        res.status(404).json({ message: "Order not created" });
+        return;
       }
   
       res.status(201).json({ order: createdOrder });
@@ -155,7 +162,8 @@ router.put("/orders", async (req, res, next) => {
       const updatedOrder = await Order.findByIdAndUpdate(data._id, data, { new: true })
   
       if (!data) {
-        return res.status(404).json({ message: "Order not created" });
+        res.status(404).json({ message: "Order not created" });
+        return;
       }
   
       res.status(201).json({ order: data });
@@ -164,4 +172,4 @@ router.put("/orders", async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;

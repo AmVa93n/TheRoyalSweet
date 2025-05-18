@@ -1,5 +1,5 @@
 // We reuse this import in order to have access to the `body` property in requests
-const express = require("express");
+import express, { Express } from "express";
 
 // ℹ️ Responsible for the messages you see in the terminal as requests are coming in
 // https://www.npmjs.com/package/morgan
@@ -16,7 +16,7 @@ const cors = require("cors");
 const FRONTEND_URL = process.env.ORIGIN || "http://localhost:3000";
 
 // Middleware configuration
-module.exports = (app) => {
+module.exports = (app: Express) => {
   // Because this will be hosted on a server that will accept requests from outside and it will be hosted ona server with a `proxy`, express needs to know that it should trust that setting.
   // Services like Fly use something called a proxy and you need to add this to your server
   app.set("trust proxy", 1);
