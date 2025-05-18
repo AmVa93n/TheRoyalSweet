@@ -1,21 +1,28 @@
-import { Typography, Box, Drawer, List, ListItem, ListItemText, TextField, IconButton, 
-    Button, Divider } from '@mui/material';
-import { CartContext } from '../context/cart.context';
+import { Typography, Box, Drawer, List, ListItem, ListItemText, TextField, IconButton, Button, Divider } from '@mui/material';
 import { useStore } from '../store';
-import { useContext } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from 'react-router-dom';
 
 function Cart() {
-    const { cart, removeProduct, changeQuantity, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
-    const { language } = useStore()
+    const { language, cart, setCart, isCartOpen, setIsCartOpen } = useStore()
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    function removeProduct(id: string) {
+        const updatedCart = cart.filter(item => item.product._id !== id)
+        setCart(updatedCart)
+    }
+    
+    function changeQuantity(id: string, newQuantity: number) {
+        if (newQuantity < 1 || newQuantity > 99) return
+        const updatedCart = cart.map(item => item.product._id === id ? {...item, quantity: newQuantity} : item)
+        setCart(updatedCart)
+    }
 
     return (
         <Drawer
           anchor="right"
-          open={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(!isDrawerOpen)}
+          open={isCartOpen}
+          onClose={() => setIsCartOpen(!isCartOpen)}
         >
           <Box
             sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%', boxSizing: 'border-box' }}

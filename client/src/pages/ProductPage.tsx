@@ -1,9 +1,8 @@
 import { Container, Box, Typography, Button, Grid as Grid2, Select, MenuItem, FormControl, FormLabel, TextField } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useParams } from 'react-router-dom'
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useStore } from '../store';
-import { CartContext } from '../context/cart.context';
 import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -19,8 +18,14 @@ function ProductPage() {
     const [size, setSize] = useState<Size>('small')
     const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     const [quantity, setQuantity] = useState(1)
-    const { language } = useStore()
-    const { addProduct } = useContext(CartContext)
+    const { language, cart, setCart } = useStore()
+
+    function addProduct(product: Product, size: Size, quantity: number) {
+        if (cart.some(item => item.product._id === product._id)) return // can't add two items with same product
+        const { price } = calculatePrice(product)
+        const updatedCart = [...cart, {product, size, quantity, price}]
+        setCart(updatedCart)
+    }
     
     return (
         <Container sx={{ py: 4, mt: 7 }}>

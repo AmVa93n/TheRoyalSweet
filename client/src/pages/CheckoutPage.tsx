@@ -1,6 +1,5 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Container, Box, Card, CardContent, Divider, Grid as Grid2, TextField, Typography, FormControlLabel, Switch, Button } from '@mui/material';
-import { CartContext } from '../context/cart.context';
 import { useStore } from '../store';
 import appService from '../services/app.service'
 import { Elements } from '@stripe/react-stripe-js';
@@ -10,8 +9,7 @@ import PaymentForm from '../components/PaymentForm';
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 function CheckoutPage() {
-    const { cart } = useContext(CartContext)
-    const { language } = useStore()
+    const { language, cart } = useStore()
     const [isPickup, setIsPickup] = useState(false);
     const deliveryFee = isPickup ? 0 : 5
     const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + deliveryFee

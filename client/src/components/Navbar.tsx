@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box, Button, Drawer, List, ListItem, ListItemText, Badge, ToggleButtonGroup,
   ToggleButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -6,15 +6,13 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { Link } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { CartContext } from '../context/cart.context';
 import { useStore } from '../store';
 import Cart from './Cart'
 import { theme } from '../style';
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { cart, isDrawerOpen, setIsDrawerOpen } = useContext(CartContext)
-  const { language, setLanguage } = useStore()
+  const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore()
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -157,7 +155,7 @@ function Navbar() {
 
         {/* Cart Button */}
         <IconButton 
-          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          onClick={() => setIsCartOpen(!isCartOpen)}
           sx={{ml: 2, color: theme.primary_text}}
         >
           <Badge badgeContent={cart.length} color="primary">

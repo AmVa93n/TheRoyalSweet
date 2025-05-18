@@ -27,6 +27,8 @@ type Store = {
     setOrders: (orders: Order[]) => void
     cart: CartItem[]
     setCart: (cart: CartItem[]) => void
+    isCartOpen: boolean
+    setIsCartOpen: (isCartOpen: boolean) => void
     language: 'pt' | 'en'
     setLanguage: (language: 'pt' | 'en') => void
 }
@@ -42,6 +44,8 @@ export const useStore = create<Store>()(
             setOrders: (orders) => set({ orders }),
             cart: [],
             setCart: (cart) => set({ cart }),
+            isCartOpen: false,
+            setIsCartOpen: (isCartOpen) => set({ isCartOpen }),
             language: 'pt',
             setLanguage: (language) => set({ language })
         }),
