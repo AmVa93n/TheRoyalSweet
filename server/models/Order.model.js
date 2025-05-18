@@ -17,7 +17,8 @@ const orderSchema = new Schema(
         address: String,
         zip: String,
     },
-    total: Number
+    total: Number,
+    deliveryDate: Date,
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

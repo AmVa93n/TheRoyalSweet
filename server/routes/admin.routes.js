@@ -131,6 +131,7 @@ router.post("/orders", async (req, res, next) => {
             zip: ""
         },
         items: [],
+        deliveryDate: new Date(),
       }
   
       const createdOrder = await Order.create(newOrder);
@@ -148,6 +149,8 @@ router.post("/orders", async (req, res, next) => {
 router.put("/orders", async (req, res, next) => {
     try {
       const data = req.body;
+      data.deliveryDate = new Date(data.deliveryDate);
+      data.createdAt = new Date(data.createdAt);
   
       const updatedOrder = await Order.findByIdAndUpdate(data._id, data, { new: true })
   

@@ -50,6 +50,9 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <TextField name="name" label="Name" value={orderForm.name} onChange={handleChange} size="small" fullWidth/>
                 <TextField name="email" label="Email" value={orderForm.email} onChange={handleChange} size="small" fullWidth/>
+
+                <TextField name="createdAt" label="Placed on" value={orderForm.createdAt.split('T')[0]} onChange={handleChange} size="small" fullWidth/>
+                <TextField name="deliveryDate" label="Delivery Date" value={orderForm.deliveryDate?.split('T')[0]} onChange={handleChange} size="small" fullWidth/>
                 
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <TextField name="shipping.city" label="City" value={orderForm.shipping.city} onChange={handleChange} size="small" multiline fullWidth/>

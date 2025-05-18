@@ -54,6 +54,8 @@ export type Order = {
         zip: string,
     },
     total: number
+    deliveryDate: string
+    createdAt: string
 }
 
 export type CartItem = {
