@@ -1,13 +1,14 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider, IconButton } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Typography, Divider, IconButton, Dialog } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import type { Order, CartItem } from '../../types';
 
 type Props = {
     order: Order;
-    handleEdit: (orderId: string) => void;
+    open: boolean;
+    onClose: () => void;
 }
 
-export default function OrderCard({ order, handleEdit }: Props) {
+export default function OrderCard({ order, open, onClose }: Props) {
     const accumulativeIngredients = calculateAccumulativeIngredients(order.items);
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
     const totalIngredientsPrice = accumulativeIngredients.reduce((total, ing) => total + ing.totalPrice, 0);
@@ -42,9 +43,10 @@ export default function OrderCard({ order, handleEdit }: Props) {
     }
 
     return (
+      <Dialog open={open} fullWidth maxWidth="lg">
         <Paper sx={{ mb: 3, p: 2, position: 'relative' }}>
-            <Typography variant="h6">Order by: {order.name} ({order.email})</Typography>
-            
+            <Typography variant="h6">Order by: {order.name}</Typography>
+            <Typography>Email: {order.email}</Typography>
             <Typography>Placed on: {order.createdAt.split('T')[0]}</Typography>
             <Typography>Delivery Date: {order.deliveryDate?.split('T')[0]}</Typography>
 
@@ -111,9 +113,10 @@ export default function OrderCard({ order, handleEdit }: Props) {
             <Typography variant="h6">Total Ingredients Price: {totalIngredientsPrice.toFixed(3)} €</Typography>
             <Typography variant="h6">Net Gain: {(grandTotalPrice - totalIngredientsPrice).toFixed(3)} €</Typography>
 
-            <IconButton onClick={() => handleEdit(order._id)} sx={{ position: 'absolute', top: 10, right: 10 }}>
-                <EditIcon />
+            <IconButton onClick={onClose} sx={{ position: 'absolute', top: 10, right: 10 }}>
+                <CloseIcon />
             </IconButton>
         </Paper>
+      </Dialog>
     )
 }
