@@ -4,21 +4,7 @@ const Product = require("../models/Product.model");
 const Order = require("../models/Order.model");
 const Ingredient = require("../models/Ingredient.model");
 
-router.get("/ingredients", async (req, res, next) => {
-    try {
-      const ingredients = await Ingredient.find();
-      
-      if (!ingredients) {
-        return res.status(404).json({ message: "Ingredients not found" });
-      }
-  
-      res.status(200).json({ ingredients });
-    } catch (err) {
-      next(err);
-    }
-});
-
-router.post("/product", async (req, res, next) => {
+router.post("/products", async (req, res, next) => {
     try {
       const createdProduct = await Product.create({ 
         name: {en: "", pt: ""},
@@ -43,7 +29,7 @@ router.post("/product", async (req, res, next) => {
     }
 });
   
-router.put("/product", async (req, res, next) => {
+router.put("/products", async (req, res, next) => {
     try {
       const newData = req.body;
       const { _id } = newData;
@@ -60,7 +46,21 @@ router.put("/product", async (req, res, next) => {
     }
 });
 
-router.post("/ingredient", async (req, res, next) => {
+router.get("/ingredients", async (req, res, next) => {
+    try {
+      const ingredients = await Ingredient.find();
+      
+      if (!ingredients) {
+        return res.status(404).json({ message: "Ingredients not found" });
+      }
+  
+      res.status(200).json({ ingredients });
+    } catch (err) {
+      next(err);
+    }
+});
+
+router.post("/ingredients", async (req, res, next) => {
     try {
       const createdIngredient = await Ingredient.create({
         supermarket: "",
@@ -83,7 +83,7 @@ router.post("/ingredient", async (req, res, next) => {
     }
 });
   
-router.put("/ingredient", async (req, res, next) => {
+router.put("/ingredients", async (req, res, next) => {
     try {
       const newData = req.body;
       const { _id } = newData;

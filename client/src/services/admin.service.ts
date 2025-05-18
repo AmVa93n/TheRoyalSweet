@@ -9,28 +9,28 @@ class AdminService {
     });
   }
 
+  async createProduct(): Promise<Product> {
+    const response = await this.api.post(`/admin/products`);
+    return response.data.product
+  }
+
+  async updateProduct(updatedProduct: Product): Promise<Product> {
+    const response = await this.api.put(`/admin/products`, updatedProduct);
+    return response.data.product
+  }
+
   async getIngredients(): Promise<Ingredient[]> {
     const response = await this.api.get(`/admin/ingredients`);
     return response.data.ingredients
   }
 
-  async createProduct(): Promise<Product> {
-    const response = await this.api.post(`/admin/product`);
-    return response.data.product
-  }
-
-  async updateProduct(updatedProduct: Product): Promise<Product> {
-    const response = await this.api.put(`/admin/product`, updatedProduct);
-    return response.data.product
-  }
-
   async createIngredient(): Promise<Ingredient> {
-    const response = await this.api.post(`/admin/ingredient`);
+    const response = await this.api.post(`/admin/ingredients`);
     return response.data.ingredient
   }
 
   async updateIngredient(updatedIngredient: Ingredient): Promise<Ingredient> {
-    const response = await this.api.put(`/admin/ingredient`, updatedIngredient);
+    const response = await this.api.put(`/admin/ingredients`, updatedIngredient);
     return response.data.ingredient
   }
 
