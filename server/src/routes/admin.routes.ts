@@ -35,7 +35,7 @@ router.put("/products", async (req, res, next) => {
       const newData = req.body;
       const { _id } = newData;
   
-      const updatedProduct = await Product.findByIdAndUpdate(_id, newData, { new: true })
+      const updatedProduct = await Product.findByIdAndUpdate(_id, newData, { new: true }).populate('recipe.ingredient');
   
       if (!updatedProduct) {
         res.status(404).json({ message: "Product not found" });
@@ -166,7 +166,7 @@ router.put("/orders", async (req, res, next) => {
         return;
       }
   
-      res.status(201).json({ order: data });
+      res.status(201).json({ order: updatedOrder });
     } catch (err) {
       next(err);  // Pass the error to the error-handling middleware
     }
