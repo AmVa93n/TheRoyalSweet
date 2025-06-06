@@ -35,12 +35,14 @@ router.put("/products", async (req, res, next) => {
       const newData = req.body;
       const { _id } = newData;
   
-      const updatedProduct = await Product.findByIdAndUpdate(_id, newData, { new: true }).populate('recipe.ingredient');
-  
+      const updatedProduct = await Product.findByIdAndUpdate(_id, newData, { new: true })
+      
       if (!updatedProduct) {
         res.status(404).json({ message: "Product not found" });
         return;
       }
+
+      await updatedProduct.populate('recipe.ingredient');
   
       res.status(200).json({ product: updatedProduct });
     } catch (err) {
@@ -138,6 +140,7 @@ router.post("/orders", async (req, res, next) => {
         },
         items: [],
         deliveryDate: new Date(),
+        additionalIngredients: [],
       }
   
       const createdOrder = await Order.create(newOrder);
