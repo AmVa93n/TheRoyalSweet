@@ -9,17 +9,18 @@ type Props = {
 }
 
 export default function OrderCard({ order, open, onClose }: Props) {
-    const accumulativeIngredients = calculateAccumulativeIngredients(order.items);
+    const ingredientRegistry = createIngredientRegistry();
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
-    const totalIngredientsPrice = accumulativeIngredients.reduce((total, ing) => total + ing.totalPrice, 0);
+    const totalIngredientsPrice = ingredientRegistry.reduce((total, ing) => total + ing.totalPrice, 0);
 
-    function calculateAccumulativeIngredients(items: CartItem[]) {
-        const ingredientsMap: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
+    function createIngredientRegistry() {
+        const registry: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
     
-        items.forEach(item => {
+        // Iterate through each item in the order and accumulate ingredient data
+        order.items.forEach(item => {
           item.product.recipe.forEach(({ ingredient, amount }) => {
-            if (!ingredientsMap[ingredient._id]) {
-              ingredientsMap[ingredient._id] = {
+            if (!registry[ingredient._id]) {
+              registry[ingredient._id] = {
                 name: ingredient.name,
                 units: ingredient.recipeUnits,
                 totalAmount: 0,
@@ -27,13 +28,29 @@ export default function OrderCard({ order, open, onClose }: Props) {
               };
             }
     
-            const ingredientData = ingredientsMap[ingredient._id];
-            ingredientData.totalAmount += amount * item.quantity;
-            ingredientData.totalPrice += ingredientData.totalAmount * ingredient.pricePerUnit;
+            const entry = registry[ingredient._id];
+            entry.totalAmount += amount * item.quantity;
+            entry.totalPrice += entry.totalAmount * ingredient.pricePerUnit;
           });
         });
+
+        // Add additional ingredients from the order
+        order.additionalIngredients.forEach(({ ingredient, amount }) => {
+          if (!registry[ingredient._id]) {
+            registry[ingredient._id] = {
+              name: ingredient.name,
+              units: ingredient.recipeUnits,
+              totalAmount: 0,
+              totalPrice: 0,
+            };
+          }
+
+          const entry = registry[ingredient._id];
+          entry.totalAmount += amount;
+          entry.totalPrice += amount * ingredient.pricePerUnit;
+        });
     
-        return Object.values(ingredientsMap);
+        return Object.values(registry);
     }
     
     function calculateGrandTotalPrice(items: CartItem[]) {
@@ -96,7 +113,7 @@ export default function OrderCard({ order, open, onClose }: Props) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {accumulativeIngredients.map((ingredient, i) => (
+                    {ingredientRegistry.map((ingredient, i) => (
                       <TableRow key={i}>
                         <TableCell>{ingredient.name}</TableCell>
                         <TableCell>{ingredient.totalAmount} {ingredient.units}</TableCell>

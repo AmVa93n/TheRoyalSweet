@@ -16,10 +16,12 @@ type Props = {
 };
 
 export default function EditOrderModal({ open, order, onSave, onClose }: Props) {
-    const { products } = useStore();
+    const { products, ingredients } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
-    const [newAmount, setNewAmount] = useState(0);
+    const [newItemQuantity, setNewItemQuantity] = useState(0);
+    const [newIngredientId, setNewIngredientId] = useState("");
+    const [newIngredientAmount, setNewIngredientAmount] = useState(0);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -36,13 +38,29 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
     function handleAddItem() {
         const product = products.find(product => product._id === newProductId)!;
         const { price } = calculatePrice(product)
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newAmount, price: price, size: 'medium' }] }));
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newItemQuantity, price: price, size: 'medium' }] }));
         setNewProductId(""); // Clear input
-        setNewAmount(0); // Clear amount
+        setNewItemQuantity(0); // Clear amount
     };
     
-    function handleDeleteItem(itemIndex: number) {
-        setOrderForm(prev => ({ ...prev, items: prev.items.filter((_, index) => index !== itemIndex) }));
+    function handleDeleteItem(productId: string) {
+        setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product._id !== productId) }));
+    };
+
+    function handleAddIngredient() {
+        const ingredient = ingredients.find(ingredient => ingredient._id === newIngredientId)!
+        setOrderForm((prev) => ({
+            ...prev, additionalIngredients: [...prev.additionalIngredients, { ingredient, amount: newIngredientAmount }]
+        }));
+        setNewIngredientId(""); // Clear input
+        setNewIngredientAmount(0); // Clear amount
+    };
+        
+    function handleDeleteIngredient(ingredientId: string) {
+        setOrderForm((prev) => ({
+            ...prev,
+            recipe: prev.additionalIngredients.filter(item => item.ingredient._id !== ingredientId)
+        }));
     };
 
     return (
@@ -73,13 +91,13 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
                 <Box>
                     <Typography variant="body2">Items:</Typography>
                     <List>
-                        {orderForm.items.map((item, index) => (
-                        <ListItem key={index} dense sx={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                        {orderForm.items.map((item) => (
+                        <ListItem key={item.product._id} dense sx={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                             <Typography variant="body2">{item.product.name.pt} x {item.quantity}</Typography>
                             <Typography variant="body2">
                                 {calculatePrice(item.product).price * item.quantity} € ( {calculatePrice(item.product).price} € x {item.quantity} )
                             </Typography>
-                            <IconButton onClick={() => handleDeleteItem(index)}>
+                            <IconButton onClick={() => handleDeleteItem(item.product._id)}>
                                 <DeleteIcon />
                             </IconButton>
                         </ListItem>
@@ -99,8 +117,8 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
                         sx={{ width: 300 }}
                     />
                     <TextField
-                        value={newAmount}
-                        onChange={(e) => setNewAmount(Number(e.target.value))}
+                        value={newItemQuantity}
+                        onChange={(e) => setNewItemQuantity(Number(e.target.value))}
                         placeholder="Amount"
                         type="number"
                         size="small"
@@ -110,7 +128,49 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
                         variant="contained"
                         onClick={() => handleAddItem()}
                         startIcon={<AddIcon />}
-                        disabled={newProductId === "" || newAmount <= 0}
+                        disabled={newProductId === "" || newItemQuantity <= 0}
+                    >
+                        Add
+                    </Button>
+                </Box>
+
+                <Box>
+                    <Typography variant="body2">Additional Ingredients:</Typography>
+                    <List>
+                        {orderForm.additionalIngredients.map((entry) => (
+                        <ListItem key={entry.ingredient._id} dense>
+                            <Typography variant="body2">{entry.ingredient.name}: {entry.amount} {entry.ingredient.recipeUnits}</Typography>
+                            <IconButton onClick={() => handleDeleteIngredient(entry.ingredient._id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItem>
+                        ))}
+                    </List>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Autocomplete
+                        options={ingredients} // Pass the whole ingredient object
+                        getOptionLabel={(option) => option.name} // Display the ingredient name in the dropdown
+                        value={ingredients.find(ingredient => ingredient._id === newIngredientId) || null} // Find the selected ingredient by ID
+                        onChange={(_, newValue) => setNewIngredientId(newValue?._id || "")} // Store the ingredient's ID
+                        renderInput={(params) => (
+                            <TextField {...params} placeholder="Select Ingredient" size="small" />
+                        )}
+                        sx={{ width: 300 }}
+                    />
+                    <TextField
+                        value={newIngredientAmount}
+                        onChange={(e) => setNewIngredientAmount(Number(e.target.value))}
+                        placeholder="Amount"
+                        type="number"
+                        size="small"
+                        sx={{ width: 100 }}
+                    />
+                    <Button
+                        variant="contained"
+                        onClick={() => handleAddIngredient()}
+                        startIcon={<AddIcon />}
                     >
                         Add
                     </Button>

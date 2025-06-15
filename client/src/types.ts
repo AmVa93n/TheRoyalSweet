@@ -56,6 +56,10 @@ export type Order = {
     total: number
     deliveryDate: string
     createdAt: string
+    additionalIngredients: {
+        ingredient: Ingredient,
+        amount: number
+    }[]
 }
 
 export type CartItem = {

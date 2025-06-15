@@ -19,6 +19,10 @@ const orderSchema = new Schema(
     },
     total: Number,
     deliveryDate: Date,
+    additionalIngredients: [{
+        ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
+        amount: Number
+    }]
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
