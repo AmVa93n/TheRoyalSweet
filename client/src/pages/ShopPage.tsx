@@ -1,8 +1,8 @@
-import { Container, Grid as Grid2, Card, CardMedia, CardContent, Typography, Button, Box, ListItemText } from '@mui/material';
+import { Container, Grid as Grid2, Typography, Button, Box, ListItemText } from '@mui/material';
 import { useStore } from '../store';
-import { useNavigate } from "react-router-dom";
+
 import type { Category } from '../types';
-import { calculatePrice } from '../utils';
+import ProductCard from '../components/ProductCard';
 
 const categories: {cat: Category, en: string, pt: string}[] = [
     {cat: 'cake', en: 'Cakes', pt: 'Bolos'}, 
@@ -14,12 +14,6 @@ const categories: {cat: Category, en: string, pt: string}[] = [
 
 function ShopPage() {
     const { language, products } = useStore()
-    const navigate = useNavigate();
-
-    function handleCardClick(event: React.MouseEvent<HTMLElement>) {
-        const productId = (event.target as HTMLElement).id
-        navigate(`/product/${productId}`);
-    }
 
     return (
         <Container sx={{mt: 10}}>
@@ -67,25 +61,7 @@ function ShopPage() {
                     <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
                         {products.filter(product => product.category === category.cat).map((product) => (
                         <Grid2 columns={{xs: 12, sm: 6, md: 4}} key={product._id}>
-                            <Card sx={{width: 340}}>
-                                <CardMedia
-                                    component="img"
-                                    alt={product._id}
-                                    height="250"
-                                    image={product.images[0]}
-                                    sx={{ objectFit: 'cover', cursor: 'pointer' }}
-                                    onClick={handleCardClick}
-                                    id={product._id}
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h6" component="div">
-                                        {product.name[language]}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {language === 'en' ? 'from' : 'A partir de '} €{calculatePrice(product).price}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
+                            <ProductCard product={product} />
                         </Grid2>
                         ))}
                     </Grid2>
