@@ -1,169 +1,137 @@
 import { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Box, Button, Drawer, List, ListItem, ListItemText, Badge, ToggleButtonGroup,
-  ToggleButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import { Link } from 'react-router-dom';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon } from '@phosphor-icons/react';
 import { useStore } from '../store';
-import Cart from './Cart'
-import { theme } from '../style';
+import Cart from './Cart';
+import FacebookLogo from '../assets/icons8-facebook.svg';
+import InstagramLogo from '../assets/icons8-instagram-logo.svg';
+import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
 
 function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore()
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
+  const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore();
+  const location = useLocation();
 
   const navLinks = [
-    {text: language === 'en' ? 'Shop' : 'Loja', route: '/shop'}, 
-    {text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'orders'},
-    {text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts'}, 
-    {text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme'}, 
-    {text: 'Menu', route: '/menu'}, 
-    {text: language === 'en' ? 'Blog' : 'Blogue', route: "https://theroyalsweet.com/en/"}
+    { text: language === 'en' ? 'Shop' : 'Loja', route: '/shop', icon: <StorefrontIcon size={24} /> },
+    { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'orders', icon: <ShoppingBagIcon size={24} /> },
+    { text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts', icon: <PhoneIcon size={24} /> },
+    { text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme', icon: <ChefHatIcon size={24} /> },
+    { text: 'Menu', route: '/menu', icon: <ForkKnifeIcon size={24} /> },
+    { text: language === 'en' ? 'Blog' : 'Blogue', route: `https://theroyalsweet.com/${language === 'en' ? 'en/' : ''}`, external: true, icon: <PencilCircleIcon size={24} /> },
   ];
 
   function scrollToSection(sectionId?: string) {
-    const section = document.getElementById(sectionId || '');
+    if (!sectionId || location.pathname !== '/') return;
+    const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }
 
   return (
-    <AppBar position="fixed" sx={{bgcolor: theme.primary_bg}}>
-      <Toolbar>
-        {/* Logo for Desktop */}
-        <Typography variant="h6" noWrap sx={{ display: { xs: 'none', md: 'flex' }, flexGrow: 0 }}>
-          LOGO
-        </Typography>
+    <header className="fixed w-full bg-white shadow z-50">
+      <div className="container mx-auto px-3 py-2 flex items-center justify-between">
+        {/* Mobile menu icon */}
+        <button onClick={() => setDrawerOpen(!drawerOpen)} className="md:hidden">
+          <ListIcon size={28} />
+        </button>
 
-        {/* Hamburger Icon for Mobile */}
-        <IconButton
-          color="inherit"
-          edge="start"
-          onClick={handleDrawerToggle}
-          sx={{ display: { xs: 'block', md: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <img src={Logo} alt="The Royal Sweet Logo" className="w-12 h-12" />
+        </Link>
 
-        {/* Drawer for Mobile Navigation */}
-        <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle}>
-          <Box
-            sx={{ width: 250 }}
-            role="presentation"
-            onClick={handleDrawerToggle}
-            onKeyDown={handleDrawerToggle}
-          >
-            <List>
-              {navLinks.map((link) => (
-                <ListItem 
-                  key={link.text}
-                  component={Link} 
-                  to={link.route} 
-                  onClick={() => scrollToSection(link.sectionId)}
-                  >
-                  <ListItemText primary={link.text} />
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Drawer>
-
-        {/* Cart Drawer */}
-        <Cart />
-
-        {/* Logo for Mobile */}
-        <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-          LOGO
-        </Typography>
-
-         {/* Navigation Links for Desktop */}
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 2 }}>
+        {/* Desktop nav */}
+        <nav className="hidden md:flex gap-6">
           {navLinks.map((link) => (
-            <Button 
-              key={link.text} 
-              sx={{ color: theme.primary_text, fontFamily: 'Montserrat' }}
-              component={Link} 
-              to={link.route}
-              onClick={() => scrollToSection(link.sectionId)}
-            >
-              {link.text}
-            </Button>
+              <Link
+                key={link.text}
+                to={link.route}
+                onClick={() => scrollToSection(link.sectionId)}
+                className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-pink-600 px-2 py-1 rounded transition-colors rounded-full"
+                target={link.external ? '_blank' : undefined}
+              >
+                {link.icon}
+                {link.text}
+              </Link>
           ))}
-        </Box>
+        </nav>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <ToggleButtonGroup
-            value={language}
-            exclusive
-            onChange={(e) => setLanguage((e.target as HTMLInputElement).value as 'en' | 'pt')}
-            aria-label="language switch"
-            sx={{ borderRadius: 25, mr: 2 }}
-          >
-            <ToggleButton 
-              value="en" 
-              aria-label="English" 
-              sx={{ padding: '5px', textTransform: 'none', color: theme.primary_text, fontFamily: 'Montserrat',
-                '&.Mui-selected': { color: theme.primary_text }
-               }}
+        {/* Right section */}
+        <div className="flex items-center gap-3">
+          {/* Language Toggle */}
+          <div className="flex border border-gray-300 rounded-full overflow-hidden text-sm">
+            <button
+              onClick={() => setLanguage('en')}
+              className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-gray-200' : 'cursor-pointer'}`}
             >
-              <img
-                loading="lazy"
-                width="20"
-                srcSet={`https://flagcdn.com/w40/gb.png 2x`}
-                src={`https://flagcdn.com/w20/gb.png`}
-                alt=""
-                style={{marginRight: 5}}
-              /> EN
-            </ToggleButton>
-
-            <ToggleButton 
-              value="pt" 
-              aria-label="Portuguese" 
-              sx={{ padding: '5px', textTransform: 'none', color: theme.primary_text, fontFamily: 'Montserrat',
-                '&.Mui-selected': { color: theme.primary_text }
-               }}
+              <img src="https://flagcdn.com/w20/gb.png" alt="EN" /> EN
+            </button>
+            <button
+              onClick={() => setLanguage('pt')}
+              className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-gray-200' : 'cursor-pointer'}`}
             >
-              <img
-                  loading="lazy"
-                  width="20"
-                  srcSet={`https://flagcdn.com/w40/pt.png 2x`}
-                  src={`https://flagcdn.com/w20/pt.png`}
-                  alt=""
-                  style={{marginRight: 5}}
-                /> PT
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
-        
+              <img src="https://flagcdn.com/w20/pt.png" alt="PT" /> PT
+            </button>
+          </div>
 
-        {/* Social Media Icons */}
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <IconButton color="inherit" href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank">
-            <FacebookIcon />
-          </IconButton>
-          <IconButton color="inherit" href="https://www.instagram.com/theroyalsweetblog/" target="_blank">
-            <InstagramIcon />
-          </IconButton>
-        </Box>
+          {/* Social Icons */}
+          <a href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank" rel="noopener noreferrer">
+            <img src={FacebookLogo} alt="Facebook" className="w-8 h-8" />
+          </a>
+          <a href="https://www.instagram.com/theroyalsweetblog/" target="_blank" rel="noopener noreferrer">
+            <img src={InstagramLogo} alt="Instagram" className="w-8 h-8" />
+          </a>
 
-        {/* Cart Button */}
-        <IconButton 
-          onClick={() => setIsCartOpen(!isCartOpen)}
-          sx={{ml: 2, color: theme.primary_text}}
-        >
-          <Badge badgeContent={cart.length} color="primary">
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>
-      </Toolbar>
-    </AppBar>
+          {/* Cart Icon */}
+          <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative cursor-pointer">
+            <ShoppingCartIcon size={24} />
+            {cart.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1">
+                {cart.length}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {drawerOpen && (
+        <div className="md:hidden bg-white border-t shadow p-4">
+          <nav className="flex flex-col gap-3">
+            {navLinks.map((link) => (
+              link.external ? (
+                <a
+                  key={link.text}
+                  href={link.route}
+                  target="_blank"
+                  className="text-gray-800"
+                  onClick={() => setDrawerOpen(false)}
+                >
+                  {link.text}
+                </a>
+              ) : (
+                <Link
+                  key={link.text}
+                  to={link.route}
+                  onClick={() => {
+                    scrollToSection(link.sectionId);
+                    setDrawerOpen(false);
+                  }}
+                  className="text-gray-800"
+                >
+                  {link.text}
+                </Link>
+              )
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {/* Cart Drawer */}
+      <Cart />
+    </header>
   );
 }
 
