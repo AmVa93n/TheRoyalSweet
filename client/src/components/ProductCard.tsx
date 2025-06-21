@@ -18,7 +18,7 @@ function ProductCard({ product }: ProductCardProps) {
     return (
         <div
             onClick={handleCardClick}
-            className="w-[340px] bg-pink-50 rounded-3xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-pink-200 group border border-pink-100"
+            className="w-[340px] bg-pink-50 rounded-3xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-pink-200 group border border-pink-100 mx-auto"
         >
             <div className="w-full h-[250px] overflow-hidden relative">
                 <img
