@@ -57,7 +57,7 @@ function CheckoutPage() {
     } as StripeElementsOptions;
 
     return (
-        <Container sx={{ padding: 4, mt: 7 }}>
+        <Container className='pt-24'>
             
             <Grid2 container spacing={4} columns={{ xs: 6, md: 12 }}>
 

@@ -1,46 +1,22 @@
-import { Grid as Grid2, Card, CardMedia, CardContent, Typography, Box, Button } from '@mui/material';
-import { useNavigate, Link } from "react-router-dom";
-import { calculatePrice } from '../utils';
+import { Grid as Grid2, Typography, Box, Button } from '@mui/material';
+import { Link } from "react-router-dom";
 import { useStore } from '../store';
+import ProductCard from './ProductCard';
 
 function ShopPreview() {
     const { language, products } = useStore()
-    const navigate = useNavigate();
     const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
-
-    function handleCardClick(event: React.MouseEvent) {
-        const productId = (event.target as HTMLElement).id
-        navigate(`/product/${productId}`);
-    }
 
     return (
         <Box my={2}>
             <Typography variant="h4" textAlign={'center'} fontFamily={'Montserrat'} fontStyle={'italic'}>
-                {language === 'en' ? 'Our Dessers' : 'Os Nossos Doces'}
+                {language === 'en' ? 'Our Desserts' : 'Os Nossos Doces'}
             </Typography>
 
             <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
                 {preview.map((product) => (
                 <Grid2 columns={{xs: 12, sm: 6, md: 4}} key={product._id}>
-                    <Card sx={{width: 340}}>
-                        <CardMedia
-                            component="img"
-                            alt={product._id}
-                            height="250"
-                            image={product.images[0]}
-                            sx={{ objectFit: 'cover', cursor: 'pointer' }}
-                            onClick={handleCardClick}
-                            id={product._id}
-                        />
-                        <CardContent>
-                            <Typography gutterBottom variant="h6" component="div">
-                                {product.name[language]}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                {language === 'en' ? 'from' : 'A partir de '} €{calculatePrice(product).price}
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                    <ProductCard product={product} />
                 </Grid2>
                 ))}
             </Grid2>

@@ -33,7 +33,7 @@ function AdminPage() {
     }
 
     return (
-        <Box sx={{ width: '100%', mt: 8 }}>
+        <Box sx={{ width: '100%' }} className="pt-24">
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="Ingredients" />
                 <Tab label="Products" />

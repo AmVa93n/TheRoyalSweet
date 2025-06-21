@@ -28,7 +28,7 @@ function ProductPage() {
     }
     
     return (
-        <Container sx={{ py: 4, mt: 7 }}>
+        <Container className='pt-24'>
             <Grid2 container spacing={4} columns={{ xs: 6, md: 12 }}>
                 {/* Product Image */}
                 <Grid2 size={{ xs: 12, md: 6 }}>
