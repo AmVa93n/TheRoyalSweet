@@ -1,7 +1,6 @@
 import type { Product } from "../types";
-import { Card, CardMedia, CardContent, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { useStore } from '../store';
+import { useStore } from "../store";
 
 type ProductCardProps = {
     product: Product;
@@ -9,33 +8,35 @@ type ProductCardProps = {
 
 function ProductCard({ product }: ProductCardProps) {
     const navigate = useNavigate();
-    const { language } = useStore()
+    const { language } = useStore();
+    const imagePlaceholder = "https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000"
 
-    function handleCardClick(event: React.MouseEvent<HTMLElement>) {
-        const productId = (event.target as HTMLElement).id
-        navigate(`/product/${productId}`);
+    function handleCardClick() {
+        navigate(`/product/${product._id}`);
     }
 
     return (
-        <Card sx={{width: 340}}>
-            <CardMedia
-                component="img"
-                alt={product._id}
-                height="250"
-                image={product.images[0] || 'https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000'}
-                sx={{ objectFit: 'cover', cursor: 'pointer' }}
-                onClick={handleCardClick}
-                id={product._id}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
+        <div
+            onClick={handleCardClick}
+            className="w-[340px] bg-pink-50 rounded-3xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-pink-200 group border border-pink-100"
+        >
+            <div className="w-full h-[250px] overflow-hidden relative">
+                <img
+                    src={product.images[0] || imagePlaceholder}
+                    alt={product.name[language]}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
+            <div className="p-5">
+                <h3 className="text-xl text-rose-800 mb-2 truncate">
                     {product.name[language]}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
+                </h3>
+                <p className="text-sm text-gray-700 line-clamp-2 font-light leading-relaxed">
                     {product.description[language]}
-                </Typography>
-            </CardContent>
-        </Card>
+                </p>
+            </div>
+        </div>
     );
 }
 
