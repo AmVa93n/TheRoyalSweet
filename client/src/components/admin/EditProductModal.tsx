@@ -54,6 +54,10 @@ export default function EditProductModal({ open, product, onSave, onClose }: Pro
         }));
     };
 
+    function handleChangeImage(index: number, newUrl: string) {
+        setProductForm((prev) => ({ ...prev, images: prev.images.map((url, i) => i === index ? newUrl : url) }));
+    };
+
     return (
         <Dialog open={open} fullWidth maxWidth="lg">
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -82,7 +86,10 @@ export default function EditProductModal({ open, product, onSave, onClose }: Pro
                 <TextField name="category" label="Category" value={productForm.category} onChange={handleChange} size="small" fullWidth/>
                 <TextField name="workHours" label="Work Hours" value={productForm.workHours} onChange={handleChange} type="number" size="small" />
                 <TextField name="electricityHours" label="Electricity Hours" value={productForm.electricityHours} onChange={handleChange} type="number" size="small" />
-                <TextField name="image" label="Image" value={productForm.images[0]} onChange={handleChange} size="small"/>
+                
+                {productForm.images.map((url, index) => (
+                    <TextField key={index} label={`Image  ${index+1}`} value={url} onChange={(e)=> handleChangeImage(index, e.target.value)} size="small"/>
+                ))}
                 
                 <Box>
                     <Typography variant="body2">Ingredients:</Typography>
