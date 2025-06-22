@@ -83,13 +83,9 @@ function HomePage() {
         <Orders />
       </Box>
 
-      <Box id='contacts' sx={{bgcolor: theme.secondary_bg1}}>
-        <Contacts />
-      </Box>
-
-      <Box id='aboutme' sx={{bgcolor: theme.secondary_bg2}}>
-        <AboutMe />
-      </Box>
+      <Contacts />
+    
+      <AboutMe />
 
     </Stack>
   );

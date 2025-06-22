@@ -31,7 +31,7 @@ function Contacts() {
   }
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-10 text-center">
+    <section className="max-w-6xl mx-auto px-4 py-10 text-center" id='contacts'>
       <h2 className="text-3xl font-montserrat italic mb-8 text-[#643843]">
         {language === 'en' ? 'Contacts' : 'Contactos'}
       </h2>

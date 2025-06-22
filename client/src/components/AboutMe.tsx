@@ -1,4 +1,3 @@
-import { Box, Grid as Grid2, Typography } from '@mui/material';
 import { useStore } from '../store';
 
 function AboutMe() {
@@ -32,42 +31,31 @@ function AboutMe() {
     ]
 
     return (
-        <Box sx={{ padding: 2 }}>
-            <Grid2 container spacing={4} alignItems="center" justifyContent="center">
+        <section className="max-w-6xl mx-auto px-4 py-10" id='aboutme'>
+            <div className="flex flex-col md:flex-row gap-10 items-center">
+                {/* Image Section */}
+                <div className="w-full md:w-1/3 flex justify-center md:justify-start">
+                <img
+                    src="./aboutme.jpg"
+                    alt="About Me"
+                    className="w-full max-w-[400px] rounded-lg shadow-md"
+                />
+                </div>
 
-                {/* Image section */}
-                <Grid2 size={{xs: 12, md: 4}} sx={{ textAlign: {xs: 'center', md: 'left'} }}>
-                    <Box
-                        component="img"
-                        src='./aboutme.jpg' // Replace with your image source
-                        alt="About Me"
-                        sx={{
-                            width: '100%',
-                            maxWidth: '400px',
-                            height: 'auto',
-                            borderRadius: '8px',
-                            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                        }}
-                    />
-                </Grid2>
+                {/* Text Section */}
+                <div className="w-full md:w-2/3">
+                <h2 className="text-3xl mb-6 font-montserrat italic text-[#643843]">
+                    {language === 'en' ? 'About Me' : 'Sobre mim'}
+                </h2>
 
-                {/* Text section */}
-                <Grid2 size={{xs: 12, md: 8}}>
-                    <Typography variant="h4" gutterBottom fontFamily={'Montserrat'} fontStyle={'italic'}>
-                        {language === 'en' ? 'About Me' : 'Sobre mim'}
-                    </Typography>
-
+                <div className="space-y-4 text-[#643843] font-montserrat italic leading-relaxed">
                     {text.map((line, index) => (
-                        <Typography key={'line-' + index} variant="body1" fontFamily={'Montserrat'} fontStyle={'italic'} sx={{mb: 2}}>
-                            {line[language]}
-                        </Typography>
+                        <p key={`line-${index}`}>{line[language]}</p>
                     ))}
-                        
-                </Grid2>
-
-                
-            </Grid2>
-        </Box>
+                </div>
+                </div>
+            </div>
+        </section>
     );
 }
 
