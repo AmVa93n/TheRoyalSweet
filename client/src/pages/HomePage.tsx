@@ -8,7 +8,6 @@ import Testimonials from '../../src/components/Testimonials';
 import AboutMe from '../../src/components/AboutMe'
 import Contacts from '../../src/components/Contacts'
 import Orders from '../../src/components/Orders';
-import Footer from '../../src/components/Footer';
 import { theme } from '../style';
 
 const images = [
@@ -92,7 +91,6 @@ function HomePage() {
         <AboutMe />
       </Box>
 
-      <Footer />
     </Stack>
   );
 }

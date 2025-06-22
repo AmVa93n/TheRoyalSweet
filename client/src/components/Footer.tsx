@@ -1,38 +1,28 @@
-import { Box, Typography, Link } from '@mui/material';
-import { theme } from '../style';
 import { useStore } from '../store';
+import { theme } from '../style';
 
 function Footer() {
     const { language } = useStore();
 
     return (
-        <Box
-            component="footer"
-            sx={{
-                bgcolor: theme.primary_bg,
-                py: 3,
-                px: 2,
-                mt: 'auto',
-                textAlign: 'center',
-            }}
-        >
-            <Typography variant="body1" sx={{ color: theme.primary_text, fontFamily: 'Montserrat' }}>
+        <footer className={`text-center py-6 px-4 mt-auto`} style={{ backgroundColor: theme.primary_bg }}>
+            <p className={`text-base`} style={{ color: theme.primary_text }}>
                 © {new Date().getFullYear()} The Royal Sweet. All rights reserved.
-            </Typography>
-            <Typography variant="body2" sx={{ color: theme.primary_text, mt: 1, fontFamily: 'Montserrat' }}>
-                <Link href="/privacy" underline="hover" sx={{ color: theme.primary_text }}>
+            </p>
+            <p className={`text-sm mt-2`} style={{ color: theme.primary_text }}>
+                <a href="/privacy" className="hover:underline">
                     {language === 'en' ? 'Privacy Policy' : 'Política de Privacidade'}
-                </Link>
+                </a>
                 {' | '}
-                <Link href="/terms" underline="hover" sx={{ color: theme.primary_text }}>
+                <a href="/terms" className="hover:underline">
                     {language === 'en' ? 'Terms of Service' : 'Termos e Condições'}
-                </Link>
+                </a>
                 {' | '}
-                <Link href="/terms" underline="hover" sx={{ color: theme.primary_text }}>
-                    {language === 'en' ? '' : 'Livro de Reclamações'}
-                </Link>
-            </Typography>
-        </Box>
+                <a href="/complaints" className="hover:underline">
+                    {language === 'en' ? 'Complaint Book' : 'Livro de Reclamações'}
+                </a>
+            </p>
+        </footer>
     );
 }
 
