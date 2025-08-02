@@ -44,7 +44,7 @@ function Cart() {
             </span>
             <button
               onClick={() => setIsCartOpen(false)}
-              className="text-white hover:text-gray-300 transition"
+              className="text-white hover:text-gray-300 transition cursor-pointer"
             >
               <XIcon size={24} />
             </button>

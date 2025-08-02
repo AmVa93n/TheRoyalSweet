@@ -8,7 +8,7 @@ import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function ProductPage() {
     const { productId } = useParams();
-    const { products } = useStore();
+    const { products, setIsCartOpen } = useStore();
     const product = products.find((product: Product) => product._id === productId)!;
     
     const [quantity, setQuantity] = useState(1)
@@ -16,10 +16,19 @@ function ProductPage() {
     const navigate = useNavigate()
 
     function addProduct(product: Product, quantity: number) {
-        if (cart.some(item => item.product._id === product._id)) return // can't add two items with same product
-        const { price } = calculatePrice(product)
-        const updatedCart = [...cart, {product, quantity, price}]
-        setCart(updatedCart)
+        if (cart.some(item => item.product._id === product._id)) {
+            // If product already exists in cart, just update the quantity
+            const updatedCart = cart.map(item => 
+                item.product._id === product._id ? {...item, quantity: item.quantity + quantity} : item
+            );
+            setCart(updatedCart);
+        } else {
+            // If product is not in cart, add it
+            const { price } = calculatePrice(product)
+            const updatedCart = [...cart, {product, quantity, price}]
+            setCart(updatedCart)
+        }
+        setIsCartOpen(true) // Open cart after adding product
     }
     
     return (
