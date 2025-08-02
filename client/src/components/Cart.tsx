@@ -39,7 +39,7 @@ function Cart() {
           {/* Header */}
           <div className="flex gap-2 bg-[#414141] p-5 text-white justify-between items-center">
             <span>
-              <span className="text-xl">{language === 'en' ? 'Your Cart' : 'Itens adicionados'}</span>
+              <span className="text-xl">{language === 'en' ? 'Added items' : 'Itens adicionados'}</span>
               <span className='text-sm'> ({totalItems} {language === 'en' ? 'items' : 'itens'})</span>
             </span>
             <button
@@ -121,7 +121,7 @@ function Cart() {
           <div className="flex flex-col gap-4 p-4">
             <hr className='border-gray-300' />
 
-            <div className="flex justify-between text-[#643843]">
+            <div className="flex justify-between text-[#593b3e]">
               <p className="text-lg font-semibold">
                 {language === 'en' ? 'Estimated total' : 'Total estimado'}
               </p>
@@ -132,7 +132,7 @@ function Cart() {
 
             <button
               onClick={() => navigate("/checkout")}
-              className="w-full block mx-auto text-center bg-[#643843] text-white font-bold py-2 px-4 rounded-full hover:bg-[#64384375] transition hover:cursor-pointer"
+              className="w-full block mx-auto text-center bg-[#593b3e] text-white font-bold py-2 px-4 rounded-full hover:bg-[#593b3e75] transition hover:cursor-pointer"
             >
               {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
             </button>

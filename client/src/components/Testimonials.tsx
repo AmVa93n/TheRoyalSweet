@@ -22,7 +22,7 @@ function Testimonials() {
             <button
               onClick={onClickHandler}
               aria-label={label}
-              className="absolute top-1/2 left-2 lg:left-10 transform -translate-y-1/2 z-10 text-[#643843]"
+              className="absolute top-1/2 left-2 lg:left-10 transform -translate-y-1/2 z-10 text-[#593b3e]"
             >
               <CaretLeftIcon size={40} />
             </button>
@@ -33,7 +33,7 @@ function Testimonials() {
             <button
               onClick={onClickHandler}
               aria-label={label}
-              className="absolute top-1/2 right-2 lg:right-10 transform -translate-y-1/2 z-10 text-[#643843]"
+              className="absolute top-1/2 right-2 lg:right-10 transform -translate-y-1/2 z-10 text-[#593b3e]"
             >
               <CaretRightIcon size={40} />
             </button>
@@ -43,12 +43,12 @@ function Testimonials() {
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="flex flex-col justify-center items-start gap-4 py-12 px-12 lg:px-60 h-150 lg:h-100 bg-opacity-10 bg-[#64384325]"
+            className="flex flex-col justify-center items-start gap-4 py-12 px-12 lg:px-60 h-150 lg:h-100 bg-opacity-10 bg-[#593b3e25]"
           >
-            <p className="italic mb-4 text-xl text-[#643843] text-center mx-auto">
+            <p className="italic mb-4 text-xl text-[#593b3e] text-center mx-auto">
               "{review.text}"
             </p>
-            <p className="text-sm font-bold text-[#643843] mx-auto">
+            <p className="text-sm font-bold text-[#593b3e] mx-auto">
               {review.name}
             </p>
           </div>

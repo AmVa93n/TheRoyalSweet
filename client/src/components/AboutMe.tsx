@@ -44,11 +44,11 @@ function AboutMe() {
 
                 {/* Text Section */}
                 <div className="w-full md:w-2/3">
-                <h2 className="text-3xl mb-6 font-montserrat italic text-[#643843]">
+                <h2 className="text-3xl mb-6 font-montserrat italic text-[#593b3e]">
                     {language === 'en' ? 'About Me' : 'Sobre mim'}
                 </h2>
 
-                <div className="space-y-4 text-[#643843] font-montserrat italic leading-relaxed">
+                <div className="space-y-4 text-[#593b3e] font-montserrat italic leading-relaxed">
                     {text.map((line, index) => (
                         <p key={`line-${index}`}>{line[language]}</p>
                     ))}

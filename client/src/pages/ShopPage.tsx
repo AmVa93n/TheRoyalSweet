@@ -23,7 +23,7 @@ function ShopPage() {
             <button
                 key={category.cat}
                 onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
-                className="flex items-center gap-2 text-[#643843] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#643843] px-4 py-2 rounded-full duration-300"
+                className="flex items-center gap-2 text-[#593b3e] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#593b3e] px-4 py-2 rounded-full duration-300"
             >
                 {category.icon}
                 {category[language]}
@@ -37,7 +37,7 @@ function ShopPage() {
                 <button
                     key={category.cat}
                     onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
-                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-[#643843] transition-colors cursor-pointer"
+                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-[#593b3e] transition-colors cursor-pointer"
                 >
                     {category[language]}
                 </button>
@@ -48,7 +48,7 @@ function ShopPage() {
         {categories.map((category) => (
             <section key={category.cat} id={category.cat} className="my-20">
                 <div className="flex items-center justify-center gap-2 mb-6">
-                    <h2 className="text-3xl text-center font-montserrat italic text-[#643843]">{category[language]}</h2>
+                    <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{category[language]}</h2>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6 w-full">
                     {products.filter((product) => product.category === category.cat).map((product) => (
@@ -62,7 +62,7 @@ function ShopPage() {
         <div className="flex justify-center my-8">
             <button
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
+                className="block mx-auto w-44 text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
             >
                 {language === 'en' ? 'Back to Top' : 'Voltar ao Topo'}
             </button>

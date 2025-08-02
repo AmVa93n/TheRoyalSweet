@@ -40,16 +40,16 @@ function HowToOrder() {
     ]
 
     return (
-        <section className="bg-[#64384325]" id='how-to-order'>
+        <section className="bg-[#593b3e25]" id='how-to-order'>
             <div className="max-w-6xl mx-auto px-4 py-10">
-                <h2 className="text-3xl text-center font-montserrat italic text-[#643843]">
+                <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">
                     {language === 'en' ? 'How to Order' : 'Como Encomendar'}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-12 w-4/5 mx-auto my-8">
                     {text.map((step, index) => (
                     <div key={index} className="flex flex-col items-center w-full gap-2">
-                        <step.icon size={80} className="text-[#643843]" />
-                        <p className="text-medium mt-2 text-[#643843] text-center">
+                        <step.icon size={80} className="text-[#593b3e]" />
+                        <p className="text-medium mt-2 text-[#593b3e] text-center">
                         {step[language]}
                         </p>
                     </div>
@@ -57,7 +57,7 @@ function HowToOrder() {
                 </div>
                 <button
                     onClick={() => navigate("/shop")}
-                    className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
+                    className="block mx-auto w-44 text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                 >
                     {language === 'en' ? 'See all desserts' : 'Ver todos os doces'}
                 </button>

@@ -30,7 +30,7 @@ function Navbar() {
   }
 
   return (
-    <header className="fixed w-full bg-[#643843] shadow z-50">
+    <header className="fixed w-full bg-[#593b3e] shadow z-50">
       <div className="container mx-auto px-3 py-2 flex items-center justify-between">
         {/* Mobile menu icon */}
         <button onClick={() => setDrawerOpen(!drawerOpen)} className="md:hidden">
@@ -49,7 +49,7 @@ function Navbar() {
                 key={link.text}
                 to={link.route}
                 onClick={() => scrollToSection(link.sectionId)}
-                className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#643843] px-2 py-1 rounded transition-colors rounded-full text-white"
+                className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#593b3e] px-2 py-1 rounded transition-colors rounded-full text-white"
                 target={link.external ? '_blank' : undefined}
               >
                 {link.icon}
@@ -106,7 +106,7 @@ function Navbar() {
                   key={link.text}
                   href={link.route}
                   target="_blank"
-                  className="text-[#643843]"
+                  className="text-[#593b3e]"
                   onClick={() => setDrawerOpen(false)}
                 >
                   {link.text}
@@ -119,7 +119,7 @@ function Navbar() {
                     scrollToSection(link.sectionId);
                     setDrawerOpen(false);
                   }}
-                  className="text-[#643843]"
+                  className="text-[#593b3e]"
                 >
                   {link.text}
                 </Link>
