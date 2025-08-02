@@ -1,7 +1,5 @@
 import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Box, IconButton, Typography } from '@mui/material';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const reviews = [
@@ -12,89 +10,51 @@ const reviews = [
 ];
 
 function Testimonials() {
-    return (
-        <Box>
-            <Carousel 
-                showThumbs={false} 
-                showStatus={false} 
-                infiniteLoop 
-                autoPlay
-                renderArrowPrev={(onClickHandler, hasPrev, label) =>
-                    hasPrev && (
-                    <IconButton
-                        onClick={onClickHandler}
-                        sx={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: 10,
-                            transform: 'translateY(-50%)',
-                            zIndex: 2,
-                            color: 'white',
-                        }}
-                        aria-label={label}
-                    >
-                        <ArrowBackIos />
-                    </IconButton>
-                    )
-                }
-                renderArrowNext={(onClickHandler, hasNext, label) =>
-                    hasNext && (
-                    <IconButton
-                        onClick={onClickHandler}
-                        sx={{
-                            position: 'absolute',
-                            top: '50%',
-                            right: 10,
-                            transform: 'translateY(-50%)',
-                            zIndex: 2,
-                            color: 'white',
-                        }}
-                        aria-label={label}
-                    >
-                        <ArrowForwardIos />
-                    </IconButton>
-                    )
-                }
+  return (
+    <section className="relative" id='testimonials'>
+      <Carousel
+        showThumbs={false}
+        showStatus={false}
+        infiniteLoop
+        autoPlay
+        renderArrowPrev={(onClickHandler, hasPrev, label) =>
+          hasPrev && (
+            <button
+              onClick={onClickHandler}
+              aria-label={label}
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 text-[#643843]"
             >
-            {reviews.map((review, index) => (
-                <Box 
-                    key={index} 
-                    sx={{
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        justifyContent: 'center', 
-                        alignItems: 'start', 
-                        py: 3, px: 25,
-                        minHeight: '300px',
-                        backgroundColor: 'rgba(0, 0, 0, 0.1)', // Background styling
-                    }}
-                >
-                  <Typography 
-                    variant="h5" 
-                    sx={{
-                      fontStyle: 'italic',
-                      textAlign: 'left',
-                      mb: 2,
-                      fontFamily: 'Montserrat'
-                    }}
-                  >
-                    "{review.text}"
-                  </Typography>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      textAlign: 'center', 
-                      fontWeight: 'bold', 
-                      fontSize: '1rem',
-                      fontFamily: 'Montserrat'
-                    }}
-                  >
-                    - {review.name}
-                  </Typography>
-              </Box>
-            ))}
-            </Carousel>
-        </Box>
+              <CaretLeftIcon size={24} />
+            </button>
+          )
+        }
+        renderArrowNext={(onClickHandler, hasNext, label) =>
+          hasNext && (
+            <button
+              onClick={onClickHandler}
+              aria-label={label}
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 text-[#643843]"
+            >
+              <CaretRightIcon size={24} />
+            </button>
+          )
+        }
+      >
+        {reviews.map((review, index) => (
+          <div
+            key={index}
+            className="flex flex-col justify-center items-start gap-4 py-12 px-6 md:px-32 min-h-[300px] bg-opacity-10"
+          >
+            <p className="italic mb-4 text-xl text-[#643843] text-center mx-auto">
+              "{review.text}"
+            </p>
+            <p className="text-sm font-bold text-[#643843] mx-auto">
+              {review.name}
+            </p>
+          </div>
+        ))}
+      </Carousel>
+    </section>
   );
 }
 

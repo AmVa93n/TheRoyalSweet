@@ -16,9 +16,7 @@ function HomePage() {
         <ShopPreview />
       </Box>
 
-      <Box id='testimonials' sx={{bgcolor: theme.secondary_bg1}}>
-        <Testimonials />
-      </Box>
+      <Testimonials />
 
       <HowToOrder />
 
