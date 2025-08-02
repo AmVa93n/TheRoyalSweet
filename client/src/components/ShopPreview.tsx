@@ -21,7 +21,7 @@ function ShopPreview() {
 
       <button
         onClick={() => navigate("/shop")}
-        className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition"
+        className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
       >
         {language === 'en' ? 'See more...' : 'Ver Mais...'}
       </button>

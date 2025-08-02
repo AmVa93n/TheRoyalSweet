@@ -1,8 +1,10 @@
 import { useStore } from '../store';
 import { MagnifyingGlassIcon, ShoppingCartIcon, CreditCardIcon, MapPinIcon, ForkKnifeIcon, ChatCenteredDotsIcon } from '@phosphor-icons/react';
+import { useNavigate } from "react-router-dom";
 
 function HowToOrder() {
     const { language } = useStore()
+    const navigate = useNavigate();
 
     const text = [
         {
@@ -42,7 +44,7 @@ function HowToOrder() {
             <h2 className="text-3xl text-center font-montserrat italic text-[#643843]">
                 {language === 'en' ? 'How to Order' : 'Como Encomendar'}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-12 w-4/5 mx-auto mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-12 w-4/5 mx-auto my-8">
                 {text.map((step, index) => (
                 <div key={index} className="flex flex-col items-center w-full gap-2">
                     <step.icon size={80} className="text-[#643843]" />
@@ -52,6 +54,12 @@ function HowToOrder() {
                 </div>
                 ))}
             </div>
+            <button
+                onClick={() => navigate("/shop")}
+                className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
+            >
+                {language === 'en' ? 'See all desserts' : 'Ver todos os doces'}
+            </button>
         </section>
     )
 }
