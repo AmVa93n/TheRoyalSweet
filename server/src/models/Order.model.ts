@@ -16,7 +16,6 @@ const orderSchema = new Schema(
         address: String,
         zip: String,
     },
-    total: Number,
     deliveryDate: Date,
     additionalIngredients: [{
         ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},

@@ -53,7 +53,6 @@ export type Order = {
         address: string,
         zip: string,
     },
-    total: number
     deliveryDate: string
     createdAt: string
     additionalIngredients: {
