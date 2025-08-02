@@ -64,11 +64,8 @@ export type Order = {
 
 export type CartItem = {
     product: Product,
-    size: Size,
     quantity: number
     price: number,
 }
-
-export type Size = "small" | "medium" | "big"
 
 export type Category = "cake" | "pie" | "cheesecake" | "dessert" | "mini"

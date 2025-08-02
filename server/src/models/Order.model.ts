@@ -7,7 +7,6 @@ const orderSchema = new Schema(
     email: String,
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
-        size: String,
         quantity: Number,
         price: Number,
     }],
