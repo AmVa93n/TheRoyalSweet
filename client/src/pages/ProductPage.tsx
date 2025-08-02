@@ -1,147 +1,116 @@
-import { Container, Box, Typography, Button, Grid as Grid2, Select, MenuItem, FormControl, FormLabel, TextField } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useParams } from 'react-router-dom'
 import { useState } from 'react';
 import { useStore } from '../store';
-import dayjs from 'dayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { Link } from 'react-router-dom';
-import type { Product, Size } from '../types';
+import { useNavigate } from 'react-router-dom';
+import type { Product } from '../types';
 import { calculatePrice } from '../utils';
+import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function ProductPage() {
     const { productId } = useParams();
     const { products } = useStore();
     const product = products.find((product: Product) => product._id === productId)!;
-    const [size, setSize] = useState<Size>('small')
-    const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
+    
     const [quantity, setQuantity] = useState(1)
     const { language, cart, setCart } = useStore()
+    const navigate = useNavigate()
 
-    function addProduct(product: Product, size: Size, quantity: number) {
+    function addProduct(product: Product, quantity: number) {
         if (cart.some(item => item.product._id === product._id)) return // can't add two items with same product
         const { price } = calculatePrice(product)
-        const updatedCart = [...cart, {product, size, quantity, price}]
+        const updatedCart = [...cart, {product, quantity, price}]
         setCart(updatedCart)
     }
     
     return (
-        <Container className='pt-24'>
-            <Grid2 container spacing={4} columns={{ xs: 6, md: 12 }}>
-                {/* Product Image */}
-                <Grid2 size={{ xs: 12, md: 6 }}>
-                    <Box sx={{ textAlign: 'center', mb: 4 }}>
+        <div className="pt-24 px-4 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Product Image and Description */}
+                <div>
+                    <div className="text-center mb-4">
                         <img
-                        src={product.images?.[0]}
-                        alt={product._id}
-                        style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
+                            src={product.images?.[0]}
+                            alt={product._id}
+                            className="w-full max-h-[400px] object-cover"
                         />
-                    </Box>
+                    </div>
 
-                    {/* Product Description */}
-                    <Typography variant="body1" sx={{ mb: 4, fontWeight: 'bold' }}>
-                                {product.intro?.[language]}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 4 }}>
+                    <p className="mb-4 font-bold">{product.intro?.[language]}</p>
+                    <p className="mb-4">
                         <b>{language === 'en' ? 'Description' : 'Descrição'}:</b> {product.description?.[language]}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 4 }}>
+                    </p>
+                    <p className="mb-4">
                         <b>{language === 'en' ? 'Serve' : 'Servir'}:</b> {product.serve?.[language]}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mb: 4 }}>
+                    </p>
+                    <p className="mb-4">
                         <b>{language === 'en' ? 'Store' : 'Conservar'}:</b> {product.store?.[language]}
-                    </Typography>
-                </Grid2>
+                    </p>
+                </div>
 
                 {/* Order Info */}
-                <Grid2 size={{ xs: 12, md: 6 }}>
-                    {/* Product Title */}
-                    <Typography variant="h4" sx={{ mb: 2 }}>
-                        {product.name?.[language]}
-                    </Typography>
+                <div>
+                    <h2 className="text-3xl font-semibold mb-4">{product.name?.[language]}</h2>
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="h5" sx={{ mb: 2 }}>
+                    <div className="flex flex-col">
+                        <p className="text-2xl font-semibold mb-4">
                             {calculatePrice(product).price.toFixed(2).replace('.', ',')} €
-                        </Typography>
-                        
-                        <FormControl sx={{ mb: 2 }}>
-                            <FormLabel id="size">{language === 'en' ? 'Size' : 'Tamanho'}</FormLabel>
-                            <Select
-                                size='small'
-                                labelId='size'
-                                sx={{ width: 300, bgcolor: 'white' }} 
-                                value={size}
-                                onChange={(e) => setSize(e.target.value)}
-                                MenuProps={{disableScrollLock: true}}
-                                >
-                                <MenuItem value={'small'}>{language === 'en' ? 'Small' : 'Pequeno'}</MenuItem>
-                                <MenuItem value={'medium'}>{language === 'en' ? 'Medium' : 'Médio'}</MenuItem>
-                                <MenuItem value={'big'}>{language === 'en' ? 'Big' : 'Grande'}</MenuItem>
-                            </Select>
-                        </FormControl>
+                        </p>
 
-                        <FormControl sx={{ mb: 2 }}>
-                            <FormLabel>{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</FormLabel>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    value={date}
-                                    onChange={(newValue) => setDate(newValue)}
-                                    sx={{width: 300, bgcolor: 'white'}}
-                                    format='DD/MM/YYYY'
+                        {/* Quantity */}
+                        <div className="mb-6 relative">
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Quantity' : 'Quantidade'}</label>
+                            <div className="relative w-30">
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={99}
+                                    value={quantity}
+                                    onChange={(e) => setQuantity(Number(e.target.value))}
+                                    className="text-center w-full p-2 rounded bg-white border appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                                 />
-                            </LocalizationProvider>
-                        </FormControl>
-
-                        <FormControl sx={{ mb: 3 }}>
-                            <FormLabel>{language === 'en' ? 'Quantity' : 'Quantidade'}</FormLabel>
-                            <TextField
-                                sx={{width: 100, bgcolor: 'white'}}
-                                type='number'
-                                slotProps={{htmlInput: { min: 1, max: 99 }}}
-                                value={quantity}
-                                onChange={(e) => setQuantity(Number(e.target.value))}
-                                size='small'
-                            />
-                        </FormControl>
+                                <button
+                                    onClick={() => setQuantity(q => Math.min(q + 1, 99))}
+                                    className="p-1 rounded-full hover:bg-gray-100 transition absolute right-1 top-[50%] translate-y-[-50%] cursor-pointer"
+                                >
+                                    <PlusIcon size={20} />
+                                </button>
+                                <button
+                                    onClick={() => setQuantity(q => Math.max(q - 1, 1))}
+                                    className="p-1 rounded-full hover:bg-gray-100 transition absolute left-1 top-[50%] translate-y-[-50%] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={quantity === 1}
+                                >
+                                    <MinusIcon size={20} />
+                                </button>
+                            </div>
+                        </div>
 
                         {/* Add to Cart Button */}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<ShoppingCartIcon />}
-                            sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 200, ml: 7 }}
-                            onClick={()=> addProduct(product, size, quantity)}
+                        <button
+                            onClick={() => addProduct(product, quantity)}
+                            className="w-full block mx-auto text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
                         >
                             {language === 'en' ? 'Add to Cart' : 'Adicionar ao carrinho'}
-                        </Button>
-                    </Box>
-                </Grid2>
-            </Grid2>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-            <Box sx={{width: {xs: '100%', md: '35%'}, mx: 'auto', display: 'flex', justifyContent: 'space-between'}}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 180 }}
-                    component={Link}
-                    to="/shop"
-                >
-                    {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
-                </Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ textTransform: 'none', mb: 2, borderRadius: 25, width: 180 }}
-                    component={Link}
-                    to="/checkout"
-                >
-                    {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
-                </Button>
-            </Box>
-        </Container>
+            {/* Bottom Buttons */}
+            <div className="my-8 w-full md:w-[35%] mx-auto flex flex-col sm:flex-row justify-between gap-4">
+                <button
+                    onClick={() => navigate('/shop')}
+                    className="block mx-auto text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
+                    >
+                {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
+                </button>
+                <button
+                    onClick={() => navigate('/checkout')}
+                    className="block mx-auto text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
+                    >
+                {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
+                </button>
+            </div>
+        </div>
     );
 }
 
