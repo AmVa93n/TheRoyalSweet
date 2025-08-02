@@ -16,7 +16,7 @@ function ShopPreview() {
   }, [products]);
 
   return (
-    <section className="mx-auto py-10" id='shop'>
+    <section className="mx-auto py-10" id='products'>
       <h2 className="text-3xl text-center italic font-montserrat mb-8 text-[#593b3e]">
         {language === 'en' ? 'Our Desserts' : 'Os Nossos Doces'}
       </h2>

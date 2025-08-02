@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom';
+import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon, CakeIcon } from '@phosphor-icons/react';
 import { useStore } from '../store';
 import Cart from './Cart';
 import FacebookLogo from '../assets/icons8-facebook.svg';
@@ -8,32 +8,24 @@ import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
 
 function Navbar() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore();
-  const location = useLocation();
 
   const navLinks = [
-    { text: language === 'en' ? 'Shop' : 'Loja', route: '/shop', icon: <StorefrontIcon size={24} /> },
+    { text: language === 'en' ? 'Products' : 'Produtos', route: '/', sectionId: 'products', icon: <CakeIcon size={24} /> },
+    { text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme', icon: <ChefHatIcon size={24} /> },
     { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'how-to-order', icon: <ShoppingBagIcon size={24} /> },
     { text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts', icon: <PhoneIcon size={24} /> },
-    { text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme', icon: <ChefHatIcon size={24} /> },
+    { text: language === 'en' ? 'Shop' : 'Loja', route: '/shop', icon: <StorefrontIcon size={24} /> },
     { text: 'Menu', route: '/menu', icon: <ForkKnifeIcon size={24} /> },
     { text: language === 'en' ? 'Blog' : 'Blogue', route: `https://theroyalsweet.com/${language === 'en' ? 'en/' : ''}`, external: true, icon: <PencilCircleIcon size={24} /> },
   ];
-
-  function scrollToSection(sectionId?: string) {
-    if (!sectionId || location.pathname !== '/') return;
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
 
   return (
     <header className="fixed w-full bg-[#593b3e] shadow z-50">
       <div className="container mx-auto px-3 py-2 flex items-center justify-between">
         {/* Mobile menu icon */}
-        <button onClick={() => setDrawerOpen(!drawerOpen)} className="md:hidden">
+        <button onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden">
           <ListIcon size={28} className='text-white' />
         </button>
 
@@ -48,7 +40,7 @@ function Navbar() {
               <Link
                 key={link.text}
                 to={link.route}
-                onClick={() => scrollToSection(link.sectionId)}
+                state={{ sectionId: link.sectionId }}
                 className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#593b3e] px-2 py-1 rounded transition-colors rounded-full text-white"
                 target={link.external ? '_blank' : undefined}
               >
@@ -96,38 +88,30 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {drawerOpen && (
-        <div className="md:hidden bg-[#e6dcd5] border-t shadow p-4">
-          <nav className="flex flex-col gap-3">
+      {/* Mobile Menu */}
+
+        <div className={`md:hidden bg-[#e6dcd5] border-t shadow overflow-hidden transition-all duration-300 px-4
+          ${isMobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
+          <nav className="flex flex-col gap-3 h-">
             {navLinks.map((link) => (
-              link.external ? (
-                <a
-                  key={link.text}
-                  href={link.route}
-                  target="_blank"
-                  className="text-[#593b3e]"
-                  onClick={() => setDrawerOpen(false)}
-                >
-                  {link.text}
-                </a>
-              ) : (
                 <Link
                   key={link.text}
                   to={link.route}
+                  state={{ sectionId: link.sectionId }}
                   onClick={() => {
-                    scrollToSection(link.sectionId);
-                    setDrawerOpen(false);
+                    setMobileMenuOpen(false);
                   }}
-                  className="text-[#593b3e]"
+                  className="text-[#593b3e] flex items-center gap-2"
+                  target={link.external ? '_blank' : undefined}
                 >
+                  {link.icon}
                   {link.text}
                 </Link>
               )
-            ))}
+            )}
           </nav>
         </div>
-      )}
+      
 
       {/* Cart Drawer */}
       <Cart />
