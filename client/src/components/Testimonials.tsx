@@ -22,9 +22,9 @@ function Testimonials() {
             <button
               onClick={onClickHandler}
               aria-label={label}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 text-[#643843]"
+              className="absolute top-1/2 left-2 lg:left-10 transform -translate-y-1/2 z-10 text-[#643843]"
             >
-              <CaretLeftIcon size={24} />
+              <CaretLeftIcon size={40} />
             </button>
           )
         }
@@ -33,9 +33,9 @@ function Testimonials() {
             <button
               onClick={onClickHandler}
               aria-label={label}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 text-[#643843]"
+              className="absolute top-1/2 right-2 lg:right-10 transform -translate-y-1/2 z-10 text-[#643843]"
             >
-              <CaretRightIcon size={24} />
+              <CaretRightIcon size={40} />
             </button>
           )
         }
@@ -43,7 +43,7 @@ function Testimonials() {
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="flex flex-col justify-center items-start gap-4 py-12 px-6 md:px-32 min-h-[300px] bg-opacity-10"
+            className="flex flex-col justify-center items-start gap-4 py-12 px-12 lg:px-60 h-150 lg:h-100 bg-opacity-10 bg-[#64384325]"
           >
             <p className="italic mb-4 text-xl text-[#643843] text-center mx-auto">
               "{review.text}"
