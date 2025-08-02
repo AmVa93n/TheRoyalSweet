@@ -18,7 +18,7 @@ function ProductCard({ product }: ProductCardProps) {
     return (
         <div
             onClick={handleCardClick}
-            className="w-[340px] bg-pink-50 rounded-3xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-pink-200 group border border-pink-100 mx-auto"
+            className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#64384350] group mx-auto"
         >
             <div className="w-full h-[250px] overflow-hidden relative">
                 <img
@@ -29,7 +29,7 @@ function ProductCard({ product }: ProductCardProps) {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
             <div className="p-5">
-                <h3 className="text-xl text-rose-800 mb-2 truncate">
+                <h3 className="text-xl text-[#643843] mb-2 truncate">
                     {product.name[language]}
                 </h3>
                 <p className="text-sm text-gray-700 line-clamp-2 font-light leading-relaxed">
