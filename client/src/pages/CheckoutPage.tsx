@@ -9,23 +9,27 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
+import type { Order } from '../types';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 function CheckoutPage() {
     const { language, cart } = useStore()
-    const [isPickup, setIsPickup] = useState(false);
-    const deliveryFee = isPickup ? 0 : 5
-    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + deliveryFee
-    const [orderData, setOrderData] = useState({
+    const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients'>>({
         name: '',
         email: '',
-        address: '',
-        city: '',
-        zip: '',
+        deliveryDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        pickup: false,
+        shipping: {
+            address: '',
+            city: '',
+            zip: '',
+        },
+        items: cart
     });
+    const deliveryFee = orderData.pickup ? 0 : 5
+    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + deliveryFee
     const [clientSecret, setClientSecret] = useState('');
-    const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -38,18 +42,13 @@ function CheckoutPage() {
             return
         }
 
-        if (!isPickup && (!orderData.city || !orderData.address || !orderData.zip)) {
+        const { pickup, shipping } = orderData;
+        if (!pickup && (!shipping.city || !shipping.address || !shipping.zip)) {
             alert('Missing shipping information!')
             return
         }
 
-        const requestBody = {
-        cart, 
-        orderData: !isPickup ? orderData : null,
-        deliveryFee
-        };
-
-        const response = await appService.placeOrder(requestBody);
+        const response = await appService.placeOrder(orderData);
         const { client_secret } = await response;
         setClientSecret(client_secret);
     };
@@ -100,8 +99,8 @@ function CheckoutPage() {
                             <label className="block mb-1 font-semibold">{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</label>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
-                                value={date}
-                                onChange={(newValue) => setDate(newValue)}
+                                value={dayjs(orderData.deliveryDate)}
+                                onChange={(newValue) => newValue && setOrderData((prev) => ({ ...prev, deliveryDate: newValue?.format('YYYY-MM-DD') }))}
                                 format="DD/MM/YYYY"
                                 slotProps={{
                                     textField: {
@@ -117,8 +116,8 @@ function CheckoutPage() {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={isPickup}
-                                        onChange={() => setIsPickup(!isPickup)}
+                                        checked={orderData.pickup}
+                                        onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
                                         color="primary"
                                     />
                                 }
@@ -136,9 +135,9 @@ function CheckoutPage() {
                                 fullWidth
                                 margin="normal"
                                 name="address"
-                                value={orderData.address}
+                                value={orderData.shipping.address}
                                 onChange={handleDataChange}
-                                disabled={isPickup || !!clientSecret}
+                                disabled={orderData.pickup || !!clientSecret}
                                 variant="filled"
                                 size='small'
                             />
@@ -147,9 +146,9 @@ function CheckoutPage() {
                                 fullWidth
                                 margin="normal"
                                 name="city"
-                                value={orderData.city}
+                                value={orderData.shipping.city}
                                 onChange={handleDataChange}
-                                disabled={isPickup || !!clientSecret}
+                                disabled={orderData.pickup || !!clientSecret}
                                 variant="filled"
                                 size='small'
                             />
@@ -158,9 +157,9 @@ function CheckoutPage() {
                                 fullWidth
                                 margin="normal"
                                 name="zip"
-                                value={orderData.zip}
+                                value={orderData.shipping.zip}
                                 onChange={handleDataChange}
-                                disabled={isPickup || !!clientSecret}
+                                disabled={orderData.pickup || !!clientSecret}
                                 variant="filled"
                                 size='small'
                             />

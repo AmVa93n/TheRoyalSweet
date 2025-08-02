@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
-import type { Product } from "../types";
+import type { Product, Order } from "../types";
 
 class AppService {
   api: AxiosInstance;
@@ -14,7 +14,7 @@ class AppService {
     return response.data.products
   }
 
-  async placeOrder(requestBody: any) {
+  async placeOrder(requestBody: Partial<Order>) {
     const response = await this.api.post(`/api/checkout`, requestBody);
     return response.data
   }

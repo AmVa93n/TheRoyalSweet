@@ -23,17 +23,18 @@ router.get("/products", async (req, res, next) => {
 });
 
 router.post('/checkout', async (req, res) => {
-  const { cart, orderData, deliveryFee } = req.body;
-  const { name, email, address, city, zip } = orderData || null
-  const total = cart.reduce((sum: number, item: {price: number, quantity: number}) => sum + item.price * item.quantity, 0) + deliveryFee
+  const { name, email, deliveryDate, shipping, pickup, items } = req.body;
+  const { address, city, zip } = shipping;
+  const deliveryFee = pickup ? 0 : 5;
+  const total = items.reduce((sum: number, item: {price: number, quantity: number}) => sum + item.price * item.quantity, 0) + deliveryFee;
 
   await Order.create({
     name, 
     email, 
-    items: cart.map((item: {product: { _id: string }}) => ({...item, product: item.product._id})),
-    pickup: deliveryFee === 0,
-    shipping: {address, city, zip},
-    total
+    deliveryDate,
+    pickup,
+    shipping,
+    items,
   })
 
   const paymentIntent = await stripe.paymentIntents.create({
