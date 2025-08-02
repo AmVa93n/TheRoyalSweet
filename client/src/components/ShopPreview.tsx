@@ -1,50 +1,32 @@
-import { Grid as Grid2, Typography, Box, Button } from '@mui/material';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useStore } from '../store';
 import ProductCard from './ProductCard';
 
 function ShopPreview() {
-    const { language, products } = useStore()
-    const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
+  const { language, products } = useStore();
+  const navigate = useNavigate();
+  const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
 
-    return (
-        <Box my={2}>
-            <Typography variant="h4" textAlign={'center'} fontFamily={'Montserrat'} fontStyle={'italic'}>
-                {language === 'en' ? 'Our Desserts' : 'Os Nossos Doces'}
-            </Typography>
+  return (
+    <section className="mx-auto py-10" id='shop'>
+      <h2 className="text-3xl text-center italic font-montserrat mb-8 text-[#643843]">
+        {language === 'en' ? 'Our Desserts' : 'Os Nossos Doces'}
+      </h2>
 
-            <Grid2 container spacing={3} sx={{ p: 4, justifyContent: 'center' }}>
-                {preview.map((product) => (
-                <Grid2 columns={{xs: 12, sm: 6, md: 4}} key={product._id}>
-                    <ProductCard product={product} />
-                </Grid2>
-                ))}
-            </Grid2>
-            
-            <Button
-                variant="contained"
-                sx={{ 
-                    textTransform: 'none', 
-                    borderRadius: 25, 
-                    width: 180, 
-                    display: 'block', 
-                    mx: 'auto', 
-                    textAlign: 'center', 
-                    bgcolor: 'transparent',
-                    color: 'black',
-                    fontWeight: 'bold',
-                    fontFamily: 'Montserrat',
-                    fontStyle: 'italic',
-                }}
-                disableElevation
-                component={Link}
-                to="/shop"
-            >
-                {language === 'en' ? 'See more...' : 'Ver Mais...'}
-            </Button>
-            
-        </Box>
-    );
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center mb-10 flex-wrap">
+        {preview.map((product) => (
+            <ProductCard product={product} key={product._id} />
+        ))}
+      </div>
+
+      <button
+        onClick={() => navigate("/shop")}
+        className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition"
+      >
+        {language === 'en' ? 'See more...' : 'Ver Mais...'}
+      </button>
+    </section>
+  );
 }
 
 export default ShopPreview;
