@@ -6,7 +6,7 @@ function Footer() {
     return (
         <footer className={`text-center py-6 px-4 mt-auto bg-[#643843]`}>
             <p className={`text-base text-white`}>
-                © {new Date().getFullYear()} The Royal Sweet. All rights reserved.
+                © {new Date().getFullYear()} The Royal Sweet. {language === 'en' ? 'All rights reserved.' : 'Todos os direitos reservados.'}
             </p>
             <p className={`text-sm mt-2 text-white`}>
                 <a href="/privacy" className="hover:underline">
