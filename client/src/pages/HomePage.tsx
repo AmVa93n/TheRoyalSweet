@@ -11,7 +11,12 @@ function HomePage() {
 
   useEffect(() => {
     if (location.state?.sectionId) {
-      window.scrollTo({ top: (document.getElementById(location.state.sectionId)?.offsetTop || 0) - 60, behavior: 'smooth' });
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const scrollY = (document.getElementById(location.state.sectionId)?.offsetTop || 0) - 60;
+          window.scrollTo({ top: scrollY, behavior: 'smooth' });
+        }, 0);
+      });
     }
   }, [location.state]);
 
