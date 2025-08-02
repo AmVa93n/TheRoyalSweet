@@ -5,6 +5,10 @@ import appService from '../services/app.service'
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, type StripeElementsOptions } from '@stripe/stripe-js';
 import PaymentForm from '../components/PaymentForm';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -21,6 +25,7 @@ function CheckoutPage() {
         zip: '',
     });
     const [clientSecret, setClientSecret] = useState('');
+    const [date, setDate] = useState<dayjs.Dayjs | null>(dayjs())
     
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -88,6 +93,23 @@ function CheckoutPage() {
                                 size='small'
                                 disabled={!!clientSecret}
                                 />
+                        </CardContent>
+
+                        {/* Date Picker */}
+                        <CardContent>
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</label>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                value={date}
+                                onChange={(newValue) => setDate(newValue)}
+                                format="DD/MM/YYYY"
+                                slotProps={{
+                                    textField: {
+                                    className: 'w-72 bg-white rounded border'
+                                    }
+                                }}
+                                />
+                            </LocalizationProvider>
                         </CardContent>
 
                         {/* Switch to toggle between Delivery and Self Pickup */}
