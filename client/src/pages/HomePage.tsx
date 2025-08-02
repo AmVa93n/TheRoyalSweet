@@ -5,7 +5,7 @@ import ShopPreview from '../../src/components/ShopPreview';
 import Testimonials from '../../src/components/Testimonials';
 import AboutMe from '../../src/components/AboutMe'
 import Contacts from '../../src/components/Contacts'
-import Orders from '../../src/components/Orders';
+import HowToOrder from '../components/HowToOrder';
 import { theme } from '../style';
 
 function HomePage() {
@@ -20,9 +20,7 @@ function HomePage() {
         <Testimonials />
       </Box>
 
-      <Box id='orders' sx={{bgcolor: theme.secondary_bg2}}>
-        <Orders />
-      </Box>
+      <HowToOrder />
 
       <Contacts />
     
