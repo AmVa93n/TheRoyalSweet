@@ -1,11 +1,13 @@
-import { Typography, Box, Drawer, List, ListItem, ListItemText, TextField, IconButton, Button, Divider } from '@mui/material';
 import { useStore } from '../store';
-import CloseIcon from '@mui/icons-material/Close';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { calculatePrice } from '../utils';
+import { PlusIcon, MinusIcon, TrashIcon, XIcon } from '@phosphor-icons/react';
 
 function Cart() {
     const { language, cart, setCart, isCartOpen, setIsCartOpen } = useStore()
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const navigate = useNavigate()
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     function removeProduct(id: string) {
         const updatedCart = cart.filter(item => item.product._id !== id)
@@ -19,117 +21,125 @@ function Cart() {
     }
 
     return (
-        <Drawer
-          anchor="right"
-          open={isCartOpen}
-          onClose={() => setIsCartOpen(!isCartOpen)}
-        >
-          <Box
-            sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%', boxSizing: 'border-box' }}
-            role="presentation"
-          >
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              {language === 'en' ? 'Your Cart' : 'Carrinho'}
-            </Typography>
+      <>
+      {/* Overlay – appears behind the drawer */}
+      {isCartOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setIsCartOpen(false)}
+        />
+      )}
 
-            <List sx={{ flexGrow: 1, overflowY: 'auto' }}>
-              {cart.map((item, index) => (
-                <>
-                <ListItem key={item.product._id} sx={{ display: 'flex', alignItems: 'center', pl: 0, pr: 4, overflowX: 'hidden' }}>
-                  {/* Product Image */}
-                  <Box sx={{mr: 2}}>
-                  <img
-                      src={item.product.images[0]}
-                      alt={item.product.name[language]}
-                      style={{ width: 80, height: 80 }}
-                    />
-                  </Box>
+      <div
+        className={`fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-lg z-50 transition-transform duration-300 ease-in-out ${
+          isCartOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col h-full overflow-hidden">
+          {/* Header */}
+          <div className="flex gap-2 bg-[#414141] p-5 text-white justify-between items-center">
+            <span>
+              <span className="text-xl">{language === 'en' ? 'Your Cart' : 'Itens adicionados'}</span>
+              <span className='text-sm'> ({totalItems} {language === 'en' ? 'items' : 'itens'})</span>
+            </span>
+            <button
+              onClick={() => setIsCartOpen(false)}
+              className="text-white hover:text-gray-300 transition"
+            >
+              <XIcon size={24} />
+            </button>
+          </div>
 
-                  {/* Product Details */}
-                  <Box sx={{ flexGrow: 1 }}>
-                    <ListItemText
-                      primary={item.product.name[language]}
-                      secondary={`${item.size}, ${item.price.toFixed(2).replace('.', ',')} €`}
-                    />
-                    
-                    {/* Quantity Adjuster */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {/* Circular - Button */}
-                        <IconButton
-                            onClick={() => changeQuantity(item.product._id, item.quantity - 1)}
-                            sx={{ borderRadius: '50%', width: 36, height: 36 }}
-                        >
-                            -
-                        </IconButton>
-
-                        {/* Quantity Input (TextField) */}
-                        <TextField
-                            value={item.quantity}
-                            size='small'
-                            type="number"
-                            slotProps={{
-                                htmlInput: {min: 1, max: 99, style: { textAlign: 'center' }}
-                            }}
-                            sx={{
-                                width: 50,
-                                '& input[type=number]': {
-                                    MozAppearance: 'textfield', // Removes arrows in Firefox
-                                },
-                                '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-                                    WebkitAppearance: 'none', // Removes arrows in Chrome, Safari, Edge, etc.
-                                    margin: 0,
-                                },
-                            }}
-                            onChange={(e) => changeQuantity(item.product._id, Number(e.target.value))}
-                        />
-
-                        {/* Circular + Button */}
-                        <IconButton
-                            onClick={() => changeQuantity(item.product._id, item.quantity + 1)}
-                            sx={{ borderRadius: '50%', width: 36, height: 36 }}
-                        >
-                            +
-                        </IconButton>
-                    </Box>
-
-                  </Box>
-
-                  {/* Remove Button */}
-                  <IconButton
-                    size='small'
-                    edge="end"
-                    color="inherit"
-                    onClick={() => removeProduct(item.product._id)}
-                    sx={{ position: 'absolute', top: 0, right: 0 }}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </ListItem>
-                
-                {index < cart.length - 1 && <Divider sx={{ my: 1 }} />}
-                </>
-              ))}
-            </List>
-
-            {/* Footer Section with Total Price and Checkout Button */}
-            <Box 
-                sx={{ borderTop: '1px solid #ccc', pt: 2 }}>
-              <Typography variant="h6" sx={{ textAlign: 'left', mb: 2 }}>
-                Total: {totalPrice.toFixed(2).replace('.', ',')} €
-              </Typography>
-
-              <Button
-                variant="contained"
-                color="primary"
-                component={Link}
-                to="/checkout"
-                sx={{ textTransform: 'none', borderRadius: 25, width: 'fit-content', display: 'block', mx: 'auto' }}
+          {/* Cart Items */}
+          <div className="flex-1 overflow-y-auto flex flex-col gap-4 p-4">
+            {cart.map((item) => (
+            <>
+              <div
+                key={item.product._id}
+                className="relative flex items-start gap-3"
               >
-                {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
-              </Button>
-            </Box>
-          </Box>
-        </Drawer>
+                {/* Image */}
+                <img
+                  src={item.product.images[0]}
+                  alt={item.product.name[language]}
+                  className="w-20 h-20 object-cover"
+                />
+
+                {/* Details */}
+                <div className="flex-1 flex flex-col">
+                  <span className="font-semibold">{item.product.name[language]}</span>
+                  <span className='text-sm'>
+                    {calculatePrice(item.product).price.toFixed(2).replace('.', ',')} €
+                  </span>
+
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-2 justify-between mt-2">
+                    <div className="relative w-20">
+                      <input
+                          type="number"
+                          min={1}
+                          max={99}
+                          value={item.quantity}
+                          onChange={(e) => changeQuantity(item.product._id, Number(e.target.value))}
+                          className="text-center w-full p-1 rounded bg-white border appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                      />
+                      <button
+                          onClick={() => changeQuantity(item.product._id, item.quantity + 1)}
+                          className="p-1 rounded-full hover:bg-gray-100 transition absolute right-1 top-[50%] translate-y-[-50%] cursor-pointer"
+                      >
+                          <PlusIcon size={18} />
+                      </button>
+                      <button
+                          onClick={() => changeQuantity(item.product._id, Math.max(item.quantity - 1, 1))}
+                          className="p-1 rounded-full hover:bg-gray-100 transition absolute left-1 top-[50%] translate-y-[-50%] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          disabled={item.quantity === 1}
+                      >
+                          <MinusIcon size={18} />
+                      </button>
+                    </div>
+                    <span>
+                      {(calculatePrice(item.product).price * item.quantity).toFixed(2).replace('.', ',')} €
+                    </span>
+                  </div>
+                </div>
+
+                {/* Remove Button */}
+                <button
+                  onClick={() => removeProduct(item.product._id)}
+                  className="absolute top-0 right-0 p-1 text-gray-500 hover:text-red-600 transition cursor-pointer"
+                >
+                  <TrashIcon size={20} />
+                </button>
+              </div>
+
+              <hr className='border-gray-300' />
+            </>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="flex flex-col gap-4 p-4">
+            <hr className='border-gray-300' />
+
+            <div className="flex justify-between text-[#643843]">
+              <p className="text-lg font-semibold">
+                {language === 'en' ? 'Estimated total' : 'Total estimado'}
+              </p>
+              <p className="text-lg font-semibold">
+                {totalPrice.toFixed(2).replace('.', ',')} €
+              </p>
+            </div>
+
+            <button
+              onClick={() => navigate("/checkout")}
+              className="w-full block mx-auto text-center bg-[#643843] text-white font-bold py-2 px-4 rounded-full hover:bg-[#64384375] transition hover:cursor-pointer"
+            >
+              {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
+            </button>
+          </div>
+        </div>
+      </div>
+      </>
     )
 }
 
