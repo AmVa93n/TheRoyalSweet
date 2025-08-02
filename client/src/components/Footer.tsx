@@ -1,15 +1,14 @@
 import { useStore } from '../store';
-import { theme } from '../style';
 
 function Footer() {
     const { language } = useStore();
 
     return (
-        <footer className={`text-center py-6 px-4 mt-auto`} style={{ backgroundColor: theme.primary_bg }}>
-            <p className={`text-base`} style={{ color: theme.primary_text }}>
+        <footer className={`text-center py-6 px-4 mt-auto bg-[#643843]`}>
+            <p className={`text-base text-white`}>
                 © {new Date().getFullYear()} The Royal Sweet. All rights reserved.
             </p>
-            <p className={`text-sm mt-2`} style={{ color: theme.primary_text }}>
+            <p className={`text-sm mt-2 text-white`}>
                 <a href="/privacy" className="hover:underline">
                     {language === 'en' ? 'Privacy Policy' : 'Política de Privacidade'}
                 </a>
