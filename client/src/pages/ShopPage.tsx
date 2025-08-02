@@ -22,8 +22,8 @@ function ShopPage() {
             {categories.map((category) => (
             <button
                 key={category.cat}
-                onClick={() => document.getElementById(category.cat)?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex items-center gap-2 text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-pink-400 px-4 py-2 rounded-full duration-300"
+                onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
+                className="flex items-center gap-2 text-[#643843] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#643843] px-4 py-2 rounded-full duration-300"
             >
                 {category.icon}
                 {category[language]}
@@ -32,12 +32,12 @@ function ShopPage() {
         </nav>
 
         {/* Fixed Sidebar Navigation */}
-        <aside className="fixed top-1/2 left-4 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 space-y-2 z-50 border border-gray-200 dark:border-gray-700">
+        <aside className="fixed top-1/2 left-4 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 space-y-2 z-50 border border-gray-200 dark:border-gray-700 hidden sm:block">
             {categories.map((category) => (
                 <button
                     key={category.cat}
-                    onClick={() => document.getElementById(category.cat)?.scrollIntoView({ behavior: 'smooth' })}
-                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-pink-500 transition-colors cursor-pointer"
+                    onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
+                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-[#643843] transition-colors cursor-pointer"
                 >
                     {category[language]}
                 </button>
@@ -46,10 +46,9 @@ function ShopPage() {
 
         {/* Category Sections */}
         {categories.map((category) => (
-            <section key={category.cat} id={category.cat} className="my-12">
+            <section key={category.cat} id={category.cat} className="my-20">
                 <div className="flex items-center justify-center gap-2 mb-6">
-                    {category.icon}
-                    <h2 className="text-3xl font-bold text-center">{category[language]}</h2>
+                    <h2 className="text-3xl text-center font-montserrat italic text-[#643843]">{category[language]}</h2>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6 w-full">
                     {products.filter((product) => product.category === category.cat).map((product) => (
@@ -63,9 +62,9 @@ function ShopPage() {
         <div className="flex justify-center my-8">
             <button
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors"
+                className="block mx-auto w-44 text-center bg-transparent text-[#643843] font-bold py-2 px-4 rounded-full border border-[#643843] hover:bg-[#643843] hover:text-white transition hover:cursor-pointer"
             >
-                Back to top
+                {language === 'en' ? 'Back to Top' : 'Voltar ao Topo'}
             </button>
         </div>
     </div>
