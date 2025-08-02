@@ -8,17 +8,11 @@ import HowToOrder from '../components/HowToOrder';
 function HomePage() {
   return (
     <Stack sx={{pt: 8}}>
-      
       <ShopPreview />
-
       <Testimonials />
-
-      <HowToOrder />
-
-      <Contacts />
-    
       <AboutMe />
-
+      <HowToOrder />
+      <Contacts />
     </Stack>
   );
 }

@@ -14,7 +14,7 @@ function Navbar() {
 
   const navLinks = [
     { text: language === 'en' ? 'Shop' : 'Loja', route: '/shop', icon: <StorefrontIcon size={24} /> },
-    { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'orders', icon: <ShoppingBagIcon size={24} /> },
+    { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'how-to-order', icon: <ShoppingBagIcon size={24} /> },
     { text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts', icon: <PhoneIcon size={24} /> },
     { text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme', icon: <ChefHatIcon size={24} /> },
     { text: 'Menu', route: '/menu', icon: <ForkKnifeIcon size={24} /> },
@@ -30,11 +30,11 @@ function Navbar() {
   }
 
   return (
-    <header className="fixed w-full bg-white shadow z-50">
+    <header className="fixed w-full bg-[#643843] shadow z-50">
       <div className="container mx-auto px-3 py-2 flex items-center justify-between">
         {/* Mobile menu icon */}
         <button onClick={() => setDrawerOpen(!drawerOpen)} className="md:hidden">
-          <ListIcon size={28} />
+          <ListIcon size={28} className='text-white' />
         </button>
 
         {/* Logo */}
@@ -49,7 +49,7 @@ function Navbar() {
                 key={link.text}
                 to={link.route}
                 onClick={() => scrollToSection(link.sectionId)}
-                className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-pink-600 px-2 py-1 rounded transition-colors rounded-full"
+                className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#643843] px-2 py-1 rounded transition-colors rounded-full text-white"
                 target={link.external ? '_blank' : undefined}
               >
                 {link.icon}
@@ -61,16 +61,16 @@ function Navbar() {
         {/* Right section */}
         <div className="flex items-center gap-3">
           {/* Language Toggle */}
-          <div className="flex border border-gray-300 rounded-full overflow-hidden text-sm">
+          <div className="flex border border-[#e6dcd5] rounded-full overflow-hidden text-sm">
             <button
               onClick={() => setLanguage('en')}
-              className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-gray-200' : 'cursor-pointer'}`}
+              className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-[#e6dcd5]' : 'cursor-pointer text-white'}`}
             >
               <img src="https://flagcdn.com/w20/gb.png" alt="EN" /> EN
             </button>
             <button
               onClick={() => setLanguage('pt')}
-              className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-gray-200' : 'cursor-pointer'}`}
+              className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-[#e6dcd5]' : 'cursor-pointer text-white'}`}
             >
               <img src="https://flagcdn.com/w20/pt.png" alt="PT" /> PT
             </button>
@@ -86,7 +86,7 @@ function Navbar() {
 
           {/* Cart Icon */}
           <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative cursor-pointer">
-            <ShoppingCartIcon size={24} />
+            <ShoppingCartIcon size={24} className='text-white' />
             {cart.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1">
                 {cart.length}
@@ -98,7 +98,7 @@ function Navbar() {
 
       {/* Mobile Drawer */}
       {drawerOpen && (
-        <div className="md:hidden bg-white border-t shadow p-4">
+        <div className="md:hidden bg-[#e6dcd5] border-t shadow p-4">
           <nav className="flex flex-col gap-3">
             {navLinks.map((link) => (
               link.external ? (
@@ -106,7 +106,7 @@ function Navbar() {
                   key={link.text}
                   href={link.route}
                   target="_blank"
-                  className="text-gray-800"
+                  className="text-[#643843]"
                   onClick={() => setDrawerOpen(false)}
                 >
                   {link.text}
@@ -119,7 +119,7 @@ function Navbar() {
                     scrollToSection(link.sectionId);
                     setDrawerOpen(false);
                   }}
-                  className="text-gray-800"
+                  className="text-[#643843]"
                 >
                   {link.text}
                 </Link>
