@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Container, Box, Card, CardContent, Divider, Grid as Grid2, TextField, Typography, FormControlLabel, Switch, Button } from '@mui/material';
 import { useStore } from '../store';
 import appService from '../services/app.service'
 import { Elements } from '@stripe/react-stripe-js';
@@ -33,21 +32,20 @@ function CheckoutPage() {
     
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
+        if (['address', 'city', 'zip'].includes(name)) {
+            setOrderData((prev) => ({
+                ...prev,
+                shipping: {
+                    ...prev.shipping,
+                    [name]: value
+                }
+            }));
+            return;
+        }
         setOrderData((prev) => ({ ...prev, [name]: value }));
     };
 
     async function createPayment() {
-        if (!orderData.name || !orderData.email) {
-            alert('Please fill your name and email')
-            return
-        }
-
-        const { pickup, shipping } = orderData;
-        if (!pickup && (!shipping.city || !shipping.address || !shipping.zip)) {
-            alert('Missing shipping information!')
-            return
-        }
-
         const response = await appService.placeOrder(orderData);
         const { client_secret } = await response;
         setClientSecret(client_secret);
@@ -61,163 +59,119 @@ function CheckoutPage() {
     } as StripeElementsOptions;
 
     return (
-        <Container className='pt-24'>
-            
-            <Grid2 container spacing={4} columns={{ xs: 6, md: 12 }}>
+        <div className="pt-24 lg:px-24 w-full mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Form Card */}
+                <div className="bg-white shadow p-6 rounded">
+                    <input
+                        type="text"
+                        name="name"
+                        value={orderData.name}
+                        onChange={handleDataChange}
+                        placeholder="Name"
+                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        disabled={!!clientSecret}
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        value={orderData.email}
+                        onChange={handleDataChange}
+                        placeholder="Email Address"
+                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        disabled={!!clientSecret}
+                    />
 
-                {/* Shipping and Payment Information */}
-                <Grid2 size={{ xs: 12, md: 6 }}>
-                    <Card>
-                        <CardContent>
-                            <TextField
-                                label="Name"
-                                fullWidth
-                                margin="normal"
-                                name="name"
-                                value={orderData.name}
-                                onChange={handleDataChange}
-                                variant="filled"
-                                size='small'
-                                disabled={!!clientSecret}
-                            />
-                            <TextField
-                                label="Email Address"
-                                name="email"
-                                margin="normal"
-                                fullWidth
-                                autoComplete="email"
-                                value={orderData.email}
-                                onChange={handleDataChange}
-                                variant="filled"
-                                size='small'
-                                disabled={!!clientSecret}
-                                />
-                        </CardContent>
+                    <label className="block mb-1 font-semibold">{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</label>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                        value={dayjs(orderData.deliveryDate)}
+                        onChange={(newValue) => newValue && setOrderData((prev) => ({ ...prev, deliveryDate: newValue?.format('YYYY-MM-DD') }))}
+                        format="DD/MM/YYYY"
+                        slotProps={{
+                            textField: {
+                            className: 'w-full bg-white rounded border mb-4',
+                            },
+                        }}
+                        />
+                    </LocalizationProvider>
 
-                        {/* Date Picker */}
-                        <CardContent>
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</label>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                value={dayjs(orderData.deliveryDate)}
-                                onChange={(newValue) => newValue && setOrderData((prev) => ({ ...prev, deliveryDate: newValue?.format('YYYY-MM-DD') }))}
-                                format="DD/MM/YYYY"
-                                slotProps={{
-                                    textField: {
-                                    className: 'w-72 bg-white rounded border'
-                                    }
-                                }}
-                                />
-                            </LocalizationProvider>
-                        </CardContent>
+                    <div className="flex items-center mb-4">
+                        <input
+                        type="checkbox"
+                        checked={orderData.pickup}
+                        onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
+                        className="mr-2"
+                        />
+                        <label>Self Pickup</label>
+                    </div>
 
-                        {/* Switch to toggle between Delivery and Self Pickup */}
-                        <CardContent>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={orderData.pickup}
-                                        onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
-                                        color="primary"
-                                    />
-                                }
-                                label={"Self Pickup"}
-                            />
-                        </CardContent>
+                    <input
+                        type="text"
+                        name="address"
+                        placeholder="Address"
+                        value={orderData.shipping.address}
+                        onChange={handleDataChange}
+                        disabled={orderData.pickup || !!clientSecret}
+                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                    />
+                    <input
+                        type="text"
+                        name="city"
+                        placeholder="City"
+                        value={orderData.shipping.city}
+                        onChange={handleDataChange}
+                        disabled={orderData.pickup || !!clientSecret}
+                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                    />
+                    <input
+                        type="text"
+                        name="zip"
+                        placeholder="Zip Code"
+                        value={orderData.shipping.zip}
+                        onChange={handleDataChange}
+                        disabled={orderData.pickup || !!clientSecret}
+                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                    />
 
-                        <CardContent>
-                            <Typography variant="h6" gutterBottom>
-                                Shipping Information
-                            </Typography>
-                            
-                            <TextField
-                                label="Address"
-                                fullWidth
-                                margin="normal"
-                                name="address"
-                                value={orderData.shipping.address}
-                                onChange={handleDataChange}
-                                disabled={orderData.pickup || !!clientSecret}
-                                variant="filled"
-                                size='small'
-                            />
-                            <TextField
-                                label="City"
-                                fullWidth
-                                margin="normal"
-                                name="city"
-                                value={orderData.shipping.city}
-                                onChange={handleDataChange}
-                                disabled={orderData.pickup || !!clientSecret}
-                                variant="filled"
-                                size='small'
-                            />
-                            <TextField
-                                label="Zip Code"
-                                fullWidth
-                                margin="normal"
-                                name="zip"
-                                value={orderData.shipping.zip}
-                                onChange={handleDataChange}
-                                disabled={orderData.pickup || !!clientSecret}
-                                variant="filled"
-                                size='small'
-                            />
-                        </CardContent>
-                    
-                        <CardContent>
-                            {clientSecret ?  
-
-                            <Elements stripe={stripePromise} options={stripeOptions}>
-                                <PaymentForm />
-                            </Elements> :
-
-                            <Button 
-                            variant="contained"
-                            color="primary"
-                            sx={{ textTransform: 'none', my: 2, borderRadius: 25 }}
-                            onClick={createPayment}
-                            >
-                                Proceed to Payment
-                            </Button>}
-                            
-                        </CardContent>
-                    </Card>
-                </Grid2>
+                {clientSecret ? (
+                    <Elements stripe={stripePromise} options={stripeOptions}>
+                        <PaymentForm />
+                    </Elements>
+                ) : (
+                    <button
+                        onClick={createPayment}
+                        className="w-full py-2 px-4 mt-2 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                        >
+                        Proceed to Payment
+                    </button>
+                )}
+                </div>
 
                 {/* Order Summary */}
-                <Grid2 size={{ xs: 12, md: 6 }}>
-                <Card>
-                    <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                        Order Summary
-                    </Typography>
-                    <Divider sx={{ mb: 2 }} />
+                <div className="bg-white shadow p-6 rounded">
+                    <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+                    <hr className="mb-4" />
                     {cart.map((item) => (
-                        <Box key={item.product._id} display="flex" sx={{ mb: 2, alignItems: 'center' }}>
-                            <Box sx={{mr: 2}}>
-                                <img
-                                    src={item.product.images[0]}
-                                    alt={item.product._id}
-                                    style={{ width: 40, height: 40 }}
-                                    />
-                            </Box>
-                            <Typography flexGrow={1}>{item.product.name[language]} x {item.quantity}</Typography>
-                            <Typography>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</Typography>
-                        </Box>
+                        <div key={item.product._id} className="flex items-center mb-3">
+                            <img
+                                src={item.product.images[0]}
+                                alt={item.product._id}
+                                className="w-10 h-10 object-cover mr-3"
+                            />
+                            <span className="flex-grow">{item.product.name[language]} x {item.quantity}</span>
+                            <span>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
+                        </div>
                     ))}
-                    <Box display="flex" sx={{ mb: 2, alignItems: 'center' }}>
-                        <Typography flexGrow={1}>Delivery fee</Typography>
-                        <Typography>{deliveryFee.toFixed(2).replace('.', ',')} €</Typography>
-                    </Box>
-
-                    <Divider sx={{ mb: 2 }} />
-                    <Typography variant="h6">Total: {totalAmount} €</Typography>
-                    </CardContent>
-                </Card>
-                </Grid2>
-            </Grid2>
-        </Container>
+                    <div className="flex items-center mb-3">
+                        <span className="flex-grow">Delivery fee</span>
+                        <span>{deliveryFee.toFixed(2).replace('.', ',')} €</span>
+                    </div>
+                    <hr className="mb-4" />
+                    <h3 className="text-lg font-bold">Total: {totalAmount.toFixed(2).replace('.', ',')} €</h3>
+                </div>
+            </div>
+        </div>
     );
 };
 
