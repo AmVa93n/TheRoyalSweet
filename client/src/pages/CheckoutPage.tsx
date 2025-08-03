@@ -13,7 +13,7 @@ import type { Order } from '../types';
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 function CheckoutPage() {
-    const { language, cart } = useStore()
+    const { language, cart, setCart, setIsCartOpen } = useStore()
     const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients'>>({
         name: '',
         email: '',
@@ -27,7 +27,7 @@ function CheckoutPage() {
         items: cart
     });
     const deliveryFee = orderData.pickup ? 0 : 5
-    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0) + deliveryFee
+    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     const [clientSecret, setClientSecret] = useState('');
     
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -50,6 +50,11 @@ function CheckoutPage() {
         setClientSecret(client_secret);
     };
 
+    async function onPaymentComplete() {
+        await appService.createOrder(orderData);
+        setCart([]);
+    }
+
     const stripeOptions = {
         appearance: {
           theme: 'stripe', 
@@ -58,10 +63,10 @@ function CheckoutPage() {
     } as StripeElementsOptions;
 
     return (
-        <div className="pt-24 lg:px-24 w-full mb-8">
+        <div className="pt-24 px-4 lg:px-24 w-full mb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Form Card */}
-                <div className="bg-white shadow p-6 rounded">
+                <div className="bg-white shadow p-4 rounded">
                     <input
                         type="text"
                         name="name"
@@ -136,7 +141,7 @@ function CheckoutPage() {
 
                 {clientSecret ? (
                     <Elements stripe={stripePromise} options={stripeOptions}>
-                        <PaymentForm onConfirm={() => appService.createOrder(orderData)} />
+                        <PaymentForm onPaymentComplete={onPaymentComplete} />
                     </Elements>
                 ) : (
                     <button
@@ -149,9 +154,20 @@ function CheckoutPage() {
                 </div>
 
                 {/* Order Summary */}
-                <div className="bg-white shadow p-6 rounded">
-                    <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-                    <hr className="mb-4" />
+                <div className="bg-white shadow p-4 rounded">
+                    <div className='flex items-center justify-between'>
+                        <h2 className="text-lg font-semibold">
+                            {language === 'en' ? 'Order Summary' : 'Resumo do Pedido'} ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+                        </h2>
+                        <button 
+                            className='py-1 px-2 rounded-sm bg-gray-200 hover:bg-gray-300 transition cursor-pointer text-sm'
+                            onClick={() => setIsCartOpen(true)}
+                        >
+                            {language === 'en' ? 'Edit cart' : 'Editar carrinho'}
+                        </button>
+
+                    </div>
+                    <hr className="my-4 border-gray-300" />
                     {cart.map((item) => (
                         <div key={item.product._id} className="flex items-center mb-3">
                             <img
@@ -163,12 +179,24 @@ function CheckoutPage() {
                             <span>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
                         </div>
                     ))}
-                    <div className="flex items-center mb-3">
-                        <span className="flex-grow">Delivery fee</span>
+                    <hr className="my-4 border-gray-300" />
+                    <div className="flex items-center mb-2">
+                        <span className="flex-grow">{language === 'en' ? 'Items' : 'Itens'}</span>
+                        <span>{totalAmount.toFixed(2).replace('.', ',')} €</span>
+                    </div>
+                    <div className="flex items-center mb-2">
+                        <span className="flex-grow">{language === 'en' ? 'Delivery' : 'Entrega'}</span>
                         <span>{deliveryFee.toFixed(2).replace('.', ',')} €</span>
                     </div>
-                    <hr className="mb-4" />
-                    <h3 className="text-lg font-bold">Total: {totalAmount.toFixed(2).replace('.', ',')} €</h3>
+                    <div className="flex items-center mb-2">
+                        <span className="flex-grow">{language === 'en' ? 'VAT' : 'IVA'}</span>
+                        <span>0,00 €</span>
+                    </div>
+                    <hr className="my-4 border-gray-300" />
+                    <div className="flex items-center">
+                        <h3 className="text-lg font-bold flex-grow">Total</h3>
+                        <span className="text-lg font-bold">{(totalAmount + deliveryFee).toFixed(2).replace('.', ',')} €</span>
+                    </div>
                 </div>
             </div>
         </div>
