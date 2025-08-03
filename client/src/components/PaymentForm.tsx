@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import { useStore } from '../store';
 
-function PaymentForm({ onPaymentComplete }: { onPaymentComplete: () => void }) {
+type PaymentFormProps = {
+  onPaymentComplete: () => void;
+  onCancel: () => void;
+};
+
+function PaymentForm({ onPaymentComplete, onCancel }: PaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
+  const { language } = useStore();
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
@@ -43,15 +50,28 @@ function PaymentForm({ onPaymentComplete }: { onPaymentComplete: () => void }) {
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <button 
-        className='w-full py-2 px-4 mt-2 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition'
-        type='submit' 
-        disabled={!stripe}
-      >
-        Place Order
-      </button>
+      <div className='flex items-center justify-between gap-2'>
+        <button 
+          className='w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+          type='submit' 
+          disabled={!stripe}
+        >
+          {language === 'en' ? 'Place Order' : 'Fazer Pedido'}
+        </button>
+        <button 
+          className='w-full py-2 px-4 mt-2 rounded border font-semibold hover:bg-gray-700 hover:text-white transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+          onClick={onCancel}
+        >
+          {language === 'en' ? 'Change Details' : 'Alterar Detalhes'}
+        </button>
+      </div>
+      
       {/* Show error message to your customers */}
-      {errorMessage && <div>{errorMessage}</div>}
+      {errorMessage && 
+        <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded text-center">
+          {errorMessage}
+        </div>
+      }
     </form>
   )
 };

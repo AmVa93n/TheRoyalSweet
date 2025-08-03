@@ -17,6 +17,7 @@ function CheckoutPage() {
     const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients'>>({
         name: '',
         email: '',
+        phone: '',
         deliveryDate: dayjs(new Date()).format('YYYY-MM-DD'),
         pickup: false,
         shipping: {
@@ -29,6 +30,7 @@ function CheckoutPage() {
     const deliveryFee = orderData.pickup ? 0 : 5
     const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
     const [clientSecret, setClientSecret] = useState('');
+    const isFormValid = orderData.name && orderData.email && orderData.phone && (orderData.pickup || (orderData.shipping.address && orderData.shipping.city && orderData.shipping.zip));
     
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -67,94 +69,117 @@ function CheckoutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Form Card */}
                 <div className="bg-white shadow p-4 rounded">
+                    <h2 className="text-lg font-semibold mb-4">
+                        {language === 'en' ? 'Customer Information' : 'Informações do cliente'}
+                    </h2>
+
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Name' : 'Nome'}</label>
                     <input
                         type="text"
                         name="name"
                         value={orderData.name}
                         onChange={handleDataChange}
-                        placeholder="Name"
-                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        className="w-full p-2 mb-4 border border-gray-400 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={!!clientSecret}
                     />
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Email' : 'Email'}</label>
                     <input
                         type="email"
                         name="email"
                         value={orderData.email}
                         onChange={handleDataChange}
-                        placeholder="Email Address"
-                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        className="w-full p-2 mb-4 border border-gray-400 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={!!clientSecret}
+                    />
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Phone' : 'Telefone'}</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        value={orderData.phone}
+                        onChange={handleDataChange}
+                        className="w-full p-2 mb-4 border border-gray-400 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={!!clientSecret}
                     />
 
-                    <label className="block mb-1 font-semibold">{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</label>
+                    <h2 className="text-lg font-semibold mb-4">
+                        {language === 'en' ? 'Delivery Details' : 'Detalhes da entrega'}
+                    </h2>
+
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Date of delivery' : 'Data de entrega'}</label>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-                        value={dayjs(orderData.deliveryDate)}
-                        onChange={(newValue) => newValue && setOrderData((prev) => ({ ...prev, deliveryDate: newValue?.format('YYYY-MM-DD') }))}
-                        format="DD/MM/YYYY"
-                        slotProps={{
-                            textField: {
-                            className: 'w-full bg-white rounded border mb-4',
-                            },
-                        }}
+                            value={dayjs(orderData.deliveryDate)}
+                            onChange={(newValue) => newValue && setOrderData((prev) => ({ ...prev, deliveryDate: newValue?.format('YYYY-MM-DD') }))}
+                            format="DD/MM/YYYY"
+                            slotProps={{
+                                textField: {
+                                className: 'w-full p-2 mb-4 border border-gray-400 rounded',
+                                },
+                            }}
+                            disabled={!!clientSecret}
+                            disablePast
+                            shouldDisableDate={date => date.format('YYYY-MM-DD') === new Date().toISOString().split('T')[0]} // disable today
                         />
                     </LocalizationProvider>
 
-                    <div className="flex items-center mb-4">
+                    <div className="flex items-center my-4">
                         <input
                             type="checkbox"
                             checked={orderData.pickup}
                             onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
-                            className="mr-2"
+                            className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:cursor-not-allowed"
                             disabled={!!clientSecret}
                         />
-                        <label>Self Pickup</label>
+                        <label>{language === 'en' ? 'Self Pickup' : 'Retirada Pessoal'}</label>
                     </div>
 
+                    {!orderData.pickup && <>
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Address' : 'Endereço'}</label>
                     <input
                         type="text"
                         name="address"
-                        placeholder="Address"
                         value={orderData.shipping.address}
                         onChange={handleDataChange}
                         disabled={orderData.pickup || !!clientSecret}
-                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        className="w-full p-2 mb-4 border border-gray-400 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                     />
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'City' : 'Cidade'}</label>
                     <input
                         type="text"
                         name="city"
-                        placeholder="City"
                         value={orderData.shipping.city}
                         onChange={handleDataChange}
                         disabled={orderData.pickup || !!clientSecret}
-                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        className="w-full p-2 mb-4 border border-gray-400 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                     />
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Postal Code (ZIP)' : 'Código postal (CEP)'}</label>
                     <input
                         type="text"
                         name="zip"
-                        placeholder="Zip Code"
                         value={orderData.shipping.zip}
                         onChange={handleDataChange}
                         disabled={orderData.pickup || !!clientSecret}
-                        className="w-full p-2 mb-4 border rounded bg-gray-50"
+                        className="w-full p-2 mb-4 border border-gray-400 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                     />
+                    </>}
 
                 {clientSecret ? (
                     <Elements stripe={stripePromise} options={stripeOptions}>
-                        <PaymentForm onPaymentComplete={onPaymentComplete} />
+                        <PaymentForm onPaymentComplete={onPaymentComplete} onCancel={() => setClientSecret('')} />
                     </Elements>
                 ) : (
                     <button
                         onClick={createPayment}
-                        className="w-full py-2 px-4 mt-2 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
-                        >
-                        Proceed to Payment
+                        className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={!isFormValid}
+                    >
+                        {language === 'en' ? 'Continue' : 'Continuar'}
                     </button>
                 )}
                 </div>
 
                 {/* Order Summary */}
-                <div className="bg-white shadow p-4 rounded">
+                <div className="bg-white shadow p-4 rounded h-fit">
                     <div className='flex items-center justify-between'>
                         <h2 className="text-lg font-semibold">
                             {language === 'en' ? 'Order Summary' : 'Resumo do Pedido'} ({cart.reduce((sum, item) => sum + item.quantity, 0)})
