@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { Button } from '@mui/material';
 
-function PaymentForm() {
+function PaymentForm({ onConfirm }: { onConfirm: () => void }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -23,8 +22,9 @@ function PaymentForm() {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/',
+        return_url: 'http://localhost:5173/',
       },
+      redirect: 'if_required',
     });
 
     if (error) {
@@ -36,20 +36,20 @@ function PaymentForm() {
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.
+      onConfirm();
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <Button 
-        type='submit'
+      <button 
+        className='w-full py-2 px-4 mt-2 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition'
+        type='submit' 
         disabled={!stripe}
-        variant="contained"
-        color="primary"
-        sx={{ textTransform: 'none', my: 2, borderRadius: 25 }}
       >
-        Place Order</Button>
+        Place Order
+      </button>
       {/* Show error message to your customers */}
       {errorMessage && <div>{errorMessage}</div>}
     </form>

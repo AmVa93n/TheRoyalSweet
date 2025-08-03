@@ -46,8 +46,7 @@ function CheckoutPage() {
     };
 
     async function createPayment() {
-        const response = await appService.placeOrder(orderData);
-        const { client_secret } = await response;
+        const { client_secret } = await appService.createPayment(orderData);
         setClientSecret(client_secret);
     };
 
@@ -98,10 +97,11 @@ function CheckoutPage() {
 
                     <div className="flex items-center mb-4">
                         <input
-                        type="checkbox"
-                        checked={orderData.pickup}
-                        onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
-                        className="mr-2"
+                            type="checkbox"
+                            checked={orderData.pickup}
+                            onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
+                            className="mr-2"
+                            disabled={!!clientSecret}
                         />
                         <label>Self Pickup</label>
                     </div>
@@ -136,7 +136,7 @@ function CheckoutPage() {
 
                 {clientSecret ? (
                     <Elements stripe={stripePromise} options={stripeOptions}>
-                        <PaymentForm />
+                        <PaymentForm onConfirm={() => appService.createOrder(orderData)} />
                     </Elements>
                 ) : (
                     <button

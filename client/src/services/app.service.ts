@@ -14,8 +14,13 @@ class AppService {
     return response.data.products
   }
 
-  async placeOrder(requestBody: Partial<Order>) {
-    const response = await this.api.post(`/api/checkout`, requestBody);
+  async createPayment(order: Partial<Order>) {
+    const response = await this.api.post(`/api/checkout`, order);
+    return response.data
+  }
+
+  async createOrder(order: Partial<Order>) {
+    const response = await this.api.post(`/api/orders`, order);
     return response.data
   }
 }
