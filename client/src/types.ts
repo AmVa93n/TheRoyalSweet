@@ -46,6 +46,7 @@ export type Order = {
     _id: string,
     name: string,
     email: string,
+    phone: string,
     items: CartItem[],
     pickup: boolean,
     shipping: {

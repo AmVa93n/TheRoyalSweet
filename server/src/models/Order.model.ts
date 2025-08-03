@@ -5,6 +5,7 @@ const orderSchema = new Schema(
     user: { type: Schema.Types.ObjectId, ref: 'User'},
     name: String,
     email: String,
+    phone: String,
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
         quantity: Number,
