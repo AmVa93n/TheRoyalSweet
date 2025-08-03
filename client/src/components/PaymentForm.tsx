@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 
-function PaymentForm({ onConfirm }: { onConfirm: () => void }) {
+function PaymentForm({ onPaymentComplete }: { onPaymentComplete: () => void }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -36,7 +36,7 @@ function PaymentForm({ onConfirm }: { onConfirm: () => void }) {
       // Your customer will be redirected to your `return_url`. For some payment
       // methods like iDEAL, your customer will be redirected to an intermediate
       // site first to authorize the payment, then redirected to the `return_url`.
-      onConfirm();
+      onPaymentComplete();
     }
   };
 

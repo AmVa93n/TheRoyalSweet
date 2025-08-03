@@ -1,6 +1,5 @@
 import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
-import { calculatePrice } from '../utils';
 import { PlusIcon, MinusIcon, TrashIcon, XIcon } from '@phosphor-icons/react';
 
 function Cart() {
@@ -69,7 +68,7 @@ function Cart() {
                 <div className="flex-1 flex flex-col">
                   <span className="font-semibold">{item.product.name[language]}</span>
                   <span className='text-sm'>
-                    {calculatePrice(item.product).price.toFixed(2).replace('.', ',')} €
+                    {item.price.toFixed(2).replace('.', ',')} €
                   </span>
 
                   {/* Quantity Controls */}
@@ -98,7 +97,7 @@ function Cart() {
                       </button>
                     </div>
                     <span>
-                      {(calculatePrice(item.product).price * item.quantity).toFixed(2).replace('.', ',')} €
+                      {(item.price * item.quantity).toFixed(2).replace('.', ',')} €
                     </span>
                   </div>
                 </div>
@@ -131,7 +130,10 @@ function Cart() {
             </div>
 
             <button
-              onClick={() => navigate("/checkout")}
+              onClick={() => {
+                navigate("/checkout")
+                setIsCartOpen(false)
+              }}
               className="w-full block mx-auto text-center bg-[#593b3e] text-white font-bold py-2 px-4 rounded-full hover:bg-[#593b3e75] transition hover:cursor-pointer"
             >
               {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
