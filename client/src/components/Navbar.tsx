@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon, CakeIcon } from '@phosphor-icons/react';
 import { useStore } from '../store';
-import Cart from './Cart';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
@@ -111,10 +110,6 @@ function Navbar() {
             )}
           </nav>
         </div>
-      
-
-      {/* Cart Drawer */}
-      <Cart />
     </header>
   );
 }

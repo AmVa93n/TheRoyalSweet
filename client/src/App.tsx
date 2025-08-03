@@ -6,11 +6,13 @@ import CheckoutPage from "./pages/CheckoutPage";
 import AdminPage from "./pages/AdminPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Cart from "./components/Cart";
 
 function App() {
   return (
     <div className="bg-[#e6dcd5]">
       <Navbar />
+      <Cart />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
