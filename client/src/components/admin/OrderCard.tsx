@@ -89,7 +89,7 @@ export default function OrderCard({ order, open, onClose }: Props) {
                 <TableBody>
                   {order.items.map((item, i) => (
                     <TableRow key={i}>
-                      <TableCell>{item.product.name.en}</TableCell>
+                      <TableCell>{item.product.name.pt}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{item.price}</TableCell>
                       <TableCell>{item.price * item.quantity}</TableCell>
