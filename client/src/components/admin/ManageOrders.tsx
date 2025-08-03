@@ -11,11 +11,10 @@ import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 
 function ManageOrders() {
-  const { orders, setOrders } = useStore();
+  const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
+  const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
   const [viewedOrder, setViewedOrder] = useState<Order | null>(null);
-  const [sortCriteria, setSortCriteria] = useState<string>('createdAt');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   async function handleSave(orderForm: Order) {
       try { 
@@ -60,7 +59,7 @@ function ManageOrders() {
 
         <Select
             value={sortCriteria}
-            onChange={(e) => setSortCriteria(e.target.value)}
+            onChange={(e) => setSortPreferences('orders', { criteria: e.target.value, direction: sortDirection })}
             size="small"
         >
             <MenuItem value="createdAt">Created</MenuItem>
@@ -70,11 +69,11 @@ function ManageOrders() {
             <MenuItem value="deliveryDate">Delivery Date</MenuItem>
         </Select>
         
-        <IconButton onClick={() => setSortDirection('desc')}>
+        <IconButton onClick={() => setSortPreferences('orders', { criteria: sortCriteria, direction: 'desc' })}>
             <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
         </IconButton>
-    
-        <IconButton onClick={() => setSortDirection('asc')}>
+
+        <IconButton onClick={() => setSortPreferences('orders', { criteria: sortCriteria, direction: 'asc' })}>
             <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
         </IconButton>
       </Box>

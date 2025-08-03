@@ -11,10 +11,9 @@ import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 
 function ManageProducts() {
-  const { products, setProducts } = useStore();
+  const { products, setProducts, sortPreferences, setSortPreferences } = useStore();
+  const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.products;
   const [editedProduct, setEditedProduct] = useState<Product | null>(null);
-  const [sortCriteria, setSortCriteria] = useState<string>('name');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   async function handleSave(productForm: Product) {
     const updatedProduct = await adminService.updateProduct(productForm);
@@ -54,7 +53,7 @@ function ManageProducts() {
 
         <Select
           value={sortCriteria}
-          onChange={(e) => setSortCriteria(e.target.value)}
+          onChange={(e) => setSortPreferences('products', { criteria: e.target.value, direction: sortDirection })}
           size="small"
         >
           <MenuItem value="name">Name</MenuItem>
@@ -66,11 +65,11 @@ function ManageProducts() {
           <MenuItem value="netGain">Net Gain</MenuItem>
         </Select>
         
-        <IconButton onClick={() => setSortDirection('desc')}>
+        <IconButton onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: 'desc' })}>
           <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
         </IconButton>
-      
-        <IconButton onClick={() => setSortDirection('asc')}>
+
+        <IconButton onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: 'asc' })}>
           <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
         </IconButton>
       </Box>

@@ -31,6 +31,12 @@ type Store = {
     setIsCartOpen: (isCartOpen: boolean) => void
     language: 'pt' | 'en'
     setLanguage: (language: 'pt' | 'en') => void
+    sortPreferences: {
+        products: { criteria: string, direction: 'asc' | 'desc' },
+        ingredients: { criteria: string, direction: 'asc' | 'desc' }
+        orders: { criteria: string, direction: 'asc' | 'desc' }
+    }
+    setSortPreferences: (section: 'products' | 'ingredients' | 'orders', sort: { criteria: string, direction: 'asc' | 'desc' }) => void
 }
 
 export const useStore = create<Store>()(
@@ -47,7 +53,18 @@ export const useStore = create<Store>()(
             isCartOpen: false,
             setIsCartOpen: (isCartOpen) => set({ isCartOpen }),
             language: 'pt',
-            setLanguage: (language) => set({ language })
+            setLanguage: (language) => set({ language }),
+            sortPreferences: {
+                products: { criteria: 'name', direction: 'asc' },
+                ingredients: { criteria: 'name', direction: 'asc' },
+                orders: { criteria: 'createdAt', direction: 'asc' }
+            },
+            setSortPreferences: (section, sort) => set((state) => ({
+                sortPreferences: {
+                    ...state.sortPreferences,
+                    [section]: sort
+                }
+            }))
         }),
         { name: "store", storage: createJSONStorage(() => storage) }
     )

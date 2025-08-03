@@ -9,10 +9,9 @@ import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 
 function ManageIngredients() {
-    const { ingredients, setIngredients } = useStore()
+    const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useStore()
+    const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.ingredients;
     const [editedIngredient, setEditedIngredient] = useState<Ingredient | null>(null);
-    const [sortCriteria, setSortCriteria] = useState<string>('name');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
     async function handleSave(ingredientForm: Ingredient) {
         const updatedIngredient = await adminService.updateIngredient(ingredientForm);
@@ -43,7 +42,7 @@ function ManageIngredients() {
                 return 0;
         }
     }
-    
+
     return (
         <>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
@@ -51,7 +50,7 @@ function ManageIngredients() {
 
             <Select
                 value={sortCriteria}
-                onChange={(e) => setSortCriteria(e.target.value)}
+                onChange={(e) => setSortPreferences('ingredients', { criteria: e.target.value, direction: sortDirection })}
                 size="small"
             >
                 <MenuItem value="name">Name</MenuItem>
@@ -64,11 +63,11 @@ function ManageIngredients() {
                 <MenuItem value="packageUnits">Package Units</MenuItem>
             </Select>
             
-            <IconButton onClick={() => setSortDirection('desc')}>
+            <IconButton onClick={() => setSortPreferences('ingredients', { criteria: sortCriteria, direction: 'desc' })}>
                 <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
             </IconButton>
-        
-            <IconButton onClick={() => setSortDirection('asc')}>
+
+            <IconButton onClick={() => setSortPreferences('ingredients', { criteria: sortCriteria, direction: 'asc' })}>
                 <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
             </IconButton>
         </Box>

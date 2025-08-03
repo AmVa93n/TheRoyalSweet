@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Tabs, Tab } from "@mui/material";
+import { Tabs, Tab } from "@mui/material";
 import ManageIngredients from "../components/admin/ManageIngredients";
 import ManageProducts from "../components/admin/ManageProducts";
 import ManageOrders from "../components/admin/ManageOrders";
@@ -33,7 +33,7 @@ function AdminPage() {
     }
 
     return (
-        <Box sx={{ width: '100%' }} className="pt-24">
+        <div className="pt-20 mb-10">
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="Ingredients" />
                 <Tab label="Products" />
@@ -42,7 +42,7 @@ function AdminPage() {
             {value === 0 && <ManageIngredients />}
             {value === 1 && <ManageProducts />}
             {value === 2 && <ManageOrders />}
-        </Box>
+        </div>
     )
 }
 
