@@ -88,6 +88,7 @@ function ManageOrders() {
                       <TableCell><b>Items</b></TableCell>
                       <TableCell><b>Total Price</b></TableCell>
                       <TableCell><b>Delivery Date</b></TableCell>
+                      <TableCell><b>Actions</b></TableCell>
                   </TableRow>
               </TableHead>
               <TableBody>
