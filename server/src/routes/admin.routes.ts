@@ -109,12 +109,17 @@ router.put("/ingredients", async (req, res, next) => {
   
 router.get("/orders", async (req, res, next) => {
     try {
-      const orders = await Order.find().populate({
-        path: 'items.product', // Populate the 'product' in 'items'
-        populate: {
-          path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+      const orders = await Order.find().populate([
+        {
+          path: 'items.product', // Populate the 'product' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
         },
-      }).populate('additionalIngredients.ingredient');
+        {
+          path: 'additionalIngredients.ingredient', // Populate the 'ingredient' in 'additionalIngredients'
+        }
+      ]);
       
       if (!orders) {
         res.status(404).json({ message: "Orders not found" });
@@ -160,7 +165,6 @@ router.put("/orders", async (req, res, next) => {
     try {
       const data = req.body;
       data.deliveryDate = new Date(data.deliveryDate);
-      data.createdAt = new Date(data.createdAt);
   
       const updatedOrder = await Order.findByIdAndUpdate(data._id, data, { new: true })
   

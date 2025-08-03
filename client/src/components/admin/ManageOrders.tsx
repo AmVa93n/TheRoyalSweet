@@ -63,7 +63,7 @@ function ManageOrders() {
             onChange={(e) => setSortCriteria(e.target.value)}
             size="small"
         >
-            <MenuItem value="createdAt">Placed On</MenuItem>
+            <MenuItem value="createdAt">Created</MenuItem>
             <MenuItem value="name">Name</MenuItem>
             <MenuItem value="items">Items</MenuItem>
             <MenuItem value="totalPrice">Total Price</MenuItem>
@@ -83,7 +83,7 @@ function ManageOrders() {
           <Table size="small">
               <TableHead>
                   <TableRow>
-                      <TableCell><b>Placed On</b></TableCell>
+                      <TableCell><b>Created</b></TableCell>
                       <TableCell><b>Name</b></TableCell>
                       <TableCell><b>Items</b></TableCell>
                       <TableCell><b>Total Price</b></TableCell>

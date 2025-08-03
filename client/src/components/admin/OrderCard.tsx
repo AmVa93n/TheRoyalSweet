@@ -64,7 +64,7 @@ export default function OrderCard({ order, open, onClose }: Props) {
         <Paper sx={{ mb: 3, p: 2, position: 'relative' }}>
             <Typography variant="h6">Order by: {order.name}</Typography>
             <Typography>Email: {order.email}</Typography>
-            <Typography>Placed on: {order.createdAt.split('T')[0]}</Typography>
+            <Typography>Created: {order.createdAt.split('T')[0]}</Typography>
             <Typography>Delivery Date: {order.deliveryDate?.split('T')[0]}</Typography>
 
             {order.pickup ? <Typography>Pickup</Typography> :
