@@ -92,11 +92,12 @@ function ProductPage() {
                             </div>
                         </div>
 
-                        {/* Note */}
+                        {/* Notes */}
                         <div className="mb-6 relative">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Note' : 'Nota'}</label>
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Notes' : 'Notas'}</label>
                             <textarea
                                 maxLength={300}
+                                placeholder={language === 'en' ? 'Leave your suggestion, and we will do our best to accommodate it.' : 'Deixe a sua sugestão e faremos o possível para a concretizar.'}
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
                                 className="w-full p-2 rounded bg-white border appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
