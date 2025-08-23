@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import AdminPage from "./pages/AdminPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -19,6 +20,7 @@ function App() {
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/product/:productId" element={<ProductPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
 
