@@ -1,6 +1,6 @@
-import type { Product } from './types'
+import type { CakeComponent, Product } from './types'
 
-export function calculatePrice(product: Product) {
+export function calculatePrice(product: Product | CakeComponent) {
     const workHourPrice = 10
     const electricityHourPrice = 0.54
     const fixedCosts = 2
