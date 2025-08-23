@@ -42,6 +42,21 @@ export type Product = {
     electricityHours: number,
 }
 
+export type CakeComponent = {
+    _id: string,
+    name: {
+        en: string, 
+        pt: string
+    },
+    recipe: {
+        ingredient: Ingredient,
+        amount: number
+    }[],
+    category: Category
+    workHours: number,
+    electricityHours: number,
+}
+
 export type Order = {
     _id: string,
     name: string,

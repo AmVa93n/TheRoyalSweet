@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage, type StateStorage } from 'zustand/middleware'
-import type { CartItem, Ingredient, Order, Product } from './types'
+import type { CartItem, Ingredient, Order, Product, CakeComponent } from './types'
 
 const storage: StateStorage = {
     getItem: (name) => {
@@ -23,6 +23,8 @@ type Store = {
     setIngredients: (ingredients: Ingredient[]) => void
     products: Product[]
     setProducts: (products: Product[]) => void
+    cakeComponents: CakeComponent[]
+    setCakeComponents: (cakeComponents: CakeComponent[]) => void
     orders: Order[]
     setOrders: (orders: Order[]) => void
     cart: CartItem[]
@@ -34,9 +36,10 @@ type Store = {
     sortPreferences: {
         products: { criteria: string, direction: 'asc' | 'desc' },
         ingredients: { criteria: string, direction: 'asc' | 'desc' }
+        cakeComponents: { criteria: string, direction: 'asc' | 'desc' }
         orders: { criteria: string, direction: 'asc' | 'desc' }
     }
-    setSortPreferences: (section: 'products' | 'ingredients' | 'orders', sort: { criteria: string, direction: 'asc' | 'desc' }) => void
+    setSortPreferences: (section: 'products' | 'ingredients' | 'cakeComponents' | 'orders', sort: { criteria: string, direction: 'asc' | 'desc' }) => void
 }
 
 export const useStore = create<Store>()(
@@ -46,6 +49,8 @@ export const useStore = create<Store>()(
             setIngredients: (ingredients) => set({ ingredients }),
             products: [],
             setProducts: (products) => set({ products }),
+            cakeComponents: [],
+            setCakeComponents: (cakeComponents) => set({ cakeComponents }),
             orders: [],
             setOrders: (orders) => set({ orders }),
             cart: [],
@@ -57,6 +62,7 @@ export const useStore = create<Store>()(
             sortPreferences: {
                 products: { criteria: 'name', direction: 'asc' },
                 ingredients: { criteria: 'name', direction: 'asc' },
+                cakeComponents: { criteria: 'name', direction: 'asc' },
                 orders: { criteria: 'createdAt', direction: 'asc' }
             },
             setSortPreferences: (section, sort) => set((state) => ({

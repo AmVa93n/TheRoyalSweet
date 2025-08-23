@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
-import type { Ingredient, Product, Order } from "../types";
+import type { Ingredient, Product, Order, CakeComponent } from "../types";
 
 class AdminService {
   api: AxiosInstance;
@@ -32,6 +32,21 @@ class AdminService {
   async updateIngredient(updatedIngredient: Ingredient): Promise<Ingredient> {
     const response = await this.api.put(`/admin/ingredients`, updatedIngredient);
     return response.data.ingredient
+  }
+
+  async getCakeComponents(): Promise<CakeComponent[]> {
+    const response = await this.api.get(`/admin/cakeComponents`);
+    return response.data.cakeComponents
+  }
+
+  async createCakeComponent(): Promise<CakeComponent> {
+    const response = await this.api.post(`/admin/cakeComponents`);
+    return response.data.cakeComponent
+  }
+
+  async updateCakeComponent(updatedCakeComponent: CakeComponent): Promise<CakeComponent> {
+    const response = await this.api.put(`/admin/cakeComponents`, updatedCakeComponent);
+    return response.data.cakeComponent
   }
 
   async getOrders(): Promise<Order[]> {

@@ -3,6 +3,7 @@ const router = express.Router();
 import Product from "../models/Product.model";
 import Order from "../models/Order.model";
 import Ingredient from "../models/Ingredient.model";
+import CakeComponent from "../models/CakeComponent.model";
 
 router.post("/products", async (req, res, next) => {
     try {
@@ -106,7 +107,63 @@ router.put("/ingredients", async (req, res, next) => {
       next(err);  // Pass the error to the error-handling middleware
     }
 });
-  
+
+router.post("/cakeComponents", async (req, res, next) => {
+    try {
+      const createdCakeComponent = await CakeComponent.create({ 
+        name: {en: "", pt: ""},
+        recipe: [],
+        category: "",
+        workHours: 0,
+        electricityHours: 0,
+      })
+
+      if (!createdCakeComponent) {
+        res.status(404).json({ message: "Cake Component not created" });
+        return;
+      }
+
+      res.status(201).json({ cakeComponent: createdCakeComponent });
+    } catch (err) {
+      next(err);  // Pass the error to the error-handling middleware
+    }
+});
+
+router.put("/cakeComponents", async (req, res, next) => {
+    try {
+      const newData = req.body;
+      const { _id } = newData;
+
+      const updatedCakeComponent = await CakeComponent.findByIdAndUpdate(_id, newData, { new: true })
+
+      if (!updatedCakeComponent) {
+        res.status(404).json({ message: "Cake Component not found" });
+        return;
+      }
+
+      await updatedCakeComponent.populate('recipe.ingredient');
+
+      res.status(200).json({ cakeComponent: updatedCakeComponent });
+    } catch (err) {
+      next(err);  // Pass the error to the error-handling middleware
+    }
+});
+
+router.get("/cakeComponents", async (req, res, next) => {
+  try {
+    const cakeComponents = await CakeComponent.find().populate('recipe.ingredient');
+
+    if (!cakeComponents) {
+      res.status(404).json({ message: "Cake Components not found" });
+      return;
+    }
+
+    res.status(200).json({ cakeComponents });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/orders", async (req, res, next) => {
     try {
       const orders = await Order.find().populate([
