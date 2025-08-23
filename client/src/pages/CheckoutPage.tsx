@@ -130,11 +130,11 @@ function CheckoutPage() {
                             className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:cursor-not-allowed"
                             disabled={!!clientSecret}
                         />
-                        <label>{language === 'en' ? 'Self Pickup' : 'Retirada Pessoal'}</label>
+                        <label>{language === 'en' ? 'Pickup' : 'Recolha no local'}</label>
                     </div>
 
                     {!orderData.pickup && <>
-                    <label className="block mb-1 text-sm">{language === 'en' ? 'Address' : 'Endereço'}</label>
+                    <label className="block mb-1 text-sm">{language === 'en' ? 'Address' : 'Morada'}</label>
                     <input
                         type="text"
                         name="address"
@@ -206,7 +206,7 @@ function CheckoutPage() {
                     ))}
                     <hr className="my-4 border-gray-300" />
                     <div className="flex items-center mb-2">
-                        <span className="flex-grow">{language === 'en' ? 'Items' : 'Itens'}</span>
+                        <span className="flex-grow">{language === 'en' ? 'Items' : 'Produtos'}</span>
                         <span>{totalAmount.toFixed(2).replace('.', ',')} €</span>
                     </div>
                     <div className="flex items-center mb-2">
