@@ -10,6 +10,7 @@ const orderSchema = new Schema(
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
         quantity: Number,
         price: Number,
+        note: String
     }],
     pickup: Boolean,
     shipping: {

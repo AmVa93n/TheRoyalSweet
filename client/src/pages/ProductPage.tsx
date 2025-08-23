@@ -8,24 +8,23 @@ import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function ProductPage() {
     const { productId } = useParams();
-    const { products, setIsCartOpen } = useStore();
+    const { products, setIsCartOpen, language, cart, setCart } = useStore();
     const product = products.find((product: Product) => product._id === productId)!;
-    
     const [quantity, setQuantity] = useState(1)
-    const { language, cart, setCart } = useStore()
+    const [note, setNote] = useState('')
     const navigate = useNavigate()
 
     function addProduct(product: Product, quantity: number) {
         if (cart.some(item => item.product._id === product._id)) {
             // If product already exists in cart, just update the quantity
             const updatedCart = cart.map(item => 
-                item.product._id === product._id ? {...item, quantity: item.quantity + quantity} : item
+                item.product._id === product._id ? {...item, quantity: item.quantity + quantity, note} : item
             );
             setCart(updatedCart);
         } else {
             // If product is not in cart, add it
             const { price } = calculatePrice(product)
-            const updatedCart = [...cart, {product, quantity, price}]
+            const updatedCart = [...cart, {product, quantity, price, note}]
             setCart(updatedCart)
         }
         setIsCartOpen(true) // Open cart after adding product
@@ -91,6 +90,20 @@ function ProductPage() {
                                     <MinusIcon size={20} />
                                 </button>
                             </div>
+                        </div>
+
+                        {/* Note */}
+                        <div className="mb-6 relative">
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Note' : 'Nota'}</label>
+                            <textarea
+                                maxLength={300}
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                                className="w-full p-2 rounded bg-white border appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                            />
+                            <span className="absolute right-3 bottom-3 text-xs text-gray-500">
+                                {note.length}/300
+                            </span>
                         </div>
 
                         {/* Add to Cart Button */}

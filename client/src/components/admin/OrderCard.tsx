@@ -61,7 +61,7 @@ export default function OrderCard({ order, open, onClose }: Props) {
 
     return (
       <Dialog open={open} fullWidth maxWidth="lg">
-        <Paper sx={{ mb: 3, p: 2, position: 'relative' }}>
+        <Paper sx={{ p: 2, position: 'relative' }}>
             <Typography variant="h6">Order by: {order.name}</Typography>
             <Typography>Email: {order.email}</Typography>
             <Typography>Created: {order.createdAt.split('T')[0]}</Typography>
@@ -81,6 +81,7 @@ export default function OrderCard({ order, open, onClose }: Props) {
                 <TableHead>
                   <TableRow>
                     <TableCell>Product</TableCell>
+                    <TableCell>Note</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Price (each)</TableCell>
                     <TableCell>Total</TableCell>
@@ -90,6 +91,7 @@ export default function OrderCard({ order, open, onClose }: Props) {
                   {order.items.map((item, i) => (
                     <TableRow key={i}>
                       <TableCell>{item.product.name.pt}</TableCell>
+                      <TableCell>{item.note}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{item.price}</TableCell>
                       <TableCell>{item.price * item.quantity}</TableCell>

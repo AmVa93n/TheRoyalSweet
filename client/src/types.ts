@@ -81,6 +81,7 @@ export type CartItem = {
     product: Product,
     quantity: number
     price: number,
+    note?: string
 }
 
 export type Category = "cake" | "pie" | "cheesecake" | "dessert" | "mini"
