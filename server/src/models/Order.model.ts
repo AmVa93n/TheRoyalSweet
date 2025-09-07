@@ -9,6 +9,7 @@ const orderSchema = new Schema(
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
         customCake: { 
+          label: String,
           dough: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
           filling: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
           frosting: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},

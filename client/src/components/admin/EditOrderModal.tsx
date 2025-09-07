@@ -43,8 +43,8 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
         setNewItemQuantity(0); // Clear amount
     };
     
-    function handleDeleteItem(productId: string) {
-        setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product._id !== productId) }));
+    function handleDeleteItem(idOrLabel: string) {
+        setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product?._id !== idOrLabel || item.customCake?.label !== idOrLabel) }));
     };
 
     function handleAddIngredient() {
@@ -90,12 +90,12 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
                     <Typography variant="body2">Items:</Typography>
                     <List>
                         {orderForm.items.map((item) => (
-                        <ListItem key={item.product._id} dense sx={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                            <Typography variant="body2">{item.product.name.pt} x {item.quantity}</Typography>
+                        <ListItem key={item.product?._id || item.customCake?.label} dense sx={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                            <Typography variant="body2">{item.product?.name.pt || "Bolo Personalizado"} x {item.quantity}</Typography>
                             <Typography variant="body2">
-                                {calculatePrice(item.product).price * item.quantity} € ( {calculatePrice(item.product).price} € x {item.quantity} )
+                                {(item.price * item.quantity).toFixed(2)} € ( {item.price.toFixed(2)} € x {item.quantity} )
                             </Typography>
-                            <IconButton onClick={() => handleDeleteItem(item.product._id)}>
+                            <IconButton onClick={() => handleDeleteItem(item.product?._id || item.customCake!.label)}>
                                 <DeleteIcon />
                             </IconButton>
                         </ListItem>
