@@ -3,6 +3,8 @@ import type { ProductCategory } from '../types';
 import ProductCard from '../components/ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
 import type { JSX } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { imagePlaceholder } from '../utils';
 
 const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
     { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },
@@ -14,6 +16,7 @@ const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Elem
 
 function ShopPage() {
     const { language, products } = useStore();
+    const navigate = useNavigate();
 
     return (
         <div className="pt-24 lg:px-24 w-full">
@@ -57,6 +60,36 @@ function ShopPage() {
                 </div>
             </section>
         ))}
+
+        {/* Custom Cake */}
+        <section className="my-20">
+            <div className="flex items-center justify-center gap-2 mb-6">
+                <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake'}</h2>
+            </div>
+            <div className="flex flex-wrap justify-center gap-6 w-full">
+                <div
+                    onClick={() => navigate('/custom-cake')}
+                    className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#593b3e50] group mx-auto"
+                >
+                    <div className="w-full h-[250px] overflow-hidden relative">
+                        <img
+                            src={imagePlaceholder}
+                            alt={'Custom Cake'}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+                    <div className="p-5">
+                        <h3 className="text-xl text-[#593b3e] mb-2 truncate">
+                            {language === 'pt' ? 'Crie seu Bolo' : 'Create Your Cake'}
+                        </h3>
+                        <p className="text-sm text-gray-700 line-clamp-2 font-light leading-relaxed">
+                            {language === 'pt' ? 'Personalize seu bolo com massa, recheio e cobertura de sua escolha.' : 'Customize your cake with dough, filling, and frosting of your choice.'}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         {/* Scroll to Top Button */}
         <div className="flex justify-center my-8">
