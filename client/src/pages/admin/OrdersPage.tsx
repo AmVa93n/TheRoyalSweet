@@ -1,10 +1,7 @@
-import { useState } from 'react';
 import { Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Paper, Box, Select, MenuItem, Typography } from '@mui/material';
 import adminService from '../../services/admin.service';
 import type { Order } from '../../types';
-import EditOrderModal from '../../components/admin/EditOrderModal';
 import { useStore } from '../../store';
-import EditIcon from '@mui/icons-material/Edit';
 import ViewIcon from '@mui/icons-material/Launch';
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
@@ -13,19 +10,7 @@ import { useNavigate } from 'react-router-dom';
 function OrdersPage() {
   const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
-  const [editedOrder, setEditedOrder] = useState<Order | null>(null);
   const navigate = useNavigate();
-
-  async function handleSave(orderForm: Order) {
-      try { 
-          const updatedOrder = await adminService.updateOrder(orderForm);
-          const updatedOrders = orders.map(order => order._id === updatedOrder._id ? updatedOrder : order);
-          setOrders(updatedOrders); // Update the orders state with the new order
-      } catch (error) {
-          console.error("Error saving order:", error);
-      }
-      setEditedOrder(null); // Close the modal after saving
-  };
 
   async function handleCreateOrder() {
     const newOrder = await adminService.createOrder();
@@ -100,9 +85,6 @@ function OrdersPage() {
                       <TableCell>{order.deliveryDate.split('T')[0]}</TableCell>
 
                       <TableCell>
-                          <IconButton onClick={() => setEditedOrder(order)}>
-                              <EditIcon />
-                          </IconButton>
                           <IconButton onClick={() => navigate(order._id)}>
                               <ViewIcon />
                           </IconButton>
@@ -116,9 +98,6 @@ function OrdersPage() {
       <Button variant="contained" onClick={handleCreateOrder} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
         Create Order
       </Button>
-
-      {editedOrder && 
-        <EditOrderModal open={!!editedOrder} order={editedOrder} onSave={handleSave} onClose={() => setEditedOrder(null)} />}
     </div>
   );
 }

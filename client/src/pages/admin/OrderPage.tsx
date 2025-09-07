@@ -1,6 +1,9 @@
 import type { CartItem } from '../../types';
 import { useParams } from 'react-router-dom';
 import { useStore } from '../../store';
+import EditOrder from '../../components/admin/EditOrder';
+import { useState } from 'react';
+import { PencilIcon } from '@phosphor-icons/react';
 
 export default function OrderPage() {
     const { orderId } = useParams();
@@ -9,6 +12,7 @@ export default function OrderPage() {
     const ingredientRegistry = createIngredientRegistry();
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
     const totalIngredientsPrice = ingredientRegistry.reduce((total, ing) => total + ing.totalPrice, 0);
+    const [isEditing, setIsEditing] = useState(false);
 
     function createIngredientRegistry() {
         const registry: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
@@ -57,6 +61,10 @@ export default function OrderPage() {
         return items.reduce((total, item) => {
           return total + item.price * item.quantity;
         }, 0);
+    }
+
+    if (isEditing) {
+      return <EditOrder order={order} onClose={() => setIsEditing(false)} />;
     }
 
     return (
@@ -188,6 +196,15 @@ export default function OrderPage() {
             </p>
           </div>
         </div>
+
+        {/* Floating Edit Button */}
+        <button
+          onClick={() => setIsEditing(true)}
+          className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+          title="Edit Order"
+        >
+          <PencilIcon size={24} />
+        </button>
       </div>
     )
 }

@@ -1,22 +1,21 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, Dialog, DialogContent, DialogActions, Switch } from "@mui/material";
+import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, DialogContent, DialogActions, Switch } from "@mui/material";
 import { useState } from "react";
 import type { Order } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { calculatePrice } from "../../utils";
 import { useStore } from "../../store";
+import adminService from '../../services/admin.service';
 
 type Props = {
-    open: boolean;
-    order?: Order;
-    onSave: (orderForm: Order) => void;
+    order: Order;
     onClose: () => void;
 };
 
-export default function EditOrderModal({ open, order, onSave, onClose }: Props) {
-    const { products, ingredients } = useStore();
+export default function EditOrder({ order, onClose }: Props) {
+    const { products, ingredients, orders, setOrders } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
     const [newItemQuantity, setNewItemQuantity] = useState(0);
@@ -63,8 +62,19 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
         }));
     };
 
+    async function handleSave(orderForm: Order) {
+        try { 
+            const updatedOrder = await adminService.updateOrder(orderForm);
+            const updatedOrders = orders.map(order => order._id === updatedOrder._id ? updatedOrder : order);
+            setOrders(updatedOrders); // Update the orders state with the new order
+        } catch (error) {
+            console.error("Error saving order:", error);
+        }
+        onClose(); // Close the modal after saving
+    };
+
     return (
-        <Dialog open={open} fullWidth maxWidth="lg">
+        <div>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <TextField name="name" label="Name" value={orderForm.name} onChange={handleChange} size="small" fullWidth/>
                 <TextField name="email" label="Email" value={orderForm.email} onChange={handleChange} size="small" fullWidth/>
@@ -175,13 +185,13 @@ export default function EditOrderModal({ open, order, onSave, onClose }: Props) 
                 </Box>
             </DialogContent>
             <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={() => onSave(orderForm)} startIcon={<DoneIcon />} color="success" variant="contained">
+                <Button onClick={() => handleSave(orderForm)} startIcon={<DoneIcon />} color="success" variant="contained">
                     Save Order
                 </Button>
                 <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
                     Discard
                 </Button>
             </DialogActions>
-        </Dialog>
+        </div>
     )
 }
