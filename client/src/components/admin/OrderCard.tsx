@@ -18,7 +18,10 @@ export default function OrderCard({ order, open, onClose }: Props) {
     
         // Iterate through each item in the order and accumulate ingredient data
         order.items.forEach(item => {
-          item.product.recipe.forEach(({ ingredient, amount }) => {
+          const { product, customCake } = item;
+          const { dough, filling, frosting } = customCake || {};
+          const recipe = product?.recipe || [...dough!.recipe, ...filling!.recipe, ...frosting!.recipe];
+          recipe.forEach(({ ingredient, amount }) => {
             if (!registry[ingredient._id]) {
               registry[ingredient._id] = {
                 name: ingredient.name,
@@ -90,11 +93,11 @@ export default function OrderCard({ order, open, onClose }: Props) {
                 <TableBody>
                   {order.items.map((item, i) => (
                     <TableRow key={i}>
-                      <TableCell>{item.product.name.pt}</TableCell>
+                      <TableCell>{item.product?.name.pt || `Bolo Personalizado (${item.customCake?.dough.name.pt}, ${item.customCake?.filling.name.pt}, ${item.customCake?.frosting.name.pt})`}</TableCell>
                       <TableCell>{item.note}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
-                      <TableCell>{item.price}</TableCell>
-                      <TableCell>{item.price * item.quantity}</TableCell>
+                      <TableCell>{item.price.toFixed(2)}</TableCell>
+                      <TableCell>{(item.price * item.quantity).toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
