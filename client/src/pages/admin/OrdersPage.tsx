@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Paper, Box, Select, MenuItem, Typography } from '@mui/material';
 import adminService from '../../services/admin.service';
 import type { Order } from '../../types';
-import OrderCard from './OrderCard';
-import EditOrderModal from './EditOrderModal';
+import OrderCard from '../../components/admin/OrderCard';
+import EditOrderModal from '../../components/admin/EditOrderModal';
 import { useStore } from '../../store';
 import EditIcon from '@mui/icons-material/Edit';
 import ViewIcon from '@mui/icons-material/Launch';
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 
-function ManageOrders() {
+function OrdersPage() {
   const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
@@ -53,7 +53,7 @@ function ManageOrders() {
   }
 
   return (
-    <>
+    <div className="pt-20 pb-10 min-h-screen">
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
         <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
 
@@ -122,8 +122,8 @@ function ManageOrders() {
 
       {viewedOrder &&
         <OrderCard open={!!viewedOrder} order={viewedOrder} onClose={() => setViewedOrder(null)} />}
-    </>
+    </div>
   );
 }
 
-export default ManageOrders;
+export default OrdersPage;

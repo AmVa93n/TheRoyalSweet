@@ -1,34 +1,33 @@
 import { useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button, Select, MenuItem, Box, Typography } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Select, MenuItem, Box, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
-import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
-import type { Product } from "../../types";
+import type { CakeComponent } from "../../types";
 import { calculatePrice } from "../../utils";
-import EditProductModal from "./EditProductModal";
+import EditCakeComponentModal from "../../components/admin/EditCakeComponentModal";
 import { useStore } from "../../store";
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 
-function ManageProducts() {
-  const { products, setProducts, sortPreferences, setSortPreferences } = useStore();
-  const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.products;
-  const [editedProduct, setEditedProduct] = useState<Product | null>(null);
+function CakeComponentsPage() {
+  const { cakeComponents, setCakeComponents, sortPreferences, setSortPreferences } = useStore();
+  const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.cakeComponents;
+  const [editedCakeComponent, setEditedCakeComponent] = useState<CakeComponent | null>(null);
 
-  async function handleSave(productForm: Product) {
-    const updatedProduct = await adminService.updateProduct(productForm);
-    const updatedProducts = products.map((product) => product._id === updatedProduct._id ? updatedProduct : product);
-    setProducts(updatedProducts);
-    setEditedProduct(null); // Stop editing mode
+  async function handleSave(cakeComponentForm: CakeComponent) {
+    const updatedCakeComponent = await adminService.updateCakeComponent(cakeComponentForm);
+    const updatedCakeComponents = cakeComponents.map((cakeComponent) => cakeComponent._id === updatedCakeComponent._id ? updatedCakeComponent : cakeComponent);
+    setCakeComponents(updatedCakeComponents);
+    setEditedCakeComponent(null); // Stop editing mode
   };
 
-  async function handleAddProduct() {
-    const newProduct = await adminService.createProduct();
-    const updatedProducts = [...products, newProduct];
-    setProducts(updatedProducts); // Add the new product to the list
+  async function handleAddCakeComponent() {
+    const newCakeComponent = await adminService.createCakeComponent();
+    const updatedCakeComponents = [...cakeComponents, newCakeComponent];
+    setCakeComponents(updatedCakeComponents); // Add the new cake component to the list
   };
 
-  function sortFunction(a: Product, b: Product) {
+  function sortFunction(a: CakeComponent, b: CakeComponent) {
     switch (sortCriteria) {
       case 'name':
         return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name.pt) : b.name.pt.localeCompare(a.name.pt);
@@ -47,7 +46,7 @@ function ManageProducts() {
   }
 
   return (
-    <>
+    <div className="pt-20 pb-10 min-h-screen">
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
         <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
 
@@ -78,7 +77,6 @@ function ManageProducts() {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Image</TableCell>
               <TableCell sx={{fontWeight: 'bold'}} padding="normal">Name</TableCell>
               <TableCell sx={{fontWeight: 'bold'}} padding="normal">Category</TableCell>
               <TableCell sx={{fontWeight: 'bold'}} padding="normal">Work Hours</TableCell>
@@ -90,25 +88,19 @@ function ManageProducts() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.sort(sortFunction).map((product) => (
-              <TableRow key={product._id}>
-                <TableCell>
-                  {product.images[0] ? <img src={product.images[0]} alt={product._id} width={48} /> :
-                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)', width: 48, height: 48 }}>
-                        <ImageNotSupportedIcon />
-                    </Avatar>}
-                </TableCell>
+            {cakeComponents.sort(sortFunction).map((cakeComponent) => (
+              <TableRow key={cakeComponent._id}>
 
-                <TableCell padding="normal">{product.name.pt}</TableCell>
-                <TableCell padding="normal">{product.category}</TableCell>
-                <TableCell padding="normal">{product.workHours}</TableCell>
-                <TableCell padding="normal">{product.electricityHours}</TableCell>
-                <TableCell padding="normal">{calculatePrice(product).price.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(product).totalCost.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(product).netGain.toFixed(2)} €</TableCell>
-                
+                <TableCell padding="normal">{cakeComponent.name.pt}</TableCell>
+                <TableCell padding="normal">{cakeComponent.category}</TableCell>
+                <TableCell padding="normal">{cakeComponent.workHours}</TableCell>
+                <TableCell padding="normal">{cakeComponent.electricityHours}</TableCell>
+                <TableCell padding="normal">{calculatePrice(cakeComponent).price.toFixed(2)} €</TableCell>
+                <TableCell padding="normal">{calculatePrice(cakeComponent).totalCost.toFixed(2)} €</TableCell>
+                <TableCell padding="normal">{calculatePrice(cakeComponent).netGain.toFixed(2)} €</TableCell>
+
                 <TableCell padding="normal">
-                  <IconButton onClick={() => setEditedProduct(product)}>
+                  <IconButton onClick={() => setEditedCakeComponent(cakeComponent)}>
                     <EditIcon />
                   </IconButton>
                 </TableCell>
@@ -118,18 +110,18 @@ function ManageProducts() {
         </Table>
       </TableContainer>
 
-      <Button variant="contained" onClick={handleAddProduct} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
-          Create Product
+      <Button variant="contained" onClick={handleAddCakeComponent} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
+          Create Cake Component
       </Button>
 
-      {editedProduct && <EditProductModal 
-        open={!!editedProduct}
-        product={editedProduct}
+      {editedCakeComponent && <EditCakeComponentModal
+        open={!!editedCakeComponent}
+        cakeComponent={editedCakeComponent}
         onSave={handleSave}
-        onClose={() => setEditedProduct(null)}
+        onClose={() => setEditedCakeComponent(null)}
       />}
-    </>
+    </div>
   );
 };
 
-export default ManageProducts;
+export default CakeComponentsPage;

@@ -4,11 +4,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
 import { useStore } from "../../store";
-import EditIngredientModal from "./EditIngredientModal";
+import EditIngredientModal from "../../components/admin/EditIngredientModal";
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 
-function ManageIngredients() {
+function IngredientsPage() {
     const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useStore()
     const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.ingredients;
     const [editedIngredient, setEditedIngredient] = useState<Ingredient | null>(null);
@@ -44,7 +44,7 @@ function ManageIngredients() {
     }
 
     return (
-        <>
+        <div className="pt-20 pb-10 min-h-screen">
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
             <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
 
@@ -116,8 +116,8 @@ function ManageIngredients() {
 
         {editedIngredient && 
             <EditIngredientModal open={!!editedIngredient} ingredient={editedIngredient} onSave={handleSave} onClose={() => setEditedIngredient(null)} />}
-        </>
+        </div>
     )
 }
 
-export default ManageIngredients
+export default IngredientsPage
