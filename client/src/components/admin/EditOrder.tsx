@@ -186,6 +186,7 @@ export default function EditOrder({ order, onClose }: Props) {
                                 <th className="px-4 py-2 text-center">Quantity</th>
                                 <th className="px-4 py-2 text-center">Price (each)</th>
                                 <th className="px-4 py-2 text-center">Total</th>
+                                <th className="px-4 py-2 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
@@ -196,13 +197,15 @@ export default function EditOrder({ order, onClose }: Props) {
                                     <td className="px-4 py-2 text-center">{item.quantity}</td>
                                     <td className="px-4 py-2 text-center">{item.price.toFixed(2)} €</td>
                                     <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.price * item.quantity).toFixed(2)} €</td>
-                                    <button
-                                        onClick={() => handleDeleteItem(item.product?._id || item.customCake!.label)}
-                                        className="text-red-500 hover:text-red-700 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                                        title="Remove Item"
-                                    >
-                                        <TrashIcon size={20} />
-                                    </button>
+                                    <td className="px-4 py-2 text-center">
+                                        <button
+                                            onClick={() => handleDeleteItem(item.product?._id || item.customCake!.label)}
+                                            className="text-red-500 hover:text-red-700 cursor-pointer"
+                                            title="Remove Item"
+                                        >
+                                            <TrashIcon size={20} />
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -249,6 +252,7 @@ export default function EditOrder({ order, onClose }: Props) {
                                 <th className="px-4 py-2 text-center">Amount</th>
                                 <th className="px-4 py-2 text-center">Price / Unit</th>
                                 <th className="px-4 py-2 text-center">Total Price</th>
+                                <th className="px-4 py-2 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
@@ -258,13 +262,15 @@ export default function EditOrder({ order, onClose }: Props) {
                                     <td className="px-4 py-2 text-center">{item.amount} {item.ingredient.recipeUnits}</td>
                                     <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
                                     <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
-                                    <button
-                                        onClick={() => handleDeleteIngredient(item.ingredient._id)}
-                                        className="text-red-500 hover:text-red-700 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                                        title="Remove Additional Ingredient"
-                                    >
-                                        <TrashIcon size={20} />
-                                    </button>
+                                    <td className="px-4 py-2 text-center">
+                                        <button
+                                            onClick={() => handleDeleteIngredient(item.ingredient._id)}
+                                            className="text-red-500 hover:text-red-700 cursor-pointer"
+                                            title="Remove Additional Ingredient"
+                                        >
+                                            <TrashIcon size={20} />
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
