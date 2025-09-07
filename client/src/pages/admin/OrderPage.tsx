@@ -1,5 +1,5 @@
 import type { CartItem } from '../../types';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
@@ -12,7 +12,8 @@ export default function OrderPage() {
     const ingredientRegistry = createIngredientRegistry();
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
     const totalIngredientsPrice = ingredientRegistry.reduce((total, ing) => total + ing.totalPrice, 0);
-    const [isEditing, setIsEditing] = useState(false);
+    const location = useLocation();
+    const [isEditing, setIsEditing] = useState(location.state?.new || false);
 
     function createIngredientRegistry() {
         const registry: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};

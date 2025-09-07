@@ -1,12 +1,9 @@
-import { Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Paper, Box, Select, MenuItem, Typography } from '@mui/material';
 import adminService from '../../services/admin.service';
 import type { Order } from '../../types';
 import { useStore } from '../../store';
-import ViewIcon from '@mui/icons-material/Launch';
-import AscIcon from '@mui/icons-material/ArrowUpward';
-import DescIcon from '@mui/icons-material/ArrowDownward';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 
 function OrdersPage() {
   const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
@@ -21,6 +18,7 @@ function OrdersPage() {
     const newOrder = await adminService.createOrder();
     const updatedOrders = [...orders, newOrder]
     setOrders(updatedOrders); // Update the orders state with the new order
+    navigate(`/admin/orders/${newOrder._id}`, { state: { new: true } }); // Navigate to the new order's page
   };
 
   function sortFunction(a: Order, b: Order) {
@@ -44,65 +42,68 @@ function OrdersPage() {
 
   return (
     <div className="pt-20 pb-10 min-h-screen">
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
-        <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
+        <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
 
-        <Select
-            value={sortCriteria}
-            onChange={(e) => setSortPreferences('orders', { criteria: e.target.value, direction: sortDirection })}
-            size="small"
+            {/* Sort Options */}
+            <div className="flex items-center justify-center mb-6">
+                <p className='mr-4 text-lg font-medium text-gray-700'>Sort by:</p>
+
+                <select
+                    className='rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1'
+                    value={sortCriteria}
+                    onChange={(e) => setSortPreferences('orders', { criteria: e.target.value, direction: sortDirection })}
+                >
+                    <option value="createdAt">Created</option>
+                    <option value="name">Customer</option>
+                    <option value="items">Items</option>
+                    <option value="totalPrice">Total Price</option>
+                    <option value="deliveryDate">Delivery Date</option>
+                </select>
+                
+                <button 
+                    onClick={() => setSortPreferences('orders', { criteria: sortCriteria, direction: sortDirection === 'asc' ? 'desc' : 'asc' })} 
+                    className="ml-2 cursor-pointer"
+                    title={sortDirection === 'asc' ? 'Sort Descending' : 'Sort Ascending'}
+                >
+                    {sortDirection === 'desc' ? <SortDescendingIcon size={24} /> : <SortAscendingIcon size={24} />}
+                </button>
+            </div>
+
+            {/* Orders List */}
+            <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                <thead className="bg-gray-100 text-gray-700">
+                    <tr>
+                    <th className="px-4 py-2 text-center">Created</th>
+                    <th className="px-4 py-2 text-left">Customer</th>
+                    <th className="px-4 py-2 text-center">Items</th>
+                    <th className="px-4 py-2 text-center">Total Price</th>
+                    <th className="px-4 py-2 text-center">Delivery Date</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                    {orders.sort(sortFunction).map((order) => (
+                    <tr key={order._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/orders/${order._id}`)}>
+                        <td className="px-4 py-2 text-center">{order.createdAt.split('T')[0]}</td>
+                        <td className="px-4 py-2 text-gray-800">{order.name}</td>
+                        <td className="px-4 py-2 text-center">{order.items.length}</td>
+                        <td className="px-4 py-2 text-center">{order.items.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)} €</td>
+                        <td className="px-4 py-2 text-center">{order.deliveryDate.split('T')[0]}</td>
+                    </tr>
+                    ))}
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        {/* Floating Add Button */}
+        <button
+          onClick={handleCreateOrder}
+          className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+          title="Edit Order"
         >
-            <MenuItem value="createdAt">Created</MenuItem>
-            <MenuItem value="name">Name</MenuItem>
-            <MenuItem value="items">Items</MenuItem>
-            <MenuItem value="totalPrice">Total Price</MenuItem>
-            <MenuItem value="deliveryDate">Delivery Date</MenuItem>
-        </Select>
-        
-        <IconButton onClick={() => setSortPreferences('orders', { criteria: sortCriteria, direction: 'desc' })}>
-            <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
-        </IconButton>
-
-        <IconButton onClick={() => setSortPreferences('orders', { criteria: sortCriteria, direction: 'asc' })}>
-            <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
-        </IconButton>
-      </Box>
-
-      <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
-          <Table size="small">
-              <TableHead>
-                  <TableRow>
-                      <TableCell><b>Created</b></TableCell>
-                      <TableCell><b>Name</b></TableCell>
-                      <TableCell><b>Items</b></TableCell>
-                      <TableCell><b>Total Price</b></TableCell>
-                      <TableCell><b>Delivery Date</b></TableCell>
-                      <TableCell><b>Actions</b></TableCell>
-                  </TableRow>
-              </TableHead>
-              <TableBody>
-              {orders.sort(sortFunction).map((order) => (
-                  <TableRow key={order._id}>
-                      <TableCell>{order.createdAt.split('T')[0]}</TableCell>
-                      <TableCell>{order.name}</TableCell>
-                      <TableCell>{order.items.length}</TableCell>
-                      <TableCell>{order.items.reduce((total, item) => total + item.price * item.quantity, 0)}</TableCell>
-                      <TableCell>{order.deliveryDate.split('T')[0]}</TableCell>
-
-                      <TableCell>
-                          <IconButton onClick={() => navigate(order._id)}>
-                              <ViewIcon />
-                          </IconButton>
-                      </TableCell>
-                  </TableRow>
-              ))}
-              </TableBody>
-          </Table>
-      </TableContainer>
-
-      <Button variant="contained" onClick={handleCreateOrder} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
-        Create Order
-      </Button>
+          <PlusIcon size={24} />
+        </button>
     </div>
   );
 }
