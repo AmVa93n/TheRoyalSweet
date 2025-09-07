@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
+import CustomCakePage from "./pages/CustomCakePage";
 import CheckoutPage from "./pages/CheckoutPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/product/:productId" element={<ProductPage />} />
+        <Route path="/custom-cake" element={<CustomCakePage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
