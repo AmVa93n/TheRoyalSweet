@@ -18,3 +18,5 @@ export function calculatePrice(product: Product | CakeComponent) {
     const netGain = price - totalCost
     return { price, totalCost, netGain }
 }
+
+export const imagePlaceholder = "https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000"

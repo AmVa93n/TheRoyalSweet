@@ -1,6 +1,7 @@
 import type { Product } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../store";
+import { imagePlaceholder } from "../utils";
 
 type ProductCardProps = {
     product: Product;
@@ -9,7 +10,7 @@ type ProductCardProps = {
 function ProductCard({ product }: ProductCardProps) {
     const navigate = useNavigate();
     const { language } = useStore();
-    const imagePlaceholder = "https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000"
+    
 
     function handleCardClick() {
         navigate(`/product/${product._id}`);
