@@ -11,30 +11,27 @@ function CustomCakePage() {
     const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
     const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
     const [customCake, setCustomCake] = useState<CustomCake>({
+        label: '',
         dough: doughOptions[0],
         filling: fillingOptions[0],
         frosting: frostingOptions[0]
     });
+    const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}`
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
     const navigate = useNavigate()
 
     function addCustomCake() {
-        const existingCustomCake = cart.find(item => {
-            if (!item.customCake) return
-            const { dough, filling, frosting } = item.customCake
-            return dough._id === customCake.dough._id && filling._id === customCake.filling._id && frosting._id === customCake.frosting._id
-        })?.customCake
-        if (existingCustomCake) {
+        if (cart.some(item => item.customCake?.label === label)) {
             // If a custom cake with the same components is already in the cart, increase its quantity
             const updatedCart = cart.map(item => 
-                item.customCake === existingCustomCake ? {...item, quantity: item.quantity + quantity, note} : item
+                item.customCake?.label === label ? {...item, quantity: item.quantity + quantity, note} : item
             );
             setCart(updatedCart);
         } else {
             // If a custom cake with the same components is not in cart, add it
             const price = getCustomCakePrice(customCake)
-            const updatedCart = [...cart, {customCake, quantity, price, note}]
+            const updatedCart = [...cart, {customCake: {...customCake, label}, quantity, price, note}]
             setCart(updatedCart)
         }
         setIsCartOpen(true) // Open cart after adding product

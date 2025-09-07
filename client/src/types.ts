@@ -86,6 +86,7 @@ export type CartItem = {
 }
 
 export type CustomCake = {
+    label: string,
     dough: CakeComponent,
     filling: CakeComponent,
     frosting: CakeComponent,

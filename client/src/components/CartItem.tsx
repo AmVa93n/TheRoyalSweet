@@ -12,13 +12,13 @@ function CartItem({ item }: Props) {
     const { product, customCake, quantity, price } = item;
 
     function removeItem() {
-        const updatedCart = cart.filter(item => item.product?._id !== product?._id || item.customCake !== customCake)
+        const updatedCart = cart.filter(item => item.product?._id !== product?._id || item.customCake?.label !== customCake?.label)
         setCart(updatedCart)
     }
 
     function changeQuantity(newQuantity: number) {
         if (newQuantity < 1 || newQuantity > 99) return
-        const updatedCart = cart.map(item => item.product?._id === product?._id || item.customCake === customCake ? {...item, quantity: newQuantity} : item)
+        const updatedCart = cart.map(item => item.product?._id === product?._id || item.customCake?.label === customCake?.label ? {...item, quantity: newQuantity} : item)
         setCart(updatedCart)
     }
 
