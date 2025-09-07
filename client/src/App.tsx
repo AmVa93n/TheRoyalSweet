@@ -13,6 +13,7 @@ import IngredientsPage from "./pages/admin/IngredientsPage";
 import ProductsPage from "./pages/admin/ProductsPage";
 import CakeComponentsPage from "./pages/admin/CakeComponentsPage";
 import OrdersPage from "./pages/admin/OrdersPage";
+import OrderPage from "./pages/admin/OrderPage";
 import AdminNavbar from "./components/admin/AdminNavbar";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin/products" element={<ProductsPage />} />
         <Route path="/admin/cake-components" element={<CakeComponentsPage />} />
         <Route path="/admin/orders" element={<OrdersPage />} />
+        <Route path="/admin/orders/:orderId" element={<OrderPage />} />
       </Routes>
 
       {!isOnAdminPage && <Footer />}

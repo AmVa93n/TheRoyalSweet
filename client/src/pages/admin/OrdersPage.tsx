@@ -2,19 +2,19 @@ import { useState } from 'react';
 import { Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Paper, Box, Select, MenuItem, Typography } from '@mui/material';
 import adminService from '../../services/admin.service';
 import type { Order } from '../../types';
-import OrderCard from '../../components/admin/OrderCard';
 import EditOrderModal from '../../components/admin/EditOrderModal';
 import { useStore } from '../../store';
 import EditIcon from '@mui/icons-material/Edit';
 import ViewIcon from '@mui/icons-material/Launch';
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
+import { useNavigate } from 'react-router-dom';
 
 function OrdersPage() {
   const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
   const [editedOrder, setEditedOrder] = useState<Order | null>(null);
-  const [viewedOrder, setViewedOrder] = useState<Order | null>(null);
+  const navigate = useNavigate();
 
   async function handleSave(orderForm: Order) {
       try { 
@@ -103,7 +103,7 @@ function OrdersPage() {
                           <IconButton onClick={() => setEditedOrder(order)}>
                               <EditIcon />
                           </IconButton>
-                          <IconButton onClick={() => setViewedOrder(order)}>
+                          <IconButton onClick={() => navigate(order._id)}>
                               <ViewIcon />
                           </IconButton>
                       </TableCell>
@@ -119,9 +119,6 @@ function OrdersPage() {
 
       {editedOrder && 
         <EditOrderModal open={!!editedOrder} order={editedOrder} onSave={handleSave} onClose={() => setEditedOrder(null)} />}
-
-      {viewedOrder &&
-        <OrderCard open={!!viewedOrder} order={viewedOrder} onClose={() => setViewedOrder(null)} />}
     </div>
   );
 }
