@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Box, Typography, Select, MenuItem } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
@@ -12,6 +12,10 @@ function IngredientsPage() {
     const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useStore()
     const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.ingredients;
     const [editedIngredient, setEditedIngredient] = useState<Ingredient | null>(null);
+
+    useEffect(() => {
+        adminService.getIngredients().then(setIngredients);
+    }, []);
 
     async function handleSave(ingredientForm: Ingredient) {
         const updatedIngredient = await adminService.updateIngredient(ingredientForm);

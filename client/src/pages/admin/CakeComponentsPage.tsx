@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Select, MenuItem, Box, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
@@ -13,6 +13,10 @@ function CakeComponentsPage() {
   const { cakeComponents, setCakeComponents, sortPreferences, setSortPreferences } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.cakeComponents;
   const [editedCakeComponent, setEditedCakeComponent] = useState<CakeComponent | null>(null);
+
+  useEffect(() => {
+    adminService.getCakeComponents().then(setCakeComponents);
+  }, []);
 
   async function handleSave(cakeComponentForm: CakeComponent) {
     const updatedCakeComponent = await adminService.updateCakeComponent(cakeComponentForm);

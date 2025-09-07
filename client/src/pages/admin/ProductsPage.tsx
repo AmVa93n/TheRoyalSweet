@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button, Select, MenuItem, Box, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import adminService from '../../services/admin.service'
@@ -9,11 +9,16 @@ import EditProductModal from "../../components/admin/EditProductModal";
 import { useStore } from "../../store";
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
+import appService from "../../services/app.service";
 
 function ProductsPage() {
   const { products, setProducts, sortPreferences, setSortPreferences } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.products;
   const [editedProduct, setEditedProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    appService.getProducts().then(setProducts);
+  }, []);
 
   async function handleSave(productForm: Product) {
     const updatedProduct = await adminService.updateProduct(productForm);

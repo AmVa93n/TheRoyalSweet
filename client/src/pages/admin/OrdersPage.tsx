@@ -6,11 +6,16 @@ import ViewIcon from '@mui/icons-material/Launch';
 import AscIcon from '@mui/icons-material/ArrowUpward';
 import DescIcon from '@mui/icons-material/ArrowDownward';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function OrdersPage() {
   const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    adminService.getOrders().then(setOrders);
+  }, []);
 
   async function handleCreateOrder() {
     const newOrder = await adminService.createOrder();

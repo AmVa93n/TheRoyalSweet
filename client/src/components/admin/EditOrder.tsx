@@ -43,7 +43,9 @@ export default function EditOrder({ order, onClose }: Props) {
     };
 
     function handleAddIngredient() {
+        console.log(newIngredientId);
         const ingredient = ingredients.find(ingredient => ingredient._id === newIngredientId)!
+        console.log(ingredient);
         setOrderForm((prev) => ({
             ...prev, additionalIngredients: [...prev.additionalIngredients, { ingredient, amount: newIngredientAmount }]
         }));
@@ -214,6 +216,7 @@ export default function EditOrder({ order, onClose }: Props) {
                         onChange={(e) => setNewProductId(e.target.value)}
                         className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     >
+                        <option value="">Select a product</option>
                         {products.map((p) => (
                             <option key={p._id} value={p._id}>{p.name.pt}</option>
                         ))}
@@ -228,7 +231,7 @@ export default function EditOrder({ order, onClose }: Props) {
                     <button
                         onClick={handleAddItem}
                         disabled={newProductId === "" || newItemQuantity <= 0}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700"
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
                     >
                         Add
                     </button>
@@ -275,6 +278,7 @@ export default function EditOrder({ order, onClose }: Props) {
                         onChange={(e) => setNewIngredientId(e.target.value)}
                         className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     >
+                        <option value="">Select an ingredient</option>
                         {ingredients.map((ing) => (
                             <option key={ing._id} value={ing._id}>{ing.name}</option>
                         ))}
@@ -288,7 +292,8 @@ export default function EditOrder({ order, onClose }: Props) {
                     />
                     <button
                         onClick={handleAddIngredient}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                        disabled={newIngredientId === "" || newIngredientAmount <= 0}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
                     >
                         Add
                     </button>
