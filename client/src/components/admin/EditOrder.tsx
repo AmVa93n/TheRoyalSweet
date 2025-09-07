@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Order } from "../../types";
-import { calculatePrice } from "../../utils";
+import type { CustomCake, Order } from "../../types";
+import { calculatePrice, getCustomCakePrice } from "../../utils";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service';
 import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
@@ -11,12 +11,18 @@ type Props = {
 };
 
 export default function EditOrder({ order, onClose }: Props) {
-    const { products, ingredients, orders, setOrders } = useStore();
+    const { products, ingredients, orders, setOrders, language, cakeComponents } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
     const [newItemQuantity, setNewItemQuantity] = useState(0);
+    const [newCustomCake, setNewCustomCake] = useState<CustomCake>({} as CustomCake);
+    const [newCustomCakeQuantity, setNewCustomCakeQuantity] = useState(0);
     const [newIngredientId, setNewIngredientId] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState(0);
+    const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
+    const doughOptions = cakeComponents.filter(component => component.category === 'dough');
+    const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
+    const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -33,11 +39,19 @@ export default function EditOrder({ order, onClose }: Props) {
     function handleAddItem() {
         const product = products.find(product => product._id === newProductId)!;
         const { price } = calculatePrice(product)
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newItemQuantity, price: price, size: 'medium' }] }));
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newItemQuantity, price: price }] }));
         setNewProductId(""); // Clear input
         setNewItemQuantity(0); // Clear amount
     };
-    
+
+    function handleAddCustomCake() {
+        const price = getCustomCakePrice(newCustomCake);
+        const label = `${newCustomCake.dough.name.en}, ${newCustomCake.filling.name.en}, ${newCustomCake.frosting.name.en}`
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...newCustomCake, label }, quantity: newCustomCakeQuantity, price: price }] }));
+        setNewCustomCake({} as CustomCake); // Clear input
+        setNewCustomCakeQuantity(0); // Clear amount
+    }
+
     function handleDeleteItem(idOrLabel: string) {
         setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product?._id !== idOrLabel || item.customCake?.label !== idOrLabel) }));
     };
@@ -192,10 +206,34 @@ export default function EditOrder({ order, onClose }: Props) {
                         <tbody className="divide-y divide-gray-200">
                             {orderForm.items.map((item) => (
                                 <tr key={item.product?._id || item.customCake?.label} className="hover:bg-gray-50 relative">
-                                    <td className="px-4 py-2 text-gray-800">{item.product?.name.pt || `Bolo Personalizado`}</td>
+                                    <td className="px-4 py-2 text-gray-800">
+                                        {item.product?.name[language] || customCakeTitle}
+                                        {item.customCake && (
+                                            <div className='mt-1 text-xs text-gray-600 space-y-1 pl-2'>
+                                                <p className='grid grid-cols-[1fr_3fr]'>
+                                                    <span className='font-medium'>{language === 'pt' ? 'Massa' : 'Dough'}:</span> {item.customCake.dough.name[language]}
+                                                </p>
+                                                <p className='grid grid-cols-[1fr_3fr]'>
+                                                    <span className='font-medium'>{language === 'pt' ? 'Recheio' : 'Filling'}:</span> {item.customCake.filling.name[language]}
+                                                </p>
+                                                <p className='grid grid-cols-[1fr_3fr]'>
+                                                    <span className='font-medium'>{language === 'pt' ? 'Cobertura' : 'Frosting'}:</span> {item.customCake.frosting.name[language]}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </td>
                                     <td className="px-4 py-2 text-gray-500">{item.note}</td>
                                     <td className="px-4 py-2 text-center">{item.quantity}</td>
-                                    <td className="px-4 py-2 text-center">{item.price.toFixed(2)} €</td>
+                                    <td className="px-4 py-2 text-center">
+                                        {item.price.toFixed(2)} €
+                                        {item.customCake && (
+                                            <div className='mt-1 text-xs text-gray-600 space-y-1'>
+                                                <p>{calculatePrice(item.customCake.dough).price.toFixed(2)} €</p>
+                                                <p>{calculatePrice(item.customCake.filling).price.toFixed(2)} €</p>
+                                                <p>{calculatePrice(item.customCake.frosting).price.toFixed(2)} €</p>
+                                            </div>
+                                        )}
+                                    </td>
                                     <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.price * item.quantity).toFixed(2)} €</td>
                                     <td className="px-4 py-2 text-center">
                                         <button
@@ -212,7 +250,7 @@ export default function EditOrder({ order, onClose }: Props) {
                     </table>
                 </div>
 
-                {/* Add Item */}
+                {/* Add Product */}
                 <div className="flex gap-2 mt-4">
                     <select
                         value={newProductId}
@@ -234,6 +272,54 @@ export default function EditOrder({ order, onClose }: Props) {
                     <button
                         onClick={handleAddItem}
                         disabled={newProductId === "" || newItemQuantity <= 0}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
+                    >
+                        Add
+                    </button>
+                </div>
+
+                {/* Add Custom Cake */}
+                <div className="flex gap-2 mt-4">
+                    <select
+                        value={newCustomCake.dough?._id}
+                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, dough: doughOptions.find(d => d._id === e.target.value)! }))}
+                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    >
+                        <option value="">Select a dough</option>
+                        {doughOptions.map((d) => (
+                            <option key={d._id} value={d._id}>{d.name.pt}</option>
+                        ))}
+                    </select>
+                    <select
+                        value={newCustomCake.filling?._id}
+                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, filling: fillingOptions.find(f => f._id === e.target.value)! }))}
+                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    >
+                        <option value="">Select a filling</option>
+                        {fillingOptions.map((f) => (
+                            <option key={f._id} value={f._id}>{f.name.pt}</option>
+                        ))}
+                    </select>
+                    <select
+                        value={newCustomCake.frosting?._id}
+                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, frosting: frostingOptions.find(f => f._id === e.target.value)! }))}
+                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    >
+                        <option value="">Select a frosting</option>
+                        {frostingOptions.map((f) => (
+                            <option key={f._id} value={f._id}>{f.name.pt}</option>
+                        ))}
+                    </select>
+                    <input
+                        type="number"
+                        value={newCustomCakeQuantity}
+                        onChange={(e) => setNewCustomCakeQuantity(Number(e.target.value))}
+                        placeholder="Qty"
+                        className="w-24 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    />
+                    <button
+                        onClick={handleAddCustomCake}
+                        disabled={!newCustomCake.dough || !newCustomCake.filling || !newCustomCake.frosting || newCustomCakeQuantity <= 0}
                         className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
                     >
                         Add

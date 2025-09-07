@@ -4,16 +4,18 @@ import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
+import { calculatePrice } from '../../utils';
 
 export default function OrderPage() {
     const { orderId } = useParams();
-    const { orders } = useStore();
+    const { orders, language } = useStore();
     const order = orders.find(order => order._id === orderId)!;
     const ingredientRegistry = createIngredientRegistry();
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
     const totalIngredientsPrice = ingredientRegistry.reduce((total, ing) => total + ing.totalPrice, 0);
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
+    const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
 
     function createIngredientRegistry() {
         const registry: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
@@ -131,12 +133,32 @@ export default function OrderPage() {
                 {order.items.map((item) => (
                   <tr key={item.product?._id || item.customCake?.label} className="hover:bg-gray-50">
                     <td className="px-4 py-2 text-gray-800">
-                      {item.product?.name.pt || `Bolo Personalizado`}
+                      {item.product?.name[language] || customCakeTitle}
+                      {item.customCake && (
+                        <div className='mt-1 text-xs text-gray-600 space-y-1 pl-2'>
+                          <p className='grid grid-cols-[1fr_3fr]'>
+                            <span className='font-medium'>{language === 'pt' ? 'Massa' : 'Dough'}:</span> {item.customCake.dough.name[language]}
+                          </p>
+                          <p className='grid grid-cols-[1fr_3fr]'>
+                            <span className='font-medium'>{language === 'pt' ? 'Recheio' : 'Filling'}:</span> {item.customCake.filling.name[language]}
+                          </p>
+                          <p className='grid grid-cols-[1fr_3fr]'>
+                            <span className='font-medium'>{language === 'pt' ? 'Cobertura' : 'Frosting'}:</span> {item.customCake.frosting.name[language]}
+                          </p>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-2 text-gray-500">{item.note}</td>
                     <td className="px-4 py-2 text-center">{item.quantity}</td>
                     <td className="px-4 py-2 text-center">
                       {item.price.toFixed(2)} €
+                      {item.customCake && (
+                        <div className='mt-1 text-xs text-gray-600 space-y-1'>
+                          <p>{calculatePrice(item.customCake.dough).price.toFixed(2)} €</p>
+                          <p>{calculatePrice(item.customCake.filling).price.toFixed(2)} €</p>
+                          <p>{calculatePrice(item.customCake.frosting).price.toFixed(2)} €</p>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-2 text-center font-medium text-gray-800">
                       {(item.price * item.quantity).toFixed(2)} €
