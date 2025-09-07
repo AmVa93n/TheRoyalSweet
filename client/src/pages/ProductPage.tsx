@@ -14,11 +14,11 @@ function ProductPage() {
     const [note, setNote] = useState('')
     const navigate = useNavigate()
 
-    function addProduct(product: Product, quantity: number) {
-        if (cart.some(item => item.product._id === product._id)) {
+    function addProduct() {
+        if (cart.some(item => item.product?._id === product._id)) {
             // If product already exists in cart, just update the quantity
             const updatedCart = cart.map(item => 
-                item.product._id === product._id ? {...item, quantity: item.quantity + quantity, note} : item
+                item.product?._id === product._id ? {...item, quantity: item.quantity + quantity, note} : item
             );
             setCart(updatedCart);
         } else {
@@ -109,7 +109,7 @@ function ProductPage() {
 
                         {/* Add to Cart Button */}
                         <button
-                            onClick={() => addProduct(product, quantity)}
+                            onClick={addProduct}
                             className="w-full block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                         >
                             {language === 'en' ? 'Add to Cart' : 'Adicionar ao carrinho'}
