@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import type { CustomCake } from '../types';
-import { getCustomCakePrice, imagePlaceholder } from '../utils';
+import { calculatePrice, getCustomCakePrice, imagePlaceholder } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function CustomCakePage() {
@@ -73,7 +73,7 @@ function CustomCakePage() {
                             >
                                 {doughOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]}
+                                        {component.name[language]} ({calculatePrice(component).price.toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -88,7 +88,7 @@ function CustomCakePage() {
                             >
                                 {fillingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]}
+                                        {component.name[language]} ({calculatePrice(component).price.toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -103,7 +103,7 @@ function CustomCakePage() {
                             >
                                 {frostingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]}
+                                        {component.name[language]} ({calculatePrice(component).price.toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>

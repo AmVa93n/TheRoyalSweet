@@ -1,6 +1,7 @@
 import type { CartItem as CartItemType } from "../types";
 import { PlusIcon, MinusIcon, TrashIcon } from '@phosphor-icons/react';
 import { useStore } from "../store";
+import { imagePlaceholder } from "../utils";
 
 type Props = {
     item: CartItemType;
@@ -8,16 +9,16 @@ type Props = {
 
 function CartItem({ item }: Props) {
     const { language, cart, setCart } = useStore()
-    const { product, quantity, price } = item;
+    const { product, customCake, quantity, price } = item;
 
-    function removeProduct(id: string) {
-        const updatedCart = cart.filter(item => item.product?._id !== id)
+    function removeItem() {
+        const updatedCart = cart.filter(item => item.product?._id !== product?._id || item.customCake !== customCake)
         setCart(updatedCart)
     }
-    
-    function changeQuantity(id: string, newQuantity: number) {
+
+    function changeQuantity(newQuantity: number) {
         if (newQuantity < 1 || newQuantity > 99) return
-        const updatedCart = cart.map(item => item.product?._id === id ? {...item, quantity: newQuantity} : item)
+        const updatedCart = cart.map(item => item.product?._id === product?._id || item.customCake === customCake ? {...item, quantity: newQuantity} : item)
         setCart(updatedCart)
     }
 
@@ -25,14 +26,14 @@ function CartItem({ item }: Props) {
         <div className="relative flex items-start gap-3">
             {/* Image */}
             <img
-                src={product.images[0]}
-                alt={product.name[language]}
+                src={product?.images[0] || imagePlaceholder}
+                alt={product?.name[language] || 'Custom Cake'}
                 className="w-20 h-20 object-cover"
             />
 
             {/* Details */}
             <div className="flex-1 flex flex-col">
-                <span className="font-semibold">{product.name[language]}</span>
+                <span className="font-semibold">{product?.name[language] || (language === 'en' ? 'Custom Cake' : 'Bolo Personalizado')}</span>
                 <span className='text-sm'>
                     {price.toFixed(2).replace('.', ',')} €
                 </span>
@@ -45,17 +46,17 @@ function CartItem({ item }: Props) {
                             min={1}
                             max={99}
                             value={quantity}
-                            onChange={(e) => changeQuantity(product._id, Number(e.target.value))}
+                            onChange={(e) => changeQuantity(Number(e.target.value))}
                             className="text-center w-full p-1 rounded bg-white border appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         />
                         <button
-                            onClick={() => changeQuantity(product._id, quantity + 1)}
+                            onClick={() => changeQuantity(quantity + 1)}
                             className="p-1 rounded-full hover:bg-gray-100 transition absolute right-1 top-[50%] translate-y-[-50%] cursor-pointer"
                         >
                             <PlusIcon size={18} />
                         </button>
                         <button
-                            onClick={() => changeQuantity(product._id, Math.max(quantity - 1, 1))}
+                            onClick={() => changeQuantity(Math.max(quantity - 1, 1))}
                             className="p-1 rounded-full hover:bg-gray-100 transition absolute left-1 top-[50%] translate-y-[-50%] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={quantity === 1}
                         >
@@ -70,7 +71,7 @@ function CartItem({ item }: Props) {
 
             {/* Remove Button */}
             <button
-                onClick={() => removeProduct(product._id)}
+                onClick={() => removeItem()}
                 className="absolute top-0 right-0 p-1 text-gray-500 hover:text-red-600 transition cursor-pointer"
             >
                 <TrashIcon size={20} />
