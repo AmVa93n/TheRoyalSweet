@@ -68,7 +68,7 @@ export default function OrderPage() {
     }
 
     return (
-      <div className="pt-24 pb-12 px-6 lg:px-16 min-h-screen bg-gray-50">
+      <div className="pt-24 pb-12 px-6 lg:px-16 min-h-screen">
         {/* Order Details */}
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">
@@ -79,6 +79,9 @@ export default function OrderPage() {
           </p>
           <p className="text-gray-600">
             <span className="font-medium">Email:</span> {order.email}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-medium">Phone:</span> {order.phone}
           </p>
           <p className="text-gray-600">
             <span className="font-medium">Created:</span>{" "}
@@ -124,11 +127,10 @@ export default function OrderPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {order.items.map((item, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
+                {order.items.map((item) => (
+                  <tr key={item.product?._id || item.customCake?.label} className="hover:bg-gray-50">
                     <td className="px-4 py-2 text-gray-800">
-                      {item.product?.name.pt ||
-                        `Bolo Personalizado (${item.customCake?.dough.name.pt}, ${item.customCake?.filling.name.pt}, ${item.customCake?.frosting.name.pt})`}
+                      {item.product?.name.pt || `Bolo Personalizado`}
                     </td>
                     <td className="px-4 py-2 text-gray-500">{item.note}</td>
                     <td className="px-4 py-2 text-center">{item.quantity}</td>

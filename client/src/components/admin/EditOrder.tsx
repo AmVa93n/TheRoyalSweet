@@ -1,13 +1,9 @@
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, DialogContent, DialogActions, Switch } from "@mui/material";
 import { useState } from "react";
 import type { Order } from "../../types";
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
 import { calculatePrice } from "../../utils";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service';
+import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
 
 type Props = {
     order: Order;
@@ -58,11 +54,11 @@ export default function EditOrder({ order, onClose }: Props) {
     function handleDeleteIngredient(ingredientId: string) {
         setOrderForm((prev) => ({
             ...prev,
-            recipe: prev.additionalIngredients.filter(item => item.ingredient._id !== ingredientId)
+            additionalIngredients: prev.additionalIngredients.filter(item => item.ingredient._id !== ingredientId)
         }));
     };
 
-    async function handleSave(orderForm: Order) {
+    async function handleSave() {
         try { 
             const updatedOrder = await adminService.updateOrder(orderForm);
             const updatedOrders = orders.map(order => order._id === updatedOrder._id ? updatedOrder : order);
@@ -74,124 +70,246 @@ export default function EditOrder({ order, onClose }: Props) {
     };
 
     return (
-        <div>
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <TextField name="name" label="Name" value={orderForm.name} onChange={handleChange} size="small" fullWidth/>
-                <TextField name="email" label="Email" value={orderForm.email} onChange={handleChange} size="small" fullWidth/>
-                <TextField name="deliveryDate" label="Delivery Date" value={orderForm.deliveryDate?.split('T')[0]} onChange={handleChange} size="small" fullWidth/>
-                
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                    <TextField name="shipping.city" label="City" value={orderForm.shipping.city} onChange={handleChange} size="small" multiline fullWidth/>
-                    <TextField name="shipping.address" label="Address" value={orderForm.shipping.address} onChange={handleChange} size="small" multiline fullWidth/>
-                    <TextField name="shipping.zip" label="ZIP Code" value={orderForm.shipping.zip} onChange={handleChange} size="small" multiline fullWidth/>
-                </Box>
-                
-                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                    <Switch
-                        name="pickup"
-                        checked={orderForm.pickup}
-                        onChange={e => setOrderForm({ ...orderForm, pickup: e.target.checked })}
-                        color="primary"
-                    />
-                    <Typography variant="body2">Pickup</Typography>
-                </Box>
-                
-                <Box>
-                    <Typography variant="body2">Items:</Typography>
-                    <List>
-                        {orderForm.items.map((item) => (
-                        <ListItem key={item.product?._id || item.customCake?.label} dense sx={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                            <Typography variant="body2">{item.product?.name.pt || "Bolo Personalizado"} x {item.quantity}</Typography>
-                            <Typography variant="body2">
-                                {(item.price * item.quantity).toFixed(2)} € ( {item.price.toFixed(2)} € x {item.quantity} )
-                            </Typography>
-                            <IconButton onClick={() => handleDeleteItem(item.product?._id || item.customCake!.label)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItem>
-                        ))}
-                    </List>
-                </Box>
+        <div className="pt-24 pb-12 px-6 lg:px-16 min-h-screen">
+            <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-8 space-y-4">
+                <h2 className="text-xl font-semibold text-gray-800">Order Details</h2>
+                {/* Customer Info */}
+                <div className="grid gap-4">
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">Customer:</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={orderForm.name}
+                            onChange={handleChange}
+                            placeholder="Name"
+                            className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">Email:</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={orderForm.email}
+                            onChange={handleChange}
+                            placeholder="Email"
+                            className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">Phone:</label>
+                        <input
+                            type="text"
+                            name="phone"
+                            value={orderForm.phone}
+                            onChange={handleChange}
+                            placeholder="Phone"
+                            className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">Delivery Date:</label>
+                        <input
+                            type="date"
+                            name="deliveryDate"
+                            value={orderForm.deliveryDate?.split("T")[0]}
+                            onChange={handleChange}
+                            className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                </div>
 
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Autocomplete
-                        options={products}
-                        getOptionLabel={(option) => option.name.pt}
-                        value={products.find(product => product._id === newProductId) || null}
-                        onChange={(_, newValue) => setNewProductId(newValue?._id || "")}
-                        renderInput={(params) => (
-                            <TextField {...params} placeholder="Select Product" size="small" />
-                        )}
-                        sx={{ width: 300 }}
+                {/* Pickup Toggle */}
+                <div className="flex items-center gap-2 mt-4">
+                    <input
+                        type="checkbox"
+                        checked={orderForm.pickup}
+                        onChange={(e) =>
+                            setOrderForm({ ...orderForm, pickup: e.target.checked })
+                        }
+                        className="w-5 h-5 text-indigo-600 rounded"
                     />
-                    <TextField
+                    <label className="text-gray-700">Pickup</label>
+                </div>
+
+                {/* Shipping */}
+                {!orderForm.pickup &&
+                <>
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">City:</label>
+                        <input
+                            type="text"
+                            name="shipping.city"
+                            value={orderForm.shipping.city}
+                            onChange={handleChange}
+                            placeholder="City"
+                            className="rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">Address:</label>
+                        <input
+                            type="text"
+                            name="shipping.address"
+                            value={orderForm.shipping.address}
+                            onChange={handleChange}
+                            placeholder="Address"
+                            className="rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                        <label className="font-medium text-gray-700">ZIP:</label>
+                        <input
+                            type="text"
+                            name="shipping.zip"
+                            value={orderForm.shipping.zip}
+                            onChange={handleChange}
+                            placeholder="ZIP Code"
+                            className="rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        />
+                    </div>
+                </>}
+            </div>
+
+            {/* Ordered Items */}
+            <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">Ordered Items</h2>
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                        <thead className="bg-gray-100 text-gray-700">
+                            <tr>
+                                <th className="px-4 py-2 text-left">Product</th>
+                                <th className="px-4 py-2 text-left">Note</th>
+                                <th className="px-4 py-2 text-center">Quantity</th>
+                                <th className="px-4 py-2 text-center">Price (each)</th>
+                                <th className="px-4 py-2 text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {orderForm.items.map((item) => (
+                                <tr key={item.product?._id || item.customCake?.label} className="hover:bg-gray-50 relative">
+                                    <td className="px-4 py-2 text-gray-800">{item.product?.name.pt || `Bolo Personalizado`}</td>
+                                    <td className="px-4 py-2 text-gray-500">{item.note}</td>
+                                    <td className="px-4 py-2 text-center">{item.quantity}</td>
+                                    <td className="px-4 py-2 text-center">{item.price.toFixed(2)} €</td>
+                                    <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.price * item.quantity).toFixed(2)} €</td>
+                                    <button
+                                        onClick={() => handleDeleteItem(item.product?._id || item.customCake!.label)}
+                                        className="text-red-500 hover:text-red-700 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                                        title="Remove Item"
+                                    >
+                                        <TrashIcon size={20} />
+                                    </button>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Add Item */}
+                <div className="flex gap-2 mt-4">
+                    <select
+                        value={newProductId}
+                        onChange={(e) => setNewProductId(e.target.value)}
+                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    >
+                        {products.map((p) => (
+                            <option key={p._id} value={p._id}>{p.name.pt}</option>
+                        ))}
+                    </select>
+                    <input
+                        type="number"
                         value={newItemQuantity}
                         onChange={(e) => setNewItemQuantity(Number(e.target.value))}
-                        placeholder="Amount"
-                        type="number"
-                        size="small"
-                        sx={{ width: 100 }}
+                        placeholder="Qty"
+                        className="w-24 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
-                    <Button
-                        variant="contained"
-                        onClick={() => handleAddItem()}
-                        startIcon={<AddIcon />}
+                    <button
+                        onClick={handleAddItem}
                         disabled={newProductId === "" || newItemQuantity <= 0}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700"
                     >
                         Add
-                    </Button>
-                </Box>
+                    </button>
+                </div>
+            </div>
 
-                <Box>
-                    <Typography variant="body2">Additional Ingredients:</Typography>
-                    <List>
-                        {orderForm.additionalIngredients.map((entry) => (
-                        <ListItem key={entry.ingredient._id} dense>
-                            <Typography variant="body2">{entry.ingredient.name}: {entry.amount} {entry.ingredient.recipeUnits}</Typography>
-                            <IconButton onClick={() => handleDeleteIngredient(entry.ingredient._id)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItem>
+            {/* Additional Ingredients */}
+            <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">Additional Ingredients</h2>
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                        <thead className="bg-gray-100 text-gray-700">
+                            <tr>
+                                <th className="px-4 py-2 text-left">Ingredient</th>
+                                <th className="px-4 py-2 text-center">Amount</th>
+                                <th className="px-4 py-2 text-center">Price / Unit</th>
+                                <th className="px-4 py-2 text-center">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                            {orderForm.additionalIngredients.map((item) => (
+                                <tr key={item.ingredient._id} className="hover:bg-gray-50 relative">
+                                    <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
+                                    <td className="px-4 py-2 text-center">{item.amount} {item.ingredient.recipeUnits}</td>
+                                    <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
+                                    <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
+                                    <button
+                                        onClick={() => handleDeleteIngredient(item.ingredient._id)}
+                                        className="text-red-500 hover:text-red-700 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                                        title="Remove Additional Ingredient"
+                                    >
+                                        <TrashIcon size={20} />
+                                    </button>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Add Ingredient */}
+                <div className="flex gap-2 mt-4">
+                    <select
+                        value={newIngredientId}
+                        onChange={(e) => setNewIngredientId(e.target.value)}
+                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    >
+                        {ingredients.map((ing) => (
+                            <option key={ing._id} value={ing._id}>{ing.name}</option>
                         ))}
-                    </List>
-                </Box>
-
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Autocomplete
-                        options={ingredients} // Pass the whole ingredient object
-                        getOptionLabel={(option) => option.name} // Display the ingredient name in the dropdown
-                        value={ingredients.find(ingredient => ingredient._id === newIngredientId) || null} // Find the selected ingredient by ID
-                        onChange={(_, newValue) => setNewIngredientId(newValue?._id || "")} // Store the ingredient's ID
-                        renderInput={(params) => (
-                            <TextField {...params} placeholder="Select Ingredient" size="small" />
-                        )}
-                        sx={{ width: 300 }}
-                    />
-                    <TextField
+                    </select>
+                    <input
+                        type="number"
                         value={newIngredientAmount}
                         onChange={(e) => setNewIngredientAmount(Number(e.target.value))}
                         placeholder="Amount"
-                        type="number"
-                        size="small"
-                        sx={{ width: 100 }}
+                        className="w-28 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
-                    <Button
-                        variant="contained"
-                        onClick={() => handleAddIngredient()}
-                        startIcon={<AddIcon />}
+                    <button
+                        onClick={handleAddIngredient}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                     >
                         Add
-                    </Button>
-                </Box>
-            </DialogContent>
-            <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={() => handleSave(orderForm)} startIcon={<DoneIcon />} color="success" variant="contained">
-                    Save Order
-                </Button>
-                <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
-                    Discard
-                </Button>
-            </DialogActions>
+                    </button>
+                </div>
+            </div>
+
+            {/* Actions */}
+            <button
+                onClick={handleSave}
+                className="fixed bottom-8 right-24 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+                title="Edit Order"
+            >
+                <FloppyDiskIcon size={24} />
+            </button>
+            <button
+                onClick={onClose}
+                className="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+                title="Edit Order"
+            >
+                <XIcon size={24} />
+            </button>
         </div>
     )
 }
