@@ -8,6 +8,11 @@ const orderSchema = new Schema(
     phone: String,
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
+        customCake: { 
+          dough: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
+          filling: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
+          frosting: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
+        },
         quantity: Number,
         price: Number,
         note: String

@@ -1,10 +1,10 @@
 import { useStore } from '../store';
-import type { Category } from '../types';
+import type { ProductCategory } from '../types';
 import ProductCard from '../components/ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
 import type { JSX } from 'react';
 
-const categories: { cat: Category; en: string; pt: string, icon: JSX.Element }[] = [
+const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
     { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },
     { cat: 'pie', en: 'Pies', pt: 'Tartes', icon: < ChartPieSliceIcon size={24} /> },
     { cat: 'cheesecake', en: 'Cheesecakes', pt: 'Cheesecakes', icon: <CheeseIcon size={24} /> },

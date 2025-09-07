@@ -174,6 +174,24 @@ router.get("/orders", async (req, res, next) => {
           },
         },
         {
+          path: 'items.customCake.dough', // Populate the 'dough' in 'customCake' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
+        },
+        {
+          path: 'items.customCake.filling', // Populate the 'filling' in 'customCake' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
+        },
+        {
+          path: 'items.customCake.frosting', // Populate the 'frosting' in 'customCake' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
+        },
+        {
           path: 'additionalIngredients.ingredient', // Populate the 'ingredient' in 'additionalIngredients'
         }
       ]);
@@ -230,12 +248,32 @@ router.put("/orders", async (req, res, next) => {
         return;
       }
 
-      await updatedOrder.populate({
-        path: 'items.product', // Populate the 'product' in 'items'
-        populate: {
-          path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+      await updatedOrder.populate([
+        {
+          path: 'items.product', // Populate the 'product' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
         },
-      })
+        {
+          path: 'items.customCake.dough', // Populate the 'dough' in 'customCake' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
+        },
+        {
+          path: 'items.customCake.filling', // Populate the 'filling' in 'customCake' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
+        },
+        {
+          path: 'items.customCake.frosting', // Populate the 'frosting' in 'customCake' in 'items'
+          populate: {
+            path: 'recipe.ingredient', // Populate the 'ingredient' in 'recipe'
+          },
+        },
+      ]);
       await updatedOrder.populate('additionalIngredients.ingredient');
   
       res.status(201).json({ order: updatedOrder });

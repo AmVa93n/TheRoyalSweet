@@ -37,7 +37,7 @@ export type Product = {
         ingredient: Ingredient,
         amount: number
     }[],
-    category: Category
+    category: ProductCategory
     workHours: number,
     electricityHours: number,
 }
@@ -52,7 +52,7 @@ export type CakeComponent = {
         ingredient: Ingredient,
         amount: number
     }[],
-    category: Category
+    category: CakeComponentCategory,
     workHours: number,
     electricityHours: number,
 }
@@ -78,10 +78,18 @@ export type Order = {
 }
 
 export type CartItem = {
-    product: Product,
+    product?: Product,
+    customCake?: CustomCake,
     quantity: number
     price: number,
     note?: string
 }
 
-export type Category = "cake" | "pie" | "cheesecake" | "dessert" | "mini"
+export type CustomCake = {
+    dough: CakeComponent,
+    filling: CakeComponent,
+    frosting: CakeComponent,
+}
+
+export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "mini";
+export type CakeComponentCategory = "dough" | "filling" | "frosting";
