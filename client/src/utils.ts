@@ -1,18 +1,40 @@
 import type { CakeComponent, CustomCake, Product } from './types'
 
-export function calculatePrice(product: Product | CakeComponent) {
-    const workHourPrice = 10
-    const electricityHourPrice = 0.54
-    const fixedCosts = 2
-    const gainMultiplier = 1.2 // 20% gain
+export const workHourPrice = 10
+export const electricityHourPrice = 0.54
+export const fixedCosts = 2
+export const gainMultiplier = 1.2 // 20% gain
 
-    const electricityCost = product.electricityHours * electricityHourPrice
-    const ingredientsCost = product.recipe.reduce((total, item) => {
+export function getElectricityCost(product: Product | CakeComponent) {
+    return product.electricityHours * electricityHourPrice
+}
+
+export function getIngredientsCost(product: Product | CakeComponent) {
+    return product.recipe.reduce((total, item) => {
         return total + (item.ingredient.pricePerUnit * item.amount);
     }, 0);
+}
 
-    const totalCost = ingredientsCost + electricityCost + fixedCosts
-    const workHoursValue = product.workHours * workHourPrice
+export function getTotalProductCost(product: Product | CakeComponent) {
+    const electricityCost = getElectricityCost(product)
+    const ingredientsCost = getIngredientsCost(product)
+    return ingredientsCost + electricityCost + fixedCosts
+}
+
+export function getWorkHoursValue(product: Product | CakeComponent) {
+    return product.workHours * workHourPrice
+}
+
+export function getProductPrice(product: Product | CakeComponent) {
+    const totalCost = getTotalProductCost(product)
+    const workHoursValue = getWorkHoursValue(product)
+    const rawPrice = (totalCost + workHoursValue) * gainMultiplier
+    return (Math.round(rawPrice * 10) / 10)
+}
+
+export function calculatePrice(product: Product | CakeComponent) {
+    const totalCost = getTotalProductCost(product)
+    const workHoursValue = getWorkHoursValue(product)
     const rawPrice = (totalCost + workHoursValue) * gainMultiplier
     const price = (Math.round(rawPrice * 10) / 10)
     const netGain = price - totalCost
