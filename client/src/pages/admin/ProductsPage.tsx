@@ -1,36 +1,26 @@
-import { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Avatar, Button, Select, MenuItem, Box, Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import { useEffect } from "react";
 import adminService from '../../services/admin.service'
-import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import type { Product } from "../../types";
-import { calculatePrice } from "../../utils";
-import EditProductModal from "../../components/admin/EditProductModal";
+import { calculatePrice, imagePlaceholder } from "../../utils";
 import { useStore } from "../../store";
-import AscIcon from '@mui/icons-material/ArrowUpward';
-import DescIcon from '@mui/icons-material/ArrowDownward';
 import appService from "../../services/app.service";
+import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
+import { useNavigate } from "react-router-dom";
 
 function ProductsPage() {
-  const { products, setProducts, sortPreferences, setSortPreferences } = useStore();
+  const { products, setProducts, sortPreferences, setSortPreferences, language } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.products;
-  const [editedProduct, setEditedProduct] = useState<Product | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     appService.getProducts().then(setProducts);
   }, []);
 
-  async function handleSave(productForm: Product) {
-    const updatedProduct = await adminService.updateProduct(productForm);
-    const updatedProducts = products.map((product) => product._id === updatedProduct._id ? updatedProduct : product);
-    setProducts(updatedProducts);
-    setEditedProduct(null); // Stop editing mode
-  };
-
-  async function handleAddProduct() {
+  async function handleCreateProduct() {
     const newProduct = await adminService.createProduct();
     const updatedProducts = [...products, newProduct];
     setProducts(updatedProducts); // Add the new product to the list
+    navigate(`/admin/products/${newProduct._id}`, { state: { new: true } }); // Navigate to the new product's page
   };
 
   function sortFunction(a: Product, b: Product) {
@@ -53,86 +43,78 @@ function ProductsPage() {
 
   return (
     <div className="pt-20 pb-10 min-h-screen">
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
-        <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
+      <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
 
-        <Select
-          value={sortCriteria}
-          onChange={(e) => setSortPreferences('products', { criteria: e.target.value, direction: sortDirection })}
-          size="small"
-        >
-          <MenuItem value="name">Name</MenuItem>
-          <MenuItem value="category">Category</MenuItem>
-          <MenuItem value="workHours">Work Hours</MenuItem>
-          <MenuItem value="electricityHours">Electricity Hours</MenuItem>
-          <MenuItem value="price">Price</MenuItem>
-          <MenuItem value="totalCost">Total Cost</MenuItem>
-          <MenuItem value="netGain">Net Gain</MenuItem>
-        </Select>
-        
-        <IconButton onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: 'desc' })}>
-          <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
-        </IconButton>
+        {/* Sort Options */}
+        <div className="flex items-center justify-center mb-6">
+            <p className='mr-4 text-lg font-medium text-gray-700'>Sort by:</p>
 
-        <IconButton onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: 'asc' })}>
-          <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
-        </IconButton>
-      </Box>
+            <select
+                className='rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1'
+                value={sortCriteria}
+                onChange={(e) => setSortPreferences('products', { criteria: e.target.value, direction: sortDirection })}
+            >
+                <option value="name">Name</option>
+                <option value="category">Category</option>
+                <option value="workHours">Work Hours</option>
+                <option value="electricityHours">Electricity Hours</option>
+                <option value="price">Price</option>
+                <option value="totalCost">Total Cost</option>
+                <option value="netGain">Net Gain</option>
+            </select>
+            
+            <button 
+                onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: sortDirection === 'asc' ? 'desc' : 'asc' })} 
+                className="ml-2 cursor-pointer"
+                title={sortDirection === 'asc' ? 'Sort Descending' : 'Sort Ascending'}
+            >
+                {sortDirection === 'desc' ? <SortDescendingIcon size={24} /> : <SortAscendingIcon size={24} />}
+            </button>
+        </div>
 
-      <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Image</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Name</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Category</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Work Hours</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Electricity Hours</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Price</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Total Cost</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Net Gain</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.sort(sortFunction).map((product) => (
-              <TableRow key={product._id}>
-                <TableCell>
-                  {product.images[0] ? <img src={product.images[0]} alt={product._id} width={48} /> :
-                    <Avatar sx={{ bgcolor: 'rgb(253, 33, 155)', width: 48, height: 48 }}>
-                        <ImageNotSupportedIcon />
-                    </Avatar>}
-                </TableCell>
+        {/* Products List */}
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100 text-gray-700">
+              <tr>
+                <th className="px-4 py-2 text-center">Image</th>
+                <th className="px-4 py-2 text-left">Name</th>
+                <th className="px-4 py-2 text-center">Category</th>
+                <th className="px-4 py-2 text-center">Work Hours</th>
+                <th className="px-4 py-2 text-center">Electricity Hours</th>
+                <th className="px-4 py-2 text-center">Price</th>
+                <th className="px-4 py-2 text-center">Total Cost</th>
+                <th className="px-4 py-2 text-center">Net Gain</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+                {products.sort(sortFunction).map((product) => (
+                <tr key={product._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/products/${product._id}`)}>
+                    <td className="px-4 py-2 text-center">
+                      <img src={product.images[0] || imagePlaceholder} alt={product._id} className="w-12 h-12 object-cover rounded-md" />
+                    </td>
+                    <td className="px-4 py-2 text-gray-800">{product.name[language]}</td>
+                    <td className="px-4 py-2 text-center">{product.category}</td>
+                    <td className="px-4 py-2 text-center">{product.workHours}</td>
+                    <td className="px-4 py-2 text-center">{product.electricityHours}</td>
+                    <td className="px-4 py-2 text-center">{calculatePrice(product).price.toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{calculatePrice(product).totalCost.toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{calculatePrice(product).netGain.toFixed(2)} €</td>
+                </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-                <TableCell padding="normal">{product.name.pt}</TableCell>
-                <TableCell padding="normal">{product.category}</TableCell>
-                <TableCell padding="normal">{product.workHours}</TableCell>
-                <TableCell padding="normal">{product.electricityHours}</TableCell>
-                <TableCell padding="normal">{calculatePrice(product).price.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(product).totalCost.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(product).netGain.toFixed(2)} €</TableCell>
-                
-                <TableCell padding="normal">
-                  <IconButton onClick={() => setEditedProduct(product)}>
-                    <EditIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Button variant="contained" onClick={handleAddProduct} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
-          Create Product
-      </Button>
-
-      {editedProduct && <EditProductModal 
-        open={!!editedProduct}
-        product={editedProduct}
-        onSave={handleSave}
-        onClose={() => setEditedProduct(null)}
-      />}
+      {/* Floating Add Button */}
+      <button
+        onClick={handleCreateProduct}
+        className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+        title="Create Product"
+      >
+        <PlusIcon size={24} />
+      </button>
     </div>
   );
 };

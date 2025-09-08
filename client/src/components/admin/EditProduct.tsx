@@ -1,21 +1,19 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, Dialog, DialogContent, DialogActions } from "@mui/material";
+import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, DialogContent } from "@mui/material";
 import { useState } from "react";
 import type { Ingredient, Product } from "../../types";
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
 import { useStore } from "../../store";
+import adminService from '../../services/admin.service'
+import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
 
 type Props = {
-    open: boolean;
     product?: Product;
-    onSave: (productForm: Product) => void;
     onClose: () => void;
 };
 
-export default function EditProductModal({ open, product, onSave, onClose }: Props) {
-    const { ingredients } = useStore();
+export default function EditProductModal({ product, onClose }: Props) {
+    const { ingredients, products, setProducts } = useStore();
     const [productForm, setProductForm] = useState(product as Product);
     const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
     const [newAmount, setNewAmount] = useState(0); // New amount input
@@ -58,8 +56,19 @@ export default function EditProductModal({ open, product, onSave, onClose }: Pro
         setProductForm((prev) => ({ ...prev, images: prev.images.map((url, i) => i === index ? newUrl : url) }));
     };
 
+    async function handleSave() {
+        try {
+            const updatedProduct = await adminService.updateProduct(productForm);
+            const updatedProducts = products.map((product) => product._id === updatedProduct._id ? updatedProduct : product);
+            setProducts(updatedProducts);
+        } catch (error) {
+            console.error("Failed to save product:", error);
+        }
+        onClose(); // Close the modal after saving
+    };
+
     return (
-        <Dialog open={open} fullWidth maxWidth="lg">
+        <div className="pt-24 pb-12 px-6 lg:px-16 min-h-screen">
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 
                 <Box sx={{ display: 'flex', gap: 2 }}>
@@ -133,14 +142,22 @@ export default function EditProductModal({ open, product, onSave, onClose }: Pro
                     </Button>
                 </Box>
             </DialogContent>
-            <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={() => onSave(productForm)} startIcon={<DoneIcon />} color="success" variant="contained">
-                    Save Changes
-                </Button>
-                <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
-                    Discard
-                </Button>
-            </DialogActions>
-        </Dialog>
+
+            {/* Actions */}
+            <button
+                onClick={handleSave}
+                className="fixed bottom-8 right-24 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+                title="Edit Order"
+            >
+                <FloppyDiskIcon size={24} />
+            </button>
+            <button
+                onClick={onClose}
+                className="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+                title="Edit Order"
+            >
+                <XIcon size={24} />
+            </button>
+        </div>
     )
 }

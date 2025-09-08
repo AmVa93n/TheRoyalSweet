@@ -100,7 +100,7 @@ function OrdersPage() {
         <button
           onClick={handleCreateOrder}
           className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
-          title="Edit Order"
+          title="Create Order"
         >
           <PlusIcon size={24} />
         </button>
