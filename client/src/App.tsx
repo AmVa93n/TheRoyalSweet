@@ -13,6 +13,7 @@ import IngredientsPage from "./pages/admin/IngredientsPage";
 import ProductsPage from "./pages/admin/ProductsPage";
 import AdminProductPage from "./pages/admin/ProductPage";
 import CakeComponentsPage from "./pages/admin/CakeComponentsPage";
+import CakeComponentPage from "./pages/admin/CakeComponentPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import OrderPage from "./pages/admin/OrderPage";
 import AdminNavbar from "./components/admin/AdminNavbar";
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin/products" element={<ProductsPage />} />
         <Route path="/admin/products/:productId" element={<AdminProductPage />} />
         <Route path="/admin/cake-components" element={<CakeComponentsPage />} />
+        <Route path="/admin/cake-components/:componentId" element={<CakeComponentPage />} />
         <Route path="/admin/orders" element={<OrdersPage />} />
         <Route path="/admin/orders/:orderId" element={<OrderPage />} />
       </Routes>

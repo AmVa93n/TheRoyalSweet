@@ -92,7 +92,7 @@ function CakeComponentsPage() {
             </thead>
             <tbody className="divide-y divide-gray-200">
                 {cakeComponents.sort(sortFunction).map((component) => (
-                <tr key={component._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/products/${component._id}`)}>
+                <tr key={component._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/cake-components/${component._id}`)}>
                     <td className="px-4 py-2 text-gray-800">{component.name[language]}</td>
                     <td className="px-4 py-2 text-gray-800">{cakeComponentCategories[component.category][language]}</td>
                     <td className="px-4 py-2 text-center">{component.workHours}</td>

@@ -13,7 +13,7 @@ type Props = {
     onClose: () => void;
 };
 
-export default function EditCakeComponentModal({ cakeComponent, onClose }: Props) {
+export default function EditCakeComponent({ cakeComponent, onClose }: Props) {
     const { ingredients, cakeComponents, setCakeComponents } = useStore();
     const [cakeComponentForm, setCakeComponentForm] = useState(cakeComponent as CakeComponent);
     const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
