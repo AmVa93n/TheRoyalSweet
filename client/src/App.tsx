@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import Cart from "./components/Cart";
 import IngredientsPage from "./pages/admin/IngredientsPage";
 import ProductsPage from "./pages/admin/ProductsPage";
+import AdminProductPage from "./pages/admin/ProductPage";
 import CakeComponentsPage from "./pages/admin/CakeComponentsPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import OrderPage from "./pages/admin/OrderPage";
@@ -36,6 +37,7 @@ function App() {
 
         <Route path="/admin/ingredients" element={<IngredientsPage />} />
         <Route path="/admin/products" element={<ProductsPage />} />
+        <Route path="/admin/products/:productId" element={<AdminProductPage />} />
         <Route path="/admin/cake-components" element={<CakeComponentsPage />} />
         <Route path="/admin/orders" element={<OrdersPage />} />
         <Route path="/admin/orders/:orderId" element={<OrderPage />} />
