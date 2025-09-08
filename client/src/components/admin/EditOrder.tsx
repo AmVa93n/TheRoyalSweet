@@ -396,14 +396,14 @@ export default function EditOrder({ order, onClose }: Props) {
             <button
                 onClick={handleSave}
                 className="fixed bottom-8 right-24 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
-                title="Edit Order"
+                title="Save Order"
             >
                 <FloppyDiskIcon size={24} />
             </button>
             <button
                 onClick={onClose}
                 className="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
-                title="Edit Order"
+                title="Close"
             >
                 <XIcon size={24} />
             </button>
