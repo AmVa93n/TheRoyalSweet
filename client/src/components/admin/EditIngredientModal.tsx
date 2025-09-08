@@ -16,7 +16,7 @@ export default function EditIngredientModal({ open, ingredient, onSave, onClose 
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
-        setIngredientForm({ ...ingredientForm, [name]: value });
+        setIngredientForm(prev => ({ ...prev, [name]: value }));
     };
 
     return (

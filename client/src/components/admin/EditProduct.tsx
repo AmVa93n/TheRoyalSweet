@@ -16,17 +16,13 @@ export default function EditProduct({ product, onClose }: Props) {
     const [newIngredientId, setNewIngredientId] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState(0);
     const [newImageUrl, setNewImageUrl] = useState("");
+    type textKey = 'name' | 'description' | 'intro' | 'serve' | 'store'
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    function handleChangeText(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, language: 'pt' | 'en') {
         const { name, value } = e.target;
-        if (name.includes(".")) {
-            setProductForm((prev) => {
-                const [field, lang] = name.split(".");
-                return {...prev, [field]: {...prev[field], [lang]: value }};
-            });
-            return;
-        }
-        setProductForm({ ...productForm, [name]: value });
+        setProductForm((prev) => {
+            return { ...prev, [name]: { ...prev[name as textKey], [language]: value } };
+        });
     };
 
     function handleAddIngredient() {
@@ -108,46 +104,46 @@ export default function EditProduct({ product, onClose }: Props) {
                     <span className="font-medium">Name:</span> 
                     <input
                         type="text"
-                        name="name.pt"
+                        name="name"
                         value={productForm.name.pt}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'pt')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                     <input
                         type="text"
-                        name="name.en"
+                        name="name"
                         value={productForm.name.en}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'en')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                 </div>
                 <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr] gap-2">
                     <span className="font-medium">Intro:</span> 
                     <textarea
-                        name="intro.pt"
+                        name="intro"
                         value={productForm.intro.pt}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'pt')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1 h-30"
                     />
                     <textarea
-                        name="intro.en"
+                        name="intro"
                         value={productForm.intro.en}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'en')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1 h-30"
                     />
                 </div>
                 <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr] gap-2">
                     <span className="font-medium">Description:</span> 
                     <textarea
-                        name="description.pt"
+                        name="description"
                         value={productForm.description.pt}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'pt')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1 h-30"
                     />
                     <textarea
-                        name="description.en"
+                        name="description"
                         value={productForm.description.en}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'en')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1 h-30"
                     />
                 </div>
@@ -155,16 +151,16 @@ export default function EditProduct({ product, onClose }: Props) {
                     <span className="font-medium">Serve:</span> 
                     <input
                         type="text"
-                        name="serve.pt"
+                        name="serve"
                         value={productForm.serve.pt}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'pt')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                     <input
                         type="text"
-                        name="serve.en"
+                        name="serve"
                         value={productForm.serve.en}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'en')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                 </div>
@@ -172,16 +168,16 @@ export default function EditProduct({ product, onClose }: Props) {
                     <span className="font-medium">Store:</span> 
                     <input
                         type="text"
-                        name="store.pt"
+                        name="store"
                         value={productForm.store.pt}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'pt')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                     <input
                         type="text"
-                        name="store.en"
+                        name="store"
                         value={productForm.store.en}
-                        onChange={handleChange}
+                        onChange={(e) => handleChangeText(e, 'en')}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                 </div>
