@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Ingredient, Product, ProductCategory } from "../../types";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service'
-import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
+import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon } from "@phosphor-icons/react";
 import { productCategories } from "../../utils";
 
 type Props = {
@@ -58,6 +58,20 @@ export default function EditProduct({ product, onClose }: Props) {
 
     function handleDeleteImage(index: number) {
         setProductForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+    };
+
+    function handleMoveIngredient(direction: 'up' | 'down', ingredientId: string) {
+        setProductForm((prev) => {
+            const index = prev.recipe.findIndex(item => item.ingredient._id === ingredientId);
+            if (index === -1) return prev; // Ingredient not found
+            const newRecipe = [...prev.recipe];
+            if (direction === 'up' && index > 0) {
+                [newRecipe[index - 1], newRecipe[index]] = [newRecipe[index], newRecipe[index - 1]];
+            } else if (direction === 'down' && index < newRecipe.length - 1) {
+                [newRecipe[index + 1], newRecipe[index]] = [newRecipe[index], newRecipe[index + 1]];
+            }
+            return { ...prev, recipe: newRecipe };
+        });
     };
 
     function handleChangeImage(index: number, newUrl: string) {
@@ -195,7 +209,7 @@ export default function EditProduct({ product, onClose }: Props) {
                         type="number"
                         name="workHours"
                         value={productForm.workHours}
-                        onChange={handleChange}
+                        onChange={(e) => setProductForm((prev) => ({ ...prev, workHours: Number(e.target.value) }))}
                         className="w-full rounded-md border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                 </div>
@@ -205,7 +219,7 @@ export default function EditProduct({ product, onClose }: Props) {
                         type="number"
                         name="electricityHours"
                         value={productForm.electricityHours}
-                        onChange={handleChange}
+                        onChange={(e) => setProductForm((prev) => ({ ...prev, electricityHours: Number(e.target.value) }))}
                         className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                 </div>
@@ -226,7 +240,7 @@ export default function EditProduct({ product, onClose }: Props) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {productForm.recipe.map((item) => (
+                            {productForm.recipe.map((item, index) => (
                                 <tr key={item.ingredient._id} className="hover:bg-gray-50 relative">
                                     <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
                                     <td className="px-4 py-2 text-center">{item.amount} {item.ingredient.recipeUnits}</td>
@@ -239,6 +253,22 @@ export default function EditProduct({ product, onClose }: Props) {
                                             title="Remove Additional Ingredient"
                                         >
                                             <TrashIcon size={20} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleMoveIngredient('up', item.ingredient._id)}
+                                            className="cursor-pointer disabled:opacity-25"
+                                            title="Move Ingredient Up"
+                                            disabled={index === 0}
+                                        >
+                                            <ArrowUpIcon size={20} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleMoveIngredient('down', item.ingredient._id)}
+                                            className="cursor-pointer disabled:opacity-25"
+                                            title="Move Ingredient Down"
+                                            disabled={index === productForm.recipe.length - 1}
+                                        >
+                                            <ArrowDownIcon size={20} />
                                         </button>
                                     </td>
                                 </tr>
