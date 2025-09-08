@@ -13,7 +13,7 @@ router.post("/products", async (req, res, next) => {
         description: {en: "", pt: ""},
         serve: {en: "", pt: ""},
         store: {en: "", pt: ""},
-        images: [""],
+        images: [],
         recipe: [],
         category: "",
         workHours: 0,
