@@ -58,3 +58,9 @@ export const productCategories = {
     dessert: { en: 'Desserts', pt: 'Sobremesas' },
     mini: { en: 'Minis', pt: 'Individuais' },
 };
+
+export const cakeComponentCategories = {
+    dough: { en: 'Dough', pt: 'Massa' },
+    filling: { en: 'Filling', pt: 'Recheio' },
+    frosting: { en: 'Frosting', pt: 'Cobertura' },
+};

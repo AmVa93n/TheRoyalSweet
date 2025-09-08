@@ -1,34 +1,25 @@
-import { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Select, MenuItem, Box, Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { CakeComponent } from "../../types";
-import { calculatePrice } from "../../utils";
-import EditCakeComponentModal from "../../components/admin/EditCakeComponentModal";
+import { cakeComponentCategories, getProductPrice, getTotalProductCost } from "../../utils";
 import { useStore } from "../../store";
-import AscIcon from '@mui/icons-material/ArrowUpward';
-import DescIcon from '@mui/icons-material/ArrowDownward';
+import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
+import { useNavigate } from "react-router-dom";
 
 function CakeComponentsPage() {
-  const { cakeComponents, setCakeComponents, sortPreferences, setSortPreferences } = useStore();
+  const { cakeComponents, setCakeComponents, sortPreferences, setSortPreferences, language } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.cakeComponents;
-  const [editedCakeComponent, setEditedCakeComponent] = useState<CakeComponent | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     adminService.getCakeComponents().then(setCakeComponents);
   }, []);
 
-  async function handleSave(cakeComponentForm: CakeComponent) {
-    const updatedCakeComponent = await adminService.updateCakeComponent(cakeComponentForm);
-    const updatedCakeComponents = cakeComponents.map((cakeComponent) => cakeComponent._id === updatedCakeComponent._id ? updatedCakeComponent : cakeComponent);
-    setCakeComponents(updatedCakeComponents);
-    setEditedCakeComponent(null); // Stop editing mode
-  };
-
-  async function handleAddCakeComponent() {
+  async function handleCreateCakeComponent() {
     const newCakeComponent = await adminService.createCakeComponent();
     const updatedCakeComponents = [...cakeComponents, newCakeComponent];
     setCakeComponents(updatedCakeComponents); // Add the new cake component to the list
+    navigate(`/admin/cake-components/${newCakeComponent._id}`, { state: { new: true } }); // Navigate to the new product's page
   };
 
   function sortFunction(a: CakeComponent, b: CakeComponent) {
@@ -41,9 +32,14 @@ function CakeComponentsPage() {
       case 'electricityHours':
         return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
       case 'price':
+        return sortDirection === 'asc' ? getProductPrice(a) - getProductPrice(b) : getProductPrice(b) - getProductPrice(a);
       case 'totalCost':
-      case 'netGain':
-        return sortDirection === 'asc' ? calculatePrice(a)[sortCriteria] - calculatePrice(b)[sortCriteria] : calculatePrice(b)[sortCriteria] - calculatePrice(a)[sortCriteria];
+        return sortDirection === 'asc' ? getTotalProductCost(a) - getTotalProductCost(b) : getTotalProductCost(b) - getTotalProductCost(a);
+      case 'netGain': {
+        const netGainA = getProductPrice(a) - getTotalProductCost(a);
+        const netGainB = getProductPrice(b) - getTotalProductCost(b);
+        return sortDirection === 'asc' ? netGainA - netGainB : netGainB - netGainA;
+      }
       default:
         return 0;
     }
@@ -51,79 +47,74 @@ function CakeComponentsPage() {
 
   return (
     <div className="pt-20 pb-10 min-h-screen">
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 2 }}>
-        <Typography variant="body1" sx={{ marginRight: 2 }}>Sort by:</Typography>
+      <div className="max-w-6xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
 
-        <Select
-          value={sortCriteria}
-          onChange={(e) => setSortPreferences('products', { criteria: e.target.value, direction: sortDirection })}
-          size="small"
-        >
-          <MenuItem value="name">Name</MenuItem>
-          <MenuItem value="category">Category</MenuItem>
-          <MenuItem value="workHours">Work Hours</MenuItem>
-          <MenuItem value="electricityHours">Electricity Hours</MenuItem>
-          <MenuItem value="price">Price</MenuItem>
-          <MenuItem value="totalCost">Total Cost</MenuItem>
-          <MenuItem value="netGain">Net Gain</MenuItem>
-        </Select>
-        
-        <IconButton onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: 'desc' })}>
-          <DescIcon color={sortDirection === 'desc' ? 'primary' : 'inherit'} />
-        </IconButton>
+        {/* Sort Options */}
+        <div className="flex items-center justify-center mb-6">
+            <p className='mr-4 text-lg font-medium text-gray-700'>Sort by:</p>
 
-        <IconButton onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: 'asc' })}>
-          <AscIcon color={sortDirection === 'asc' ? 'primary' : 'inherit'} />
-        </IconButton>
-      </Box>
+            <select
+                className='rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1'
+                value={sortCriteria}
+                onChange={(e) => setSortPreferences('products', { criteria: e.target.value, direction: sortDirection })}
+            >
+                <option value="name">Name</option>
+                <option value="category">Category</option>
+                <option value="workHours">Work Hours</option>
+                <option value="electricityHours">Electricity Hours</option>
+                <option value="price">Price</option>
+                <option value="totalCost">Total Cost</option>
+                <option value="netGain">Net Gain</option>
+            </select>
+            
+            <button 
+                onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: sortDirection === 'asc' ? 'desc' : 'asc' })} 
+                className="ml-2 cursor-pointer"
+                title={sortDirection === 'asc' ? 'Sort Descending' : 'Sort Ascending'}
+            >
+                {sortDirection === 'desc' ? <SortDescendingIcon size={24} /> : <SortAscendingIcon size={24} />}
+            </button>
+        </div>
 
-      <TableContainer component={Paper} sx={{width: '92%', mx: 'auto'}}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Name</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Category</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Work Hours</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Electricity Hours</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Price</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Total Cost</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Net Gain</TableCell>
-              <TableCell sx={{fontWeight: 'bold'}} padding="normal">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {cakeComponents.sort(sortFunction).map((cakeComponent) => (
-              <TableRow key={cakeComponent._id}>
+        {/* Cake Components List */}
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100 text-gray-700">
+              <tr>
+                <th className="px-4 py-2 text-left">Name</th>
+                <th className="px-4 py-2 text-left">Category</th>
+                <th className="px-4 py-2 text-center">Work Hours</th>
+                <th className="px-4 py-2 text-center">Electricity Hours</th>
+                <th className="px-4 py-2 text-center">Price</th>
+                <th className="px-4 py-2 text-center">Total Cost</th>
+                <th className="px-4 py-2 text-center">Net Gain</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+                {cakeComponents.sort(sortFunction).map((component) => (
+                <tr key={component._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/products/${component._id}`)}>
+                    <td className="px-4 py-2 text-gray-800">{component.name[language]}</td>
+                    <td className="px-4 py-2 text-gray-800">{cakeComponentCategories[component.category][language]}</td>
+                    <td className="px-4 py-2 text-center">{component.workHours}</td>
+                    <td className="px-4 py-2 text-center">{component.electricityHours}</td>
+                    <td className="px-4 py-2 text-center">{getProductPrice(component).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{getTotalProductCost(component).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{(getProductPrice(component) - getTotalProductCost(component)).toFixed(2)} €</td>
+                </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-                <TableCell padding="normal">{cakeComponent.name.pt}</TableCell>
-                <TableCell padding="normal">{cakeComponent.category}</TableCell>
-                <TableCell padding="normal">{cakeComponent.workHours}</TableCell>
-                <TableCell padding="normal">{cakeComponent.electricityHours}</TableCell>
-                <TableCell padding="normal">{calculatePrice(cakeComponent).price.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(cakeComponent).totalCost.toFixed(2)} €</TableCell>
-                <TableCell padding="normal">{calculatePrice(cakeComponent).netGain.toFixed(2)} €</TableCell>
-
-                <TableCell padding="normal">
-                  <IconButton onClick={() => setEditedCakeComponent(cakeComponent)}>
-                    <EditIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Button variant="contained" onClick={handleAddCakeComponent} sx={{ position: 'fixed', bottom: 20, right: 20 }}>
-          Create Cake Component
-      </Button>
-
-      {editedCakeComponent && <EditCakeComponentModal
-        open={!!editedCakeComponent}
-        cakeComponent={editedCakeComponent}
-        onSave={handleSave}
-        onClose={() => setEditedCakeComponent(null)}
-      />}
+      {/* Floating Add Button */}
+      <button
+        onClick={handleCreateCakeComponent}
+        className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+        title="Create Cake Component"
+      >
+        <PlusIcon size={24} />
+      </button>
     </div>
   );
 };

@@ -1,21 +1,20 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, Dialog, DialogContent, DialogActions } from "@mui/material";
+import { TextField, IconButton, Button, Box, Typography, Autocomplete, List, ListItem, DialogContent, DialogActions } from "@mui/material";
 import { useState } from "react";
 import type { Ingredient, CakeComponent } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { useStore } from "../../store";
+import adminService from '../../services/admin.service'
 
 type Props = {
-    open: boolean;
     cakeComponent?: CakeComponent;
-    onSave: (cakeComponentForm: CakeComponent) => void;
     onClose: () => void;
 };
 
-export default function EditCakeComponentModal({ open, cakeComponent, onSave, onClose }: Props) {
-    const { ingredients } = useStore();
+export default function EditCakeComponentModal({ cakeComponent, onClose }: Props) {
+    const { ingredients, cakeComponents, setCakeComponents } = useStore();
     const [cakeComponentForm, setCakeComponentForm] = useState(cakeComponent as CakeComponent);
     const [newIngredientId, setNewIngredientId] = useState(""); // New ingredient input
     const [newAmount, setNewAmount] = useState(0); // New amount input
@@ -54,8 +53,19 @@ export default function EditCakeComponentModal({ open, cakeComponent, onSave, on
         }));
     };
 
+    async function handleSave() {
+        try {
+            const updatedCakeComponent = await adminService.updateCakeComponent(cakeComponentForm);
+            const updatedCakeComponents = cakeComponents.map((cakeComponent) => cakeComponent._id === updatedCakeComponent._id ? updatedCakeComponent : cakeComponent);
+            setCakeComponents(updatedCakeComponents);
+        } catch (error) {
+            console.error("Failed to save cake component:", error);
+        }
+        onClose();
+    };
+
     return (
-        <Dialog open={open} fullWidth maxWidth="lg">
+        <div className="pt-24 pb-12 px-6 lg:px-16 min-h-screen">
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 
                 <Box sx={{ display: 'flex', gap: 2 }}>
@@ -110,13 +120,13 @@ export default function EditCakeComponentModal({ open, cakeComponent, onSave, on
                 </Box>
             </DialogContent>
             <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={() => onSave(cakeComponentForm)} startIcon={<DoneIcon />} color="success" variant="contained">
+                <Button onClick={handleSave} startIcon={<DoneIcon />} color="success" variant="contained">
                     Save Changes
                 </Button>
                 <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
                     Discard
                 </Button>
             </DialogActions>
-        </Dialog>
+        </div>
     )
 }
