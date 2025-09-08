@@ -62,7 +62,7 @@ export default function ProductPage() {
         <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Product Details</h2>
           <p className="text-gray-600">
-            <span className="font-medium">Category:</span> {productCategories[product.category][language]}
+            <span className="font-medium">Category:</span> {productCategories[product.category]?.[language]}
           </p>
           <p className="text-gray-600">
             <span className="font-medium">Work Hours:</span> {product.workHours}

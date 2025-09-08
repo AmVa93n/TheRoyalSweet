@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { Product } from "../../types";
-import { calculatePrice, imagePlaceholder } from "../../utils";
+import { calculatePrice, imagePlaceholder, productCategories } from "../../utils";
 import { useStore } from "../../store";
 import appService from "../../services/app.service";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
@@ -94,7 +94,7 @@ function ProductsPage() {
                       <img src={product.images[0] || imagePlaceholder} alt={product._id} className="w-12 h-12 object-cover rounded-md" />
                     </td>
                     <td className="px-4 py-2 text-gray-800">{product.name[language]}</td>
-                    <td className="px-4 py-2 text-gray-800">{product.category}</td>
+                    <td className="px-4 py-2 text-gray-800">{productCategories[product.category]?.[language]}</td>
                     <td className="px-4 py-2 text-center">{product.workHours}</td>
                     <td className="px-4 py-2 text-center">{product.electricityHours}</td>
                     <td className="px-4 py-2 text-center">{calculatePrice(product).price.toFixed(2)} €</td>
