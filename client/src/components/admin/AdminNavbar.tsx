@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ListIcon, StorefrontIcon, ShoppingBagIcon, CakeIcon, EggIcon } from '@phosphor-icons/react';
+import { ListIcon, ShoppingBagIcon, CakeIcon, EggIcon } from '@phosphor-icons/react';
 import { useStore } from '../../store';
 import Logo from '../../assets/the-royal-sweet-high-resolution-logo-transparent.png';
 
@@ -13,7 +13,6 @@ function AdminNavbar() {
     { text: language === 'en' ? 'Products' : 'Produtos', route: '/admin/products', icon: <CakeIcon size={24} /> },
     { text: language === 'en' ? 'Cake Components' : 'Componentes de Bolo', route: '/admin/cake-components', icon: <CakeIcon size={24} /> },
     { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/admin/orders', icon: <ShoppingBagIcon size={24} /> },
-    { text: language === 'en' ? 'Shop' : 'Loja', route: '/', icon: <StorefrontIcon size={24} /> },
   ];
 
   return (
