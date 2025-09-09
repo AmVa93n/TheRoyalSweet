@@ -26,7 +26,7 @@ function ProductsPage() {
   function sortFunction(a: Product, b: Product) {
     switch (sortCriteria) {
       case 'name':
-        return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name.pt) : b.name.pt.localeCompare(a.name.pt);
+        return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name[language]) : b.name.pt.localeCompare(a.name[language]);
       case 'category':
         return sortDirection === 'asc' ? a.category.localeCompare(b.category) : b.category.localeCompare(a.category);
       case 'workHours':

@@ -25,7 +25,7 @@ function CakeComponentsPage() {
   function sortFunction(a: CakeComponent, b: CakeComponent) {
     switch (sortCriteria) {
       case 'name':
-        return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name.pt) : b.name.pt.localeCompare(a.name.pt);
+        return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name[language]) : b.name.pt.localeCompare(a.name[language]);
       case 'category':
         return sortDirection === 'asc' ? a.category.localeCompare(b.category) : b.category.localeCompare(a.category);
       case 'workHours':
@@ -94,7 +94,7 @@ function CakeComponentsPage() {
                 {cakeComponents.sort(sortFunction).map((component) => (
                 <tr key={component._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/cake-components/${component._id}`)}>
                     <td className="px-4 py-2 text-gray-800">{component.name[language]}</td>
-                    <td className="px-4 py-2 text-gray-800">{cakeComponentCategories[component.category][language]}</td>
+                    <td className="px-4 py-2 text-gray-800">{cakeComponentCategories[component.category]?.[language]}</td>
                     <td className="px-4 py-2 text-center">{component.workHours}</td>
                     <td className="px-4 py-2 text-center">{component.electricityHours}</td>
                     <td className="px-4 py-2 text-center">{getProductPrice(component).toFixed(2)} €</td>
