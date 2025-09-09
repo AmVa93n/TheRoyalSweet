@@ -56,7 +56,7 @@ function CakeComponentsPage() {
             <select
                 className='rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1'
                 value={sortCriteria}
-                onChange={(e) => setSortPreferences('products', { criteria: e.target.value, direction: sortDirection })}
+                onChange={(e) => setSortPreferences('cakeComponents', { criteria: e.target.value, direction: sortDirection })}
             >
                 <option value="name">Name</option>
                 <option value="category">Category</option>
@@ -68,7 +68,7 @@ function CakeComponentsPage() {
             </select>
             
             <button 
-                onClick={() => setSortPreferences('products', { criteria: sortCriteria, direction: sortDirection === 'asc' ? 'desc' : 'asc' })} 
+                onClick={() => setSortPreferences('cakeComponents', { criteria: sortCriteria, direction: sortDirection === 'asc' ? 'desc' : 'asc' })} 
                 className="ml-2 cursor-pointer"
                 title={sortDirection === 'asc' ? 'Sort Descending' : 'Sort Ascending'}
             >
