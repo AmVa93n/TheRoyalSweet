@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import type { CustomCake } from '../types';
-import { calculatePrice, getCustomCakePrice, imagePlaceholder } from '../utils';
+import { getCustomCakePrice, getProductPrice, imagePlaceholder } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function CustomCakePage() {
@@ -70,7 +70,7 @@ function CustomCakePage() {
                             >
                                 {doughOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({calculatePrice(component).price.toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -85,7 +85,7 @@ function CustomCakePage() {
                             >
                                 {fillingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({calculatePrice(component).price.toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -100,7 +100,7 @@ function CustomCakePage() {
                             >
                                 {frostingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({calculatePrice(component).price.toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>

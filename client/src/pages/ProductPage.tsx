@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../types';
-import { calculatePrice } from '../utils';
+import { getProductPrice } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function ProductPage() {
@@ -23,7 +23,7 @@ function ProductPage() {
             setCart(updatedCart);
         } else {
             // If product is not in cart, add it
-            const { price } = calculatePrice(product)
+            const price = getProductPrice(product)
             const updatedCart = [...cart, {product, quantity, price, note}]
             setCart(updatedCart)
         }
@@ -61,7 +61,7 @@ function ProductPage() {
 
                     <div className="flex flex-col">
                         <p className="text-2xl font-semibold mb-4">
-                            {calculatePrice(product).price.toFixed(2).replace('.', ',')} €
+                            {getProductPrice(product).toFixed(2).replace('.', ',')} €
                         </p>
 
                         {/* Quantity */}

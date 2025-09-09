@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { CustomCake, Order } from "../../types";
-import { calculatePrice, getCustomCakePrice } from "../../utils";
+import { getCustomCakePrice, getProductPrice } from "../../utils";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service';
 import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
@@ -38,7 +38,7 @@ export default function EditOrder({ order, onClose }: Props) {
 
     function handleAddItem() {
         const product = products.find(product => product._id === newProductId)!;
-        const { price } = calculatePrice(product)
+        const price = getProductPrice(product)
         setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newItemQuantity, price: price }] }));
         setNewProductId(""); // Clear input
         setNewItemQuantity(0); // Clear amount
@@ -228,9 +228,9 @@ export default function EditOrder({ order, onClose }: Props) {
                                         {item.price.toFixed(2)} €
                                         {item.customCake && (
                                             <div className='mt-1 text-xs text-gray-600 space-y-1'>
-                                                <p>{calculatePrice(item.customCake.dough).price.toFixed(2)} €</p>
-                                                <p>{calculatePrice(item.customCake.filling).price.toFixed(2)} €</p>
-                                                <p>{calculatePrice(item.customCake.frosting).price.toFixed(2)} €</p>
+                                                <p>{getProductPrice(item.customCake.dough).toFixed(2)} €</p>
+                                                <p>{getProductPrice(item.customCake.filling).toFixed(2)} €</p>
+                                                <p>{getProductPrice(item.customCake.frosting).toFixed(2)} €</p>
                                             </div>
                                         )}
                                     </td>

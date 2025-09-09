@@ -32,19 +32,10 @@ export function getProductPrice(product: Product | CakeComponent) {
     return (Math.round(rawPrice * 10) / 10)
 }
 
-export function calculatePrice(product: Product | CakeComponent) {
-    const totalCost = getTotalProductCost(product)
-    const workHoursValue = getWorkHoursValue(product)
-    const rawPrice = (totalCost + workHoursValue) * gainMultiplier
-    const price = (Math.round(rawPrice * 10) / 10)
-    const netGain = price - totalCost
-    return { price, totalCost, netGain }
-}
-
 export function getCustomCakePrice(customCake: CustomCake) {
-    const { price: doughPrice } = calculatePrice(customCake.dough)
-    const { price: fillingPrice } = calculatePrice(customCake.filling)
-    const { price: frostingPrice } = calculatePrice(customCake.frosting)
+    const doughPrice = getProductPrice(customCake.dough)
+    const fillingPrice = getProductPrice(customCake.filling)
+    const frostingPrice = getProductPrice(customCake.frosting)
     const totalPrice = doughPrice + fillingPrice + frostingPrice
     return totalPrice
 }

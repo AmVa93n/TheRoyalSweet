@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { Product } from "../../types";
-import { calculatePrice, imagePlaceholder, productCategories } from "../../utils";
+import { getProductPrice, getTotalProductCost, imagePlaceholder, productCategories } from "../../utils";
 import { useStore } from "../../store";
 import appService from "../../services/app.service";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
@@ -33,9 +33,14 @@ function ProductsPage() {
       case 'electricityHours':
         return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
       case 'price':
+        return sortDirection === 'asc' ? getProductPrice(a) - getProductPrice(b) : getProductPrice(b) - getProductPrice(a);
       case 'totalCost':
-      case 'netGain':
-        return sortDirection === 'asc' ? calculatePrice(a)[sortCriteria] - calculatePrice(b)[sortCriteria] : calculatePrice(b)[sortCriteria] - calculatePrice(a)[sortCriteria];
+        return sortDirection === 'asc' ? getTotalProductCost(a) - getTotalProductCost(b) : getTotalProductCost(b) - getTotalProductCost(a);
+      case 'netGain': {
+        const netGainA = getProductPrice(a) - getTotalProductCost(a);
+        const netGainB = getProductPrice(b) - getTotalProductCost(b);
+        return sortDirection === 'asc' ? netGainA - netGainB : netGainB - netGainA;
+      }
       default:
         return 0;
     }
@@ -97,9 +102,9 @@ function ProductsPage() {
                     <td className="px-4 py-2 text-gray-800">{productCategories[product.category]?.[language]}</td>
                     <td className="px-4 py-2 text-center">{product.workHours}</td>
                     <td className="px-4 py-2 text-center">{product.electricityHours}</td>
-                    <td className="px-4 py-2 text-center">{calculatePrice(product).price.toFixed(2)} €</td>
-                    <td className="px-4 py-2 text-center">{calculatePrice(product).totalCost.toFixed(2)} €</td>
-                    <td className="px-4 py-2 text-center">{calculatePrice(product).netGain.toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{getProductPrice(product).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{getTotalProductCost(product).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{(getProductPrice(product) - getTotalProductCost(product)).toFixed(2)} €</td>
                 </tr>
                 ))}
             </tbody>

@@ -4,7 +4,7 @@ import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
-import { calculatePrice } from '../../utils';
+import { getProductPrice } from '../../utils';
 
 export default function OrderPage() {
     const { orderId } = useParams();
@@ -154,9 +154,9 @@ export default function OrderPage() {
                       {item.price.toFixed(2)} €
                       {item.customCake && (
                         <div className='mt-1 text-xs text-gray-600 space-y-1'>
-                          <p>{calculatePrice(item.customCake.dough).price.toFixed(2)} €</p>
-                          <p>{calculatePrice(item.customCake.filling).price.toFixed(2)} €</p>
-                          <p>{calculatePrice(item.customCake.frosting).price.toFixed(2)} €</p>
+                          <p>{getProductPrice(item.customCake.dough).toFixed(2)} €</p>
+                          <p>{getProductPrice(item.customCake.filling).toFixed(2)} €</p>
+                          <p>{getProductPrice(item.customCake.frosting).toFixed(2)} €</p>
                         </div>
                       )}
                     </td>
