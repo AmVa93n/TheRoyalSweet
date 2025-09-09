@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Cart from "./components/Cart";
 import IngredientsPage from "./pages/admin/IngredientsPage";
+import IngredientPage from "./pages/admin/IngredientPage";
 import ProductsPage from "./pages/admin/ProductsPage";
 import AdminProductPage from "./pages/admin/ProductPage";
 import CakeComponentsPage from "./pages/admin/CakeComponentsPage";
@@ -37,6 +38,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
 
         <Route path="/admin/ingredients" element={<IngredientsPage />} />
+        <Route path="/admin/ingredients/:ingredientId" element={<IngredientPage />} />
         <Route path="/admin/products" element={<ProductsPage />} />
         <Route path="/admin/products/:productId" element={<AdminProductPage />} />
         <Route path="/admin/cake-components" element={<CakeComponentsPage />} />
