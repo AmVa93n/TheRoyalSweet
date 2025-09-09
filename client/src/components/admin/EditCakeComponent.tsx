@@ -150,7 +150,7 @@ export default function EditCakeComponent({ cakeComponent, onClose }: Props) {
                         <thead className="bg-gray-100 text-gray-700">
                             <tr>
                                 <th className="px-4 py-2 text-left">Ingredient</th>
-                                <th className="px-4 py-2 text-center">Amount</th>
+                                <th className="px-4 py-2 text-left">Amount</th>
                                 <th className="px-4 py-2 text-center">Price / Unit</th>
                                 <th className="px-4 py-2 text-center">Total Price</th>
                                 <th className="px-4 py-2 text-center">Actions</th>
@@ -160,7 +160,15 @@ export default function EditCakeComponent({ cakeComponent, onClose }: Props) {
                             {cakeComponentForm.recipe.map((item, index) => (
                                 <tr key={item.ingredient._id} className="hover:bg-gray-50 relative">
                                     <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
-                                    <td className="px-4 py-2 text-center">{item.amount} {item.ingredient.recipeUnits}</td>
+                                    <td className="px-4 py-2 text-left flex items-center gap-2">
+                                        <input
+                                            type="number"
+                                            value={item.amount}
+                                            onChange={(e) => setCakeComponentForm((prev) => ({ ...prev, recipe: prev.recipe.map((r) => r.ingredient._id === item.ingredient._id ? { ...r, amount: Number(e.target.value) } : r) }))}
+                                            className="w-20 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                                        />
+                                        {item.ingredient.recipeUnits}
+                                    </td>
                                     <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
                                     <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
                                     <td className="px-4 py-2 text-center">
