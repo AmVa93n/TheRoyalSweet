@@ -26,9 +26,12 @@ function ProductsPage() {
   function sortFunction(a: Product, b: Product) {
     switch (sortCriteria) {
       case 'name':
-        return sortDirection === 'asc' ? a.name.pt.localeCompare(b.name[language]) : b.name.pt.localeCompare(a.name[language]);
-      case 'category':
-        return sortDirection === 'asc' ? a.category.localeCompare(b.category) : b.category.localeCompare(a.category);
+        return sortDirection === 'asc' ? a.name[language].localeCompare(b.name[language]) : b.name[language].localeCompare(a.name[language]);
+      case 'category': {
+        const categoryA = productCategories[a.category]?.[language] || '';
+        const categoryB = productCategories[b.category]?.[language] || '';
+        return sortDirection === 'asc' ? categoryA.localeCompare(categoryB) : categoryB.localeCompare(categoryA);
+      }
       case 'workHours':
       case 'electricityHours':
         return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
