@@ -3,20 +3,33 @@ import { useState } from "react";
 import type { Ingredient } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
+import { useStore } from "../../store";
+import adminService from '../../services/admin.service'
 
 type Props = {
     open: boolean;
     ingredient?: Ingredient;
-    onSave: (ingredientForm: Ingredient) => void;
     onClose: () => void;
 };
 
-export default function EditIngredientModal({ open, ingredient, onSave, onClose }: Props) {
-    const [ingredientForm, setIngredientForm] = useState(ingredient as Ingredient); // Store the values being edited
+export default function EditIngredient({ open, ingredient, onClose }: Props) {
+    const { ingredients, setIngredients } = useStore();
+    const [ingredientForm, setIngredientForm] = useState(ingredient as Ingredient);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         setIngredientForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    async function handleSave() {
+        try {
+            const updatedIngredient = await adminService.updateIngredient(ingredientForm);
+            const updatedIngredients = ingredients.map(ingredient => ingredient._id === updatedIngredient._id ? updatedIngredient : ingredient);
+            setIngredients(updatedIngredients); // Update the ingredient in the list
+        } catch (error) {
+            console.error("Error saving ingredient:", error);
+        }
+        onClose();
     };
 
     return (
@@ -34,7 +47,7 @@ export default function EditIngredientModal({ open, ingredient, onSave, onClose 
 
             </DialogContent>
             <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={() => onSave(ingredientForm)} startIcon={<DoneIcon />} color="success" variant="contained">
+                <Button onClick={handleSave} startIcon={<DoneIcon />} color="success" variant="contained">
                     Save Changes
                 </Button>
                 <Button onClick={onClose} startIcon={<CloseIcon />} color="error" variant="outlined">
