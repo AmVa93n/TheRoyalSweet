@@ -57,19 +57,17 @@ export default function EditIngredient({ ingredient, onClose }: Props) {
                 <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
                     <label className="font-medium text-gray-700">Supermarket:</label>
                     <div className="flex flex-wrap gap-2">
-                        {supermarkets.map(supermarket => (
-                            <div key={supermarket} className="flex items-center space-x-2">
+                        {Object.keys(supermarkets).map(sm => (
+                            <div key={sm} className="flex items-center space-x-2">
                                 <input
                                     type="checkbox"
                                     name="supermarkets"
-                                    value={supermarket}
-                                    checked={ingredientForm.supermarkets.includes(supermarket)}
+                                    value={sm}
+                                    checked={ingredientForm.supermarkets.includes(sm)}
                                     onChange={handleSupermarketChange}
                                     className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
                                 />
-                                <label key={supermarket} className="flex items-center space-x-2">
-                                    <span>{supermarket}</span>
-                                </label>
+                                <img src={supermarkets[sm]} alt={sm} className="w-20 object-fit" />
                             </div>
                         ))}
                     </div>

@@ -1,4 +1,8 @@
 import type { CakeComponent, CustomCake, Product } from './types'
+import pingoDoceLogo from './assets/Pingo_Doce_logo.svg'
+import continenteLogo from './assets/Logo_Continente.svg'
+import auchanLogo from './assets/Auchan-Logo.svg'
+import supercorLogo from './assets/Supercor-supermercados.png'
 
 export const workHourPrice = 10
 export const electricityHourPrice = 0.54
@@ -56,9 +60,9 @@ export const cakeComponentCategories = {
     frosting: { en: 'Frosting', pt: 'Cobertura' },
 };
 
-export const supermarkets = [
-    "Pingo Doce",
-    "Continente",
-    "Auchan",
-    "Supercor",
-]
+export const supermarkets: Record<string, string> = {
+    "Pingo Doce": pingoDoceLogo,
+    "Continente": continenteLogo,
+    "Auchan": auchanLogo,
+    "Supercor": supercorLogo,
+}

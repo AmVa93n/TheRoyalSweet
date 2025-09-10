@@ -4,6 +4,7 @@ import type { Ingredient } from "../../types";
 import { useStore } from "../../store";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
+import { supermarkets } from "../../utils";
 
 function IngredientsPage() {
     const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useStore()
@@ -93,7 +94,15 @@ function IngredientsPage() {
                             {ingredients.sort(sortFunction).map((ingredient) => (
                             <tr key={ingredient._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/ingredients/${ingredient._id}`)}>
                                 <td className="px-4 py-2 text-gray-800">{ingredient.name}</td>
-                                <td className="px-4 py-2 text-gray-800">{ingredient.supermarkets.join(", ")}</td>
+                                <td className="px-4 py-2 text-gray-800">
+                                    <div className="flex items-center gap-2">
+                                        {ingredient.supermarkets.map(sm => (
+                                            supermarkets[sm] ? 
+                                                <img src={supermarkets[sm]} alt={sm} className="w-12 object-fit" />
+                                            : sm
+                                        ))}
+                                    </div>
+                                </td>
                                 <td className="px-4 py-2 text-gray-800">{ingredient.brand}</td>
                                 <td className="px-4 py-2 text-center">{ingredient.recipeUnits}</td>
                                 <td className="px-4 py-2 text-center">{ingredient.pricePerUnit} €</td>

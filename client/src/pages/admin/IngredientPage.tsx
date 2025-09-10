@@ -3,6 +3,7 @@ import { useStore } from '../../store';
 import EditIngredient from '../../components/admin/EditIngredient';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
+import { supermarkets } from '../../utils';
 
 export default function IngredientPage() {
     const { ingredientId } = useParams();
@@ -24,8 +25,15 @@ export default function IngredientPage() {
           <p className="text-gray-600">
             <span className="font-medium">Name:</span> {ingredient.name}
           </p>
-          <p className="text-gray-600">
-            <span className="font-medium">Supermarkets:</span> {ingredient.supermarkets.join(", ")}
+          <p className="text-gray-600 flex items-center gap-2">
+            <span className="font-medium">Supermarkets:</span>
+            <td className="px-4 text-gray-800 flex gap-2">
+                {ingredient.supermarkets.map(sm => (
+                    supermarkets[sm] ? 
+                        <img src={supermarkets[sm]} alt={sm} className="w-20 object-fit" />
+                    : sm
+                ))}
+            </td>
           </p>
           <p className="text-gray-600">
             <span className="font-medium">Brand:</span> {ingredient.brand}
