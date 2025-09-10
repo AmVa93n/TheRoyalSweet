@@ -1,4 +1,4 @@
-import type { CartItem } from '../../types';
+import type { CartItem, Ingredient } from '../../types';
 import { useLocation, useParams } from 'react-router-dom';
 import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
@@ -10,54 +10,44 @@ export default function OrderPage() {
     const { orderId } = useParams();
     const { orders, language } = useStore();
     const order = orders.find(order => order._id === orderId)!;
-    const ingredientRegistry = createIngredientRegistry();
+    const recipe = createRecipe();
     const grandTotalPrice = calculateGrandTotalPrice(order.items);
-    const totalIngredientsPrice = ingredientRegistry.reduce((total, ing) => total + ing.totalPrice, 0);
+    const totalIngredientsPrice = recipe.reduce((total, item) => total + item.ingredient.pricePerUnit * item.amount, 0);
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
 
-    function createIngredientRegistry() {
-        const registry: {[key: string]: { name: string; units: string; totalAmount: number; totalPrice: number }} = {};
+    function createRecipe() {
+        const orderRecipe: { ingredient: Ingredient; amount: number }[] = [];
     
-        // Iterate through each item in the order and accumulate ingredient data
+        // Iterate through each item in the order and accumulate ingredient amounts
         order.items.forEach(item => {
           const { product, customCake } = item;
           const { dough, filling, frosting } = customCake || {};
           const recipe = product?.recipe || [...dough!.recipe, ...filling!.recipe, ...frosting!.recipe];
           recipe.forEach(({ ingredient, amount }) => {
-            if (!registry[ingredient._id]) {
-              registry[ingredient._id] = {
-                name: ingredient.name,
-                units: ingredient.recipeUnits,
-                totalAmount: 0,
-                totalPrice: 0,
-              };
+            let entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
+            if (!entry) {
+              entry = { ingredient, amount: 0 };
+              orderRecipe.push(entry);
             }
-    
-            const entry = registry[ingredient._id];
-            entry.totalAmount += amount * item.quantity;
-            entry.totalPrice += entry.totalAmount * ingredient.pricePerUnit;
+            
+            entry.amount += amount * item.quantity;
           });
         });
 
         // Add additional ingredients from the order
         order.additionalIngredients.forEach(({ ingredient, amount }) => {
-          if (!registry[ingredient._id]) {
-            registry[ingredient._id] = {
-              name: ingredient.name,
-              units: ingredient.recipeUnits,
-              totalAmount: 0,
-              totalPrice: 0,
-            };
+          let entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
+          if (!entry) {
+            entry = { ingredient, amount: 0 };
+            orderRecipe.push(entry);
           }
 
-          const entry = registry[ingredient._id];
-          entry.totalAmount += amount;
-          entry.totalPrice += amount * ingredient.pricePerUnit;
+          entry.amount += amount;
         });
     
-        return Object.values(registry);
+        return orderRecipe
     }
     
     function calculateGrandTotalPrice(items: CartItem[]) {
@@ -214,17 +204,11 @@ export default function OrderPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {ingredientRegistry.map((ingredient, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 text-gray-800">
-                      {ingredient.name}
-                    </td>
-                    <td className="px-4 py-2 text-center text-gray-600">
-                      {ingredient.totalAmount} {ingredient.units}
-                    </td>
-                    <td className="px-4 py-2 text-center font-medium text-gray-800">
-                      {ingredient.totalPrice.toFixed(3)} €
-                    </td>
+                {recipe.map((item) => (
+                  <tr key={item.ingredient._id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
+                    <td className="px-4 py-2 text-center text-gray-600">{item.amount} {item.ingredient.recipeUnits}</td>
+                    <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
                   </tr>
                 ))}
               </tbody>
