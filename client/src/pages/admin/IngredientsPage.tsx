@@ -34,8 +34,8 @@ function IngredientsPage() {
             case 'unitsPerPackage':
                 return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
             case 'supermarkets': {
-                const supermarketA = a.supermarkets.sort((a, b) => b.localeCompare(a))[0];
-                const supermarketB = b.supermarkets.sort((a, b) => b.localeCompare(a))[0];
+                const supermarketA = a.supermarkets.sort((a, b) => a.localeCompare(b))[0];
+                const supermarketB = b.supermarkets.sort((a, b) => a.localeCompare(b))[0];
                 return sortDirection === 'asc' ? supermarketA.localeCompare(supermarketB) : supermarketB.localeCompare(supermarketA);
             }
             default:
@@ -57,7 +57,7 @@ function IngredientsPage() {
                         onChange={(e) => setSortPreferences('ingredients', { criteria: e.target.value, direction: sortDirection })}
                     >
                         <option value="name">Name</option>
-                        <option value="supermarket">Supermarkets</option>
+                        <option value="supermarkets">Supermarkets</option>
                         <option value="brand">Brand</option>
                         <option value="recipeUnits">Recipe Units</option>
                         <option value="pricePerUnit">Price / Unit</option>
