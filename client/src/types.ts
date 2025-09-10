@@ -1,6 +1,6 @@
 export type Ingredient = {
     _id: string,
-    supermarket: string,
+    supermarkets: string[],
     brand: string,
     name: string,
     recipeUnits: string,
