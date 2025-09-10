@@ -24,7 +24,6 @@ function IngredientsPage() {
     function sortFunction(a: Ingredient, b: Ingredient) {
         switch (sortCriteria) {
             case 'name':
-            case 'supermarket':
             case 'brand':
             case 'recipeUnits':
             case 'packageUnits':
@@ -33,6 +32,11 @@ function IngredientsPage() {
             case 'price':
             case 'unitsPerPackage':
                 return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
+            case 'supermarkets': {
+                const supermarketA = a.supermarkets.sort((a, b) => b.localeCompare(a))[0];
+                const supermarketB = b.supermarkets.sort((a, b) => b.localeCompare(a))[0];
+                return sortDirection === 'asc' ? supermarketA.localeCompare(supermarketB) : supermarketB.localeCompare(supermarketA);
+            }
             default:
                 return 0;
         }
@@ -52,7 +56,7 @@ function IngredientsPage() {
                         onChange={(e) => setSortPreferences('ingredients', { criteria: e.target.value, direction: sortDirection })}
                     >
                         <option value="name">Name</option>
-                        <option value="supermarket">Supermarket</option>
+                        <option value="supermarket">Supermarkets</option>
                         <option value="brand">Brand</option>
                         <option value="recipeUnits">Recipe Units</option>
                         <option value="pricePerUnit">Price / Unit</option>
@@ -76,7 +80,7 @@ function IngredientsPage() {
                         <thead className="bg-gray-100 text-gray-700">
                             <tr>
                                 <th className="px-4 py-2 text-left">Name</th>
-                                <th className="px-4 py-2 text-left">Supermarket</th>
+                                <th className="px-4 py-2 text-left">Supermarkets</th>
                                 <th className="px-4 py-2 text-left">Brand</th>
                                 <th className="px-4 py-2 text-center">Recipe Units</th>
                                 <th className="px-4 py-2 text-center">Price / Unit</th>
@@ -89,7 +93,7 @@ function IngredientsPage() {
                             {ingredients.sort(sortFunction).map((ingredient) => (
                             <tr key={ingredient._id} className="hover:bg-gray-100 cursor-pointer" onClick={() => navigate(`/admin/ingredients/${ingredient._id}`)}>
                                 <td className="px-4 py-2 text-gray-800">{ingredient.name}</td>
-                                <td className="px-4 py-2 text-gray-800">{ingredient.supermarket}</td>
+                                <td className="px-4 py-2 text-gray-800">{ingredient.supermarkets.join(", ")}</td>
                                 <td className="px-4 py-2 text-gray-800">{ingredient.brand}</td>
                                 <td className="px-4 py-2 text-center">{ingredient.recipeUnits}</td>
                                 <td className="px-4 py-2 text-center">{ingredient.pricePerUnit} €</td>

@@ -25,7 +25,7 @@ export default function IngredientPage() {
             <span className="font-medium">Name:</span> {ingredient.name}
           </p>
           <p className="text-gray-600">
-            <span className="font-medium">Supermarket:</span> {ingredient.supermarket}
+            <span className="font-medium">Supermarkets:</span> {ingredient.supermarkets.join(", ")}
           </p>
           <p className="text-gray-600">
             <span className="font-medium">Brand:</span> {ingredient.brand}

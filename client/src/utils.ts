@@ -55,3 +55,10 @@ export const cakeComponentCategories = {
     filling: { en: 'Filling', pt: 'Recheio' },
     frosting: { en: 'Frosting', pt: 'Cobertura' },
 };
+
+export const supermarkets = [
+    "Pingo Doce",
+    "Continente",
+    "Auchan",
+    "Supercor",
+]
