@@ -53,7 +53,7 @@ export default function EditOrder({ order, onClose }: Props) {
     }
 
     function handleDeleteItem(idOrLabel: string) {
-        setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product?._id !== idOrLabel || item.customCake?.label !== idOrLabel) }));
+        setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product?._id !== idOrLabel && item.customCake?.label !== idOrLabel) }));
     };
 
     function handleAddIngredient() {

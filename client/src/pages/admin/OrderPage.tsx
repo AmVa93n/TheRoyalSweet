@@ -5,6 +5,7 @@ import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
 import { getProductPrice } from '../../utils';
+import Recipe from '../../components/admin/Recipe';
 
 export default function OrderPage() {
     const { orderId } = useParams();
@@ -161,60 +162,38 @@ export default function OrderPage() {
         </div>
 
         {/* Additional Ingredients */}
-        <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Additional Ingredients
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead className="bg-gray-100 text-gray-700">
-                <tr>
-                  <th className="px-4 py-2 text-left">Ingredient</th>
-                  <th className="px-4 py-2 text-center">Amount</th>
-                  <th className="px-4 py-2 text-center">Price / Unit</th>
-                  <th className="px-4 py-2 text-center">Total Price</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {order.additionalIngredients.map((item) => (
-                  <tr key={item.ingredient._id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
-                    <td className="px-4 py-2 text-center">{item.amount} {item.ingredient.recipeUnits}</td>
-                    <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
-                    <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
+        {order.additionalIngredients.length > 0 &&
+          <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Additional Ingredients
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead className="bg-gray-100 text-gray-700">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Ingredient</th>
+                    <th className="px-4 py-2 text-center">Amount</th>
+                    <th className="px-4 py-2 text-center">Price / Unit</th>
+                    <th className="px-4 py-2 text-center">Total Price</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {order.additionalIngredients.map((item) => (
+                    <tr key={item.ingredient._id} className="hover:bg-gray-50">
+                      <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
+                      <td className="px-4 py-2 text-center">{item.amount} {item.ingredient.recipeUnits}</td>
+                      <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
+                      <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        }
 
         {/* Ingredients Breakdown */}
-        <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Ingredients Breakdown
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead className="bg-gray-100 text-gray-700">
-                <tr>
-                  <th className="px-4 py-2 text-left">Ingredient</th>
-                  <th className="px-4 py-2 text-center">Total Amount</th>
-                  <th className="px-4 py-2 text-center">Total Price</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {recipe.map((item) => (
-                  <tr key={item.ingredient._id} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
-                    <td className="px-4 py-2 text-center text-gray-600">{item.amount} {item.ingredient.recipeUnits}</td>
-                    <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <Recipe recipe={recipe} />
 
         {/* Summary */}
         <div className="max-w-5xl mx-auto mt-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl shadow-lg p-8 text-white">
