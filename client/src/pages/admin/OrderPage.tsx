@@ -4,7 +4,7 @@ import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
-import { getProductPrice, fixedCosts, gainMultiplier, workHourPrice, electricityHourPrice, getProductInfo, getCustomCakeInfo } from '../../utils';
+import { getProductPrice, fixedCosts, electricityHourPrice, getProductInfo, getCustomCakeInfo } from '../../utils';
 import Recipe from '../../components/admin/Recipe';
 
 export default function OrderPage() {
@@ -18,9 +18,10 @@ export default function OrderPage() {
     const ingredientsCost = getTotalIngredientsCost();
     const electricityCost = getTotalElectricityCost();
     const totalCost = ingredientsCost + electricityCost + fixedCosts;
-    const workHoursValue = getTotalWorkHoursValue();
-    const price = getTotalOrderPrice();
-    const netGain = price - totalCost;
+    const itemsPrice = order.items.reduce((total, item) => total + item.price * item.quantity, 0);
+    const additionalIngredientsCost = order.additionalIngredients.reduce((total, item) => total + item.ingredient.pricePerUnit * item.amount, 0);
+    const totalPrice = itemsPrice + additionalIngredientsCost;
+    const netGain = totalPrice - (totalCost + additionalIngredientsCost);
 
     function createRecipe() {
         const orderRecipe: { ingredient: Ingredient; amount: number }[] = [];
@@ -56,13 +57,12 @@ export default function OrderPage() {
     }
 
     function getTotalIngredientsCost() {
-      const { items, additionalIngredients } = order;
+      const { items } = order;
       const products = items.filter(item => item.product);
       const IngredientsFromProductsCost = products.reduce((total, item) => total + getProductInfo(item.product!).ingredientsCost * item.quantity, 0);
       const customCakes = items.filter(item => item.customCake);
       const IngredientsFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).ingredientsCost * item.quantity, 0);
-      const IngredientsFromAdditionalIngredientsCost = additionalIngredients.reduce((total, item) => total + (item.ingredient.pricePerUnit * item.amount), 0);
-      return IngredientsFromProductsCost + IngredientsFromCustomCakesCost + IngredientsFromAdditionalIngredientsCost;
+      return IngredientsFromProductsCost + IngredientsFromCustomCakesCost;
     }
 
     function getTotalElectricityCost() {
@@ -72,20 +72,6 @@ export default function OrderPage() {
       const customCakes = items.filter(item => item.customCake);
       const ElectricityFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).electricityCost * item.quantity, 0);
       return ElectricityFromProductsCost + ElectricityFromCustomCakesCost;
-    }
-
-    function getTotalWorkHoursValue() {
-      const { items } = order;
-      const products = items.filter(item => item.product);
-      const workHoursFromProducts = products.reduce((total, item) => total + getProductInfo(item.product!).workHoursValue * item.quantity, 0);
-      const customCakes = items.filter(item => item.customCake);
-      const workHoursFromCustomCakes = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).workHoursValue * item.quantity, 0);
-      return workHoursFromProducts + workHoursFromCustomCakes;
-    }
-
-    function getTotalOrderPrice() {
-      const rawPrice = (totalCost + workHoursValue) * gainMultiplier
-      return (Math.round(rawPrice * 10) / 10)
     }
 
     if (isEditing) {
@@ -243,15 +229,15 @@ export default function OrderPage() {
             <span>Total Cost</span> {totalCost.toFixed(2)} €
           </div>
 
-          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
-            <span>Work Hours Value</span> {workHoursValue.toFixed(2)} €
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
+            <span>Items Price</span> {itemsPrice.toFixed(2)} €
           </div>
-          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
-            <span>20% Gain Multiplier</span> {((totalCost + workHoursValue) * (gainMultiplier - 1)).toFixed(2)} €
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
+            <span>Additional Ingredients Cost</span> {additionalIngredientsCost.toFixed(2)} €
           </div>
           <hr className="my-1 border-gray-600" />
           <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] mb-4 font-medium">
-            <span>Price</span> {price.toFixed(2)} €
+            <span>Total Price</span> {totalPrice.toFixed(2)} €
           </div>
 
           <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] font-medium">
@@ -259,9 +245,6 @@ export default function OrderPage() {
           </div>
 
           <div className="absolute top-8 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-            Work Hour Price {workHourPrice} €
-          </div>
-          <div className="absolute top-16 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
             Electricity Hour Price {electricityHourPrice} €
           </div>
         </div>
