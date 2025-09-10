@@ -3,21 +3,15 @@ import { useStore } from '../../store';
 import EditCakeComponent from '../../components/admin/EditCakeComponent';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
-import { getElectricityCost, getIngredientsCost, fixedCosts, getProductPrice, getTotalProductCost, getWorkHoursValue, gainMultiplier, workHourPrice, 
-  electricityHourPrice, cakeComponentCategories} from '../../utils';
+import { cakeComponentCategories} from '../../utils';
 import Recipe from '../../components/admin/Recipe';
+import Pricing from '../../components/admin/Pricing';
 
 export default function CakeComponentPage() {
     const { componentId } = useParams();
     const { cakeComponents, language } = useStore();
     const component = cakeComponents.find(component => component._id === componentId)!;
     const location = useLocation();
-    const ingredientsCost = getIngredientsCost(component);
-    const electricityCost = getElectricityCost(component);
-    const totalCost = getTotalProductCost(component);
-    const workHoursValue = getWorkHoursValue(component);
-    const price = getProductPrice(component);
-    const netGain = price - totalCost;
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
 
     if (isEditing) {
@@ -64,44 +58,7 @@ export default function CakeComponentPage() {
         <Recipe recipe={component.recipe} />
 
         {/* Pricing */}
-        <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8 relative">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Pricing</h2>
-          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
-            <span>Ingredients Cost</span> {ingredientsCost.toFixed(2)} €
-          </div>
-          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
-            <span>Electricity Cost</span> {electricityCost.toFixed(2)} €
-          </div>
-          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
-            <span>Fixed Costs</span> {fixedCosts.toFixed(2)} €
-          </div>
-          <hr className="my-1 border-gray-600" />
-          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] mb-4 font-medium">
-            <span>Total Cost</span> {totalCost.toFixed(2)} €
-          </div>
-
-          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
-            <span>Work Hours Value</span> {workHoursValue.toFixed(2)} €
-          </div>
-          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
-            <span>20% Gain Multiplier</span> {((totalCost + workHoursValue) * (gainMultiplier - 1)).toFixed(2)} €
-          </div>
-          <hr className="my-1 border-gray-600" />
-          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] mb-4 font-medium">
-            <span>Price</span> {price.toFixed(2)} €
-          </div>
-
-          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] font-medium">
-            <span>Net Gain</span> {netGain.toFixed(2)} €
-          </div>
-
-          <div className="absolute top-8 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-            Work Hour Price {workHourPrice} €
-          </div>
-          <div className="absolute top-16 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-            Electricity Hour Price {electricityHourPrice} €
-          </div>
-        </div>
+        <Pricing product={component} />
 
         {/* Floating Edit Button */}
         <button
