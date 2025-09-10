@@ -1,10 +1,10 @@
-import type { CartItem, Ingredient } from '../../types';
+import type { Ingredient } from '../../types';
 import { useLocation, useParams } from 'react-router-dom';
 import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
-import { getProductPrice } from '../../utils';
+import { getProductPrice, fixedCosts, gainMultiplier, workHourPrice, electricityHourPrice, getProductInfo, getCustomCakeInfo } from '../../utils';
 import Recipe from '../../components/admin/Recipe';
 
 export default function OrderPage() {
@@ -12,11 +12,15 @@ export default function OrderPage() {
     const { orders, language } = useStore();
     const order = orders.find(order => order._id === orderId)!;
     const recipe = createRecipe();
-    const grandTotalPrice = calculateGrandTotalPrice(order.items);
-    const totalIngredientsPrice = recipe.reduce((total, item) => total + item.ingredient.pricePerUnit * item.amount, 0);
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
+    const ingredientsCost = getTotalIngredientsCost();
+    const electricityCost = getTotalElectricityCost();
+    const totalCost = ingredientsCost + electricityCost + fixedCosts;
+    const workHoursValue = getTotalWorkHoursValue();
+    const price = getTotalOrderPrice();
+    const netGain = price - totalCost;
 
     function createRecipe() {
         const orderRecipe: { ingredient: Ingredient; amount: number }[] = [];
@@ -50,11 +54,38 @@ export default function OrderPage() {
     
         return orderRecipe
     }
-    
-    function calculateGrandTotalPrice(items: CartItem[]) {
-        return items.reduce((total, item) => {
-          return total + item.price * item.quantity;
-        }, 0);
+
+    function getTotalIngredientsCost() {
+      const { items, additionalIngredients } = order;
+      const products = items.filter(item => item.product);
+      const IngredientsFromProductsCost = products.reduce((total, item) => total + getProductInfo(item.product!).ingredientsCost * item.quantity, 0);
+      const customCakes = items.filter(item => item.customCake);
+      const IngredientsFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).ingredientsCost * item.quantity, 0);
+      const IngredientsFromAdditionalIngredientsCost = additionalIngredients.reduce((total, item) => total + (item.ingredient.pricePerUnit * item.amount), 0);
+      return IngredientsFromProductsCost + IngredientsFromCustomCakesCost + IngredientsFromAdditionalIngredientsCost;
+    }
+
+    function getTotalElectricityCost() {
+      const { items } = order;
+      const products = items.filter(item => item.product);
+      const ElectricityFromProductsCost = products.reduce((total, item) => total + getProductInfo(item.product!).electricityCost * item.quantity, 0);
+      const customCakes = items.filter(item => item.customCake);
+      const ElectricityFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).electricityCost * item.quantity, 0);
+      return ElectricityFromProductsCost + ElectricityFromCustomCakesCost;
+    }
+
+    function getTotalWorkHoursValue() {
+      const { items } = order;
+      const products = items.filter(item => item.product);
+      const workHoursFromProducts = products.reduce((total, item) => total + getProductInfo(item.product!).workHoursValue * item.quantity, 0);
+      const customCakes = items.filter(item => item.customCake);
+      const workHoursFromCustomCakes = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).workHoursValue * item.quantity, 0);
+      return workHoursFromProducts + workHoursFromCustomCakes;
+    }
+
+    function getTotalOrderPrice() {
+      const rawPrice = (totalCost + workHoursValue) * gainMultiplier
+      return (Math.round(rawPrice * 10) / 10)
     }
 
     if (isEditing) {
@@ -196,21 +227,42 @@ export default function OrderPage() {
         <Recipe recipe={recipe} />
 
         {/* Summary */}
-        <div className="max-w-5xl mx-auto mt-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl shadow-lg p-8 text-white">
-          <h2 className="text-2xl font-bold mb-4">Summary</h2>
-          <div className="space-y-2">
-            <p className="text-lg">
-              <span className="font-medium">Grand Total Price:</span>{" "}
-              {grandTotalPrice.toFixed(2)} €
-            </p>
-            <p className="text-lg">
-              <span className="font-medium">Total Ingredients Price:</span>{" "}
-              {totalIngredientsPrice.toFixed(3)} €
-            </p>
-            <p className="text-lg">
-              <span className="font-medium">Net Gain:</span>{" "}
-              {(grandTotalPrice - totalIngredientsPrice).toFixed(3)} €
-            </p>
+        <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8 relative">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Summary</h2>
+          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
+            <span>Ingredients Cost</span> {ingredientsCost.toFixed(2)} €
+          </div>
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
+            <span>Electricity Cost</span> {electricityCost.toFixed(2)} €
+          </div>
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
+            <span>Fixed Costs</span> {fixedCosts.toFixed(2)} €
+          </div>
+          <hr className="my-1 border-gray-600" />
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] mb-4 font-medium">
+            <span>Total Cost</span> {totalCost.toFixed(2)} €
+          </div>
+
+          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
+            <span>Work Hours Value</span> {workHoursValue.toFixed(2)} €
+          </div>
+          <div className='text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]'>
+            <span>20% Gain Multiplier</span> {((totalCost + workHoursValue) * (gainMultiplier - 1)).toFixed(2)} €
+          </div>
+          <hr className="my-1 border-gray-600" />
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] mb-4 font-medium">
+            <span>Price</span> {price.toFixed(2)} €
+          </div>
+
+          <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] font-medium">
+            <span>Net Gain</span> {netGain.toFixed(2)} €
+          </div>
+
+          <div className="absolute top-8 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
+            Work Hour Price {workHourPrice} €
+          </div>
+          <div className="absolute top-16 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
+            Electricity Hour Price {electricityHourPrice} €
           </div>
         </div>
 
