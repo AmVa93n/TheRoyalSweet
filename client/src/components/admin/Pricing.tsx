@@ -1,13 +1,15 @@
 import type { Product, CakeComponent } from "../../types";
-import { fixedCosts, getProductPrice, gainMultiplier, workHourPrice, electricityHourPrice, getProductInfo } from '../../utils';
+import { fixedCostsPerItem, getProductPrice, getCakeComponentPrice, gainMultiplier, workHourPrice, electricityHourPrice, getInfo, getTotalProductCost, getTotalCakeComponentCost } from '../../utils';
 
 type Props = {
     product: Product | CakeComponent;
 }
 
 export default function Pricing({ product }: Props) {
-    const { electricityCost, ingredientsCost, totalCost, workHoursValue } = getProductInfo(product);
-    const price = getProductPrice(product);
+    const { electricityCost, ingredientsCost, workHoursValue } = getInfo(product);
+    const isProduct = "description" in product; // Check if it's a Product
+    const totalCost = isProduct ? getTotalProductCost(product) : getTotalCakeComponentCost(product);
+    const price = isProduct ? getProductPrice(product) : getCakeComponentPrice(product);
     const netGain = price - totalCost;
 
     return (
@@ -20,7 +22,7 @@ export default function Pricing({ product }: Props) {
             <span>Electricity Cost</span> {electricityCost.toFixed(2)} €
           </div>
           <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)]">
-            <span>Fixed Costs</span> {fixedCosts.toFixed(2)} €
+            <span>Fixed Costs</span> {fixedCostsPerItem.toFixed(2)} €
           </div>
           <hr className="my-1 border-gray-600" />
           <div className="text-gray-800 grid grid-cols-2 grid-cols-[repeat(2,1fr)] mb-4 font-medium">

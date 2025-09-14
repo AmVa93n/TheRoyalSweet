@@ -14,8 +14,8 @@ export default function EditOrder({ order, onClose }: Props) {
     const { products, ingredients, orders, setOrders, language, cakeComponents } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
-    const [newItemSize, setNewItemSize] = useState(1);
-    const [newItemQuantity, setNewItemQuantity] = useState(0);
+    const [newProductSize, setNewProductSize] = useState(1);
+    const [newProductQuantity, setNewProductQuantity] = useState(0);
     const [newCustomCake, setNewCustomCake] = useState<CustomCake>({} as CustomCake);
     const [newCustomCakeSize, setNewCustomCakeSize] = useState(1);
     const [newCustomCakeQuantity, setNewCustomCakeQuantity] = useState(0);
@@ -39,17 +39,17 @@ export default function EditOrder({ order, onClose }: Props) {
         setOrderForm(prev => ({ ...prev, [name]: value }));
     };
 
-    function handleAddItem() {
+    function handleAddProduct() {
         const product = products.find(product => product._id === newProductId)!;
-        const price = getProductPrice(product)
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, size: newItemSize, quantity: newItemQuantity, price: price }] }));
+        const price = getProductPrice(product, newProductSize);
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, size: newProductSize, quantity: newProductQuantity, price: price }] }));
         setNewProductId(""); // Clear input
-        setNewItemQuantity(0); // Clear amount
+        setNewProductQuantity(0); // Clear amount
     };
 
     function handleAddCustomCake() {
-        const price = getCustomCakePrice(newCustomCake);
-        const label = `${newCustomCake.dough.name.en}, ${newCustomCake.filling.name.en}, ${newCustomCake.frosting.name.en}`
+        const price = getCustomCakePrice(newCustomCake, newCustomCakeSize);
+        const label = `${newCustomCake.dough.name.en}, ${newCustomCake.filling.name.en}, ${newCustomCake.frosting.name.en}, ${newCustomCake.topping?.name.en || ""}`
         setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...newCustomCake, label }, size: newCustomCakeSize, quantity: newCustomCakeQuantity, price: price }] }));
         setNewCustomCake({} as CustomCake); // Clear input
         setNewCustomCakeQuantity(0); // Clear amount
@@ -233,9 +233,12 @@ export default function EditOrder({ order, onClose }: Props) {
                                         {item.price.toFixed(2)} €
                                         {item.customCake && (
                                             <div className='mt-1 text-xs text-gray-600 space-y-1'>
-                                                <p>{getProductPrice(item.customCake.dough).toFixed(2)} €</p>
-                                                <p>{getProductPrice(item.customCake.filling).toFixed(2)} €</p>
-                                                <p>{getProductPrice(item.customCake.frosting).toFixed(2)} €</p>
+                                                <p>{getCakeComponentPrice(item.customCake.dough, item.size).toFixed(2)} €</p>
+                                                <p>{getCakeComponentPrice(item.customCake.filling, item.size).toFixed(2)} €</p>
+                                                <p>{getCakeComponentPrice(item.customCake.frosting, item.size).toFixed(2)} €</p>
+                                                {item.customCake.topping &&
+                                                    <p>{getCakeComponentPrice(item.customCake.topping, item.size).toFixed(2)} €</p>
+                                                }
                                             </div>
                                         )}
                                     </td>
@@ -264,12 +267,12 @@ export default function EditOrder({ order, onClose }: Props) {
                     >
                         <option value="">Select a product</option>
                         {products.map((p) => (
-                            <option key={p._id} value={p._id}>{p.name.pt}</option>
+                            <option key={p._id} value={p._id}>{p.name[language]}</option>
                         ))}
                     </select>
                     <select
-                        value={newItemSize}
-                        onChange={e => setNewItemSize(Number(e.target.value))}
+                        value={newProductSize}
+                        onChange={e => setNewProductSize(Number(e.target.value))}
                         className="w-24 p-2 rounded bg-white border"
                     >
                         {Object.entries(sizes).map(([key, value]) => (
@@ -280,14 +283,14 @@ export default function EditOrder({ order, onClose }: Props) {
                     </select>
                     <input
                         type="number"
-                        value={newItemQuantity}
-                        onChange={(e) => setNewItemQuantity(Number(e.target.value))}
+                        value={newProductQuantity}
+                        onChange={(e) => setNewProductQuantity(Number(e.target.value))}
                         placeholder="Qty"
                         className="w-12 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                     <button
-                        onClick={handleAddItem}
-                        disabled={newProductId === "" || newItemQuantity <= 0}
+                        onClick={handleAddProduct}
+                        disabled={newProductId === "" || newProductQuantity <= 0}
                         className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
                     >
                         Add
@@ -303,7 +306,7 @@ export default function EditOrder({ order, onClose }: Props) {
                     >
                         <option value="">Select a dough</option>
                         {doughOptions.map((d) => (
-                            <option key={d._id} value={d._id}>{d.name.pt}</option>
+                            <option key={d._id} value={d._id}>{d.name[language]}</option>
                         ))}
                     </select>
                     <select
@@ -313,7 +316,7 @@ export default function EditOrder({ order, onClose }: Props) {
                     >
                         <option value="">Select a filling</option>
                         {fillingOptions.map((f) => (
-                            <option key={f._id} value={f._id}>{f.name.pt}</option>
+                            <option key={f._id} value={f._id}>{f.name[language]}</option>
                         ))}
                     </select>
                     <select
@@ -323,7 +326,7 @@ export default function EditOrder({ order, onClose }: Props) {
                     >
                         <option value="">Select a frosting</option>
                         {frostingOptions.map((f) => (
-                            <option key={f._id} value={f._id}>{f.name.pt}</option>
+                            <option key={f._id} value={f._id}>{f.name[language]}</option>
                         ))}
                     </select>
                     <select
@@ -333,7 +336,7 @@ export default function EditOrder({ order, onClose }: Props) {
                     >
                         <option value="">Select a topping</option>
                         {toppingOptions.map((t) => (
-                            <option key={t._id} value={t._id}>{t.name.pt}</option>
+                            <option key={t._id} value={t._id}>{t.name[language]}</option>
                         ))}
                     </select>
                     <select

@@ -4,7 +4,7 @@ import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon } from '@phosphor-icons/react';
-import { getProductPrice, fixedCosts, electricityHourPrice, getProductInfo, getCustomCakeInfo } from '../../utils';
+import { getCakeComponentPrice, fixedCostsPerItem, electricityHourPrice, getInfo, getCustomCakeInfo, sizes } from '../../utils';
 import Recipe from '../../components/admin/Recipe';
 
 export default function OrderPage() {
@@ -17,6 +17,7 @@ export default function OrderPage() {
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
     const ingredientsCost = getTotalIngredientsCost();
     const electricityCost = getTotalElectricityCost();
+    const fixedCosts = getTotalFixedCosts();
     const totalCost = ingredientsCost + electricityCost + fixedCosts;
     const itemsPrice = order.items.reduce((total, item) => total + item.price * item.quantity, 0);
     const additionalIngredientsCost = order.additionalIngredients.reduce((total, item) => total + item.ingredient.pricePerUnit * item.amount, 0);
@@ -59,19 +60,23 @@ export default function OrderPage() {
     function getTotalIngredientsCost() {
       const { items } = order;
       const products = items.filter(item => item.product);
-      const IngredientsFromProductsCost = products.reduce((total, item) => total + getProductInfo(item.product!).ingredientsCost * item.quantity, 0);
+      const IngredientsFromProductsCost = products.reduce((total, item) => total + getInfo(item.product!).ingredientsCost * item.quantity, 0);
       const customCakes = items.filter(item => item.customCake);
-      const IngredientsFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).ingredientsCost * item.quantity, 0);
+      const IngredientsFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!, item.size).ingredientsCost * item.quantity, 0);
       return IngredientsFromProductsCost + IngredientsFromCustomCakesCost;
     }
 
     function getTotalElectricityCost() {
       const { items } = order;
       const products = items.filter(item => item.product);
-      const ElectricityFromProductsCost = products.reduce((total, item) => total + getProductInfo(item.product!).electricityCost * item.quantity, 0);
+      const ElectricityFromProductsCost = products.reduce((total, item) => total + getInfo(item.product!).electricityCost * item.quantity, 0);
       const customCakes = items.filter(item => item.customCake);
-      const ElectricityFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).electricityCost * item.quantity, 0);
+      const ElectricityFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!, item.size).electricityCost * item.quantity, 0);
       return ElectricityFromProductsCost + ElectricityFromCustomCakesCost;
+    }
+
+    function getTotalFixedCosts() {
+      return order.items.reduce((total, item) => total + fixedCostsPerItem * item.quantity, 0);
     }
 
     if (isEditing) {
@@ -132,6 +137,7 @@ export default function OrderPage() {
                 <tr>
                   <th className="px-4 py-2 text-left">Product</th>
                   <th className="px-4 py-2 text-left">Note</th>
+                  <th className="px-4 py-2 text-center">Size</th>
                   <th className="px-4 py-2 text-center">Quantity</th>
                   <th className="px-4 py-2 text-center">Price (each)</th>
                   <th className="px-4 py-2 text-center">Total</th>
@@ -157,16 +163,17 @@ export default function OrderPage() {
                       )}
                     </td>
                     <td className="px-4 py-2 text-gray-500">{item.note}</td>
+                    <td className="px-4 py-2 text-center">{sizes[item.size][language]}</td>
                     <td className="px-4 py-2 text-center">{item.quantity}</td>
                     <td className="px-4 py-2 text-center">
                       {item.price.toFixed(2)} €
                       {item.customCake && (
                         <div className='mt-1 text-xs text-gray-600 space-y-1'>
-                          <p>{getProductPrice(item.customCake.dough).toFixed(2)} €</p>
-                          <p>{getProductPrice(item.customCake.filling).toFixed(2)} €</p>
-                          <p>{getProductPrice(item.customCake.frosting).toFixed(2)} €</p>
+                          <p>{getCakeComponentPrice(item.customCake.dough, item.size).toFixed(2)} €</p>
+                          <p>{getCakeComponentPrice(item.customCake.filling, item.size).toFixed(2)} €</p>
+                          <p>{getCakeComponentPrice(item.customCake.frosting, item.size).toFixed(2)} €</p>
                           {item.customCake.topping && 
-                            <p>{getProductPrice(item.customCake.topping).toFixed(2)} €</p>
+                            <p>{getCakeComponentPrice(item.customCake.topping, item.size).toFixed(2)} €</p>
                           }
                         </div>
                       )}
@@ -249,6 +256,9 @@ export default function OrderPage() {
 
           <div className="absolute top-8 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
             Electricity Hour Price {electricityHourPrice} €
+          </div>
+          <div className="absolute top-16 right-8 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
+            Fixed Costs / Item {fixedCostsPerItem} €
           </div>
         </div>
 

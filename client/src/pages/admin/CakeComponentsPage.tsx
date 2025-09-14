@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { CakeComponent } from "../../types";
-import { cakeComponentCategories, getProductPrice, getTotalProductCost } from "../../utils";
+import { cakeComponentCategories, getCakeComponentPrice, getTotalCakeComponentCost } from "../../utils";
 import { useStore } from "../../store";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
@@ -35,12 +35,12 @@ function CakeComponentsPage() {
       case 'electricityHours':
         return sortDirection === 'asc' ? a[sortCriteria] - b[sortCriteria] : b[sortCriteria] - a[sortCriteria];
       case 'price':
-        return sortDirection === 'asc' ? getProductPrice(a) - getProductPrice(b) : getProductPrice(b) - getProductPrice(a);
+        return sortDirection === 'asc' ? getCakeComponentPrice(a) - getCakeComponentPrice(b) : getCakeComponentPrice(b) - getCakeComponentPrice(a);
       case 'totalCost':
-        return sortDirection === 'asc' ? getTotalProductCost(a) - getTotalProductCost(b) : getTotalProductCost(b) - getTotalProductCost(a);
+        return sortDirection === 'asc' ? getTotalCakeComponentCost(a) - getTotalCakeComponentCost(b) : getTotalCakeComponentCost(b) - getTotalCakeComponentCost(a);
       case 'netGain': {
-        const netGainA = getProductPrice(a) - getTotalProductCost(a);
-        const netGainB = getProductPrice(b) - getTotalProductCost(b);
+        const netGainA = getCakeComponentPrice(a) - getTotalCakeComponentCost(a);
+        const netGainB = getCakeComponentPrice(b) - getTotalCakeComponentCost(b);
         return sortDirection === 'asc' ? netGainA - netGainB : netGainB - netGainA;
       }
       default:
@@ -100,9 +100,9 @@ function CakeComponentsPage() {
                     <td className="px-4 py-2 text-gray-800">{cakeComponentCategories[component.category]?.[language]}</td>
                     <td className="px-4 py-2 text-center">{component.workHours}</td>
                     <td className="px-4 py-2 text-center">{component.electricityHours}</td>
-                    <td className="px-4 py-2 text-center">{getProductPrice(component).toFixed(2)} €</td>
-                    <td className="px-4 py-2 text-center">{getTotalProductCost(component).toFixed(2)} €</td>
-                    <td className="px-4 py-2 text-center">{(getProductPrice(component) - getTotalProductCost(component)).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{getCakeComponentPrice(component).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{getTotalCakeComponentCost(component).toFixed(2)} €</td>
+                    <td className="px-4 py-2 text-center">{(getCakeComponentPrice(component) - getTotalCakeComponentCost(component)).toFixed(2)} €</td>
                 </tr>
                 ))}
             </tbody>
