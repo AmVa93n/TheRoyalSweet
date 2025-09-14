@@ -1,11 +1,13 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import EditCakeComponent from '../../components/admin/EditCakeComponent';
 import { useState } from 'react';
-import { PencilIcon } from '@phosphor-icons/react';
+import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
 import { cakeComponentCategories} from '../../utils';
 import Recipe from '../../components/admin/Recipe';
 import Pricing from '../../components/admin/Pricing';
+import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
+import adminService from '../../services/admin.service';
 
 export default function CakeComponentPage() {
     const { componentId } = useParams();
@@ -13,6 +15,17 @@ export default function CakeComponentPage() {
     const component = cakeComponents.find(component => component._id === componentId)!;
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const navigate = useNavigate();
+
+    async function handleDelete() {
+      try {
+        await adminService.deleteCakeComponent(component._id);
+        navigate('/admin/cake-components'); // Redirect to cake components list after deletion
+      } catch (error) {
+        console.error("Failed to delete cake component:", error);
+      }
+    }
 
     if (isEditing) {
       return <EditCakeComponent cakeComponent={component} onClose={() => setIsEditing(false)} />;
@@ -60,14 +73,30 @@ export default function CakeComponentPage() {
         {/* Pricing */}
         <Pricing product={component} />
 
-        {/* Floating Edit Button */}
+        {/* Actions */}
         <button
           onClick={() => setIsEditing(true)}
-          className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+          className="fixed bottom-8 right-24 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
           title="Edit Cake Component"
         >
           <PencilIcon size={24} />
         </button>
+        <button
+          onClick={() => setIsDeleting(true)}
+          className="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+          title="Delete Cake Component"
+        >
+          <TrashIcon size={24} />
+        </button>
+
+        {/* Modals */}
+        {isDeleting && (
+          <DeleteConfirmation
+            name={component.name[language]}
+            onClose={() => setIsDeleting(false)}
+            onConfirm={handleDelete}
+          />
+        )}
       </div>
     )
 }

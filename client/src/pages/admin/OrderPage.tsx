@@ -1,11 +1,13 @@
 import type { Ingredient } from '../../types';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
-import { PencilIcon } from '@phosphor-icons/react';
+import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
 import { getCakeComponentPrice, fixedCostsPerItem, electricityHourPrice, getInfo, getCustomCakeInfo, sizes } from '../../utils';
 import Recipe from '../../components/admin/Recipe';
+import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
+import adminService from '../../services/admin.service';
 
 export default function OrderPage() {
     const { orderId } = useParams();
@@ -14,6 +16,8 @@ export default function OrderPage() {
     const recipe = createRecipe();
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const navigate = useNavigate();
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
     const ingredientsCost = getTotalIngredientsCost();
     const electricityCost = getTotalElectricityCost();
@@ -77,6 +81,15 @@ export default function OrderPage() {
 
     function getTotalFixedCosts() {
       return order.items.reduce((total, item) => total + fixedCostsPerItem * item.quantity, 0);
+    }
+
+    async function handleDelete() {
+      try {
+        await adminService.deleteOrder(order._id);
+        navigate('/admin/orders'); // Redirect to orders list after deletion
+      } catch (error) {
+        console.error("Failed to delete order:", error);
+      }
     }
 
     if (isEditing) {
@@ -262,14 +275,30 @@ export default function OrderPage() {
           </div>
         </div>
 
-        {/* Floating Edit Button */}
+        {/* Actions */}
         <button
           onClick={() => setIsEditing(true)}
-          className="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+          className="fixed bottom-8 right-24 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
           title="Edit Order"
         >
           <PencilIcon size={24} />
         </button>
+        <button
+          onClick={() => setIsDeleting(true)}
+          className="fixed bottom-8 right-8 bg-red-600 hover:bg-red-700 text-white p-4 rounded-full shadow-lg transition transform hover:scale-105 cursor-pointer"
+          title="Delete Order"
+        >
+          <TrashIcon size={24} />
+        </button>
+
+        {/* Modals */}
+        {isDeleting && (
+          <DeleteConfirmation
+            name={`Order by ${order.name}`}
+            onClose={() => setIsDeleting(false)}
+            onConfirm={handleDelete}
+          />
+        )}
       </div>
     )
 }
