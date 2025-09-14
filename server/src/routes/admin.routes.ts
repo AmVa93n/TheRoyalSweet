@@ -51,6 +51,23 @@ router.put("/products", async (req, res, next) => {
     }
 });
 
+router.delete("/products/:productId", async (req, res, next) => {
+    try {
+      const { productId } = req.params;
+
+      const deletedProduct = await Product.findByIdAndDelete(productId);
+
+      if (!deletedProduct) {
+        res.status(404).json({ message: "Product not found" });
+        return;
+      }
+
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+});
+
 router.get("/ingredients", async (req, res, next) => {
     try {
       const ingredients = await Ingredient.find();
@@ -108,6 +125,23 @@ router.put("/ingredients", async (req, res, next) => {
     }
 });
 
+router.delete("/ingredients/:ingredientId", async (req, res, next) => {
+    try {
+      const { ingredientId } = req.params;
+
+      const deletedIngredient = await Ingredient.findByIdAndDelete(ingredientId);
+
+      if (!deletedIngredient) {
+        res.status(404).json({ message: "Ingredient not found" });
+        return;
+      }
+
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+});
+
 router.post("/cakeComponents", async (req, res, next) => {
     try {
       const createdCakeComponent = await CakeComponent.create({ 
@@ -162,6 +196,23 @@ router.get("/cakeComponents", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+router.delete("/cakeComponents/:cakeComponentId", async (req, res, next) => {
+    try {
+      const { cakeComponentId } = req.params;
+
+      const deletedCakeComponent = await CakeComponent.findByIdAndDelete(cakeComponentId);
+
+      if (!deletedCakeComponent) {
+        res.status(404).json({ message: "Cake Component not found" });
+        return;
+      }
+
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
 });
 
 router.get("/orders", async (req, res, next) => {
@@ -279,6 +330,23 @@ router.put("/orders", async (req, res, next) => {
       res.status(201).json({ order: updatedOrder });
     } catch (err) {
       next(err);  // Pass the error to the error-handling middleware
+    }
+});
+
+router.delete("/orders/:orderId", async (req, res, next) => {
+    try {
+      const { orderId } = req.params;
+
+      const deletedOrder = await Order.findByIdAndDelete(orderId);
+
+      if (!deletedOrder) {
+        res.status(404).json({ message: "Order not found" });
+        return;
+      }
+
+      res.status(204).send();
+    } catch (err) {
+      next(err);
     }
 });
 

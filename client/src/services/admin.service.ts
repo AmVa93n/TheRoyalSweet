@@ -19,6 +19,10 @@ class AdminService {
     return response.data.product
   }
 
+  async deleteProduct(productId: string): Promise<void> {
+    await this.api.delete(`/admin/products/${productId}`);
+  }
+
   async getIngredients(): Promise<Ingredient[]> {
     const response = await this.api.get(`/admin/ingredients`);
     return response.data.ingredients
@@ -32,6 +36,10 @@ class AdminService {
   async updateIngredient(updatedIngredient: Ingredient): Promise<Ingredient> {
     const response = await this.api.put(`/admin/ingredients`, updatedIngredient);
     return response.data.ingredient
+  }
+
+  async deleteIngredient(ingredientId: string): Promise<void> {
+    await this.api.delete(`/admin/ingredients/${ingredientId}`);
   }
 
   async getCakeComponents(): Promise<CakeComponent[]> {
@@ -49,6 +57,10 @@ class AdminService {
     return response.data.cakeComponent
   }
 
+  async deleteCakeComponent(cakeComponentId: string): Promise<void> {
+    await this.api.delete(`/admin/cakeComponents/${cakeComponentId}`);
+  }
+
   async getOrders(): Promise<Order[]> {
     const response = await this.api.get(`/admin/orders`);
     return response.data.orders
@@ -62,6 +74,10 @@ class AdminService {
   async updateOrder(updatedOrder: Order): Promise<Order> {
     const response = await this.api.put(`/admin/orders`, updatedOrder);
     return response.data.order
+  }
+
+  async deleteOrder(orderId: string): Promise<void> {
+    await this.api.delete(`/admin/orders/${orderId}`);
   }
 }
 
