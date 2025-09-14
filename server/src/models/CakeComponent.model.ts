@@ -10,6 +10,7 @@ const cakeComponentSchema = new Schema(
     category: String,
     workHours: Number,
     electricityHours: Number,
+    internal: { type: Boolean, default: false },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

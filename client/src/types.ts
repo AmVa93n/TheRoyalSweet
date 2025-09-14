@@ -56,6 +56,7 @@ export type CakeComponent = {
     category: CakeComponentCategory,
     workHours: number,
     electricityHours: number,
+    internal: boolean,
 }
 
 export type Order = {

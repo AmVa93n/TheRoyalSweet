@@ -14,6 +14,11 @@ class AppService {
     return response.data.products
   }
 
+  async getCakeComponents() {
+    const response = await this.api.get(`/api/cake-components`);
+    return response.data.cakeComponents
+  }
+
   async createPayment(order: Partial<Order>) {
     const response = await this.api.post(`/api/checkout`, order);
     return response.data

@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import Product from "../models/Product.model";
+import CakeComponent from "../models/CakeComponent.model";
 import Order from "../models/Order.model";
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -9,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 router.get("/products", async (req, res, next) => {
   try {
-    const products = await Product.find({ internal: false }).populate('recipe.ingredient');
+    const products = await Product.find({ internal: false || undefined }).populate('recipe.ingredient');
 
     if (!products) {
       res.status(404).json({ message: "Products not found" });
@@ -17,6 +18,21 @@ router.get("/products", async (req, res, next) => {
     }
 
     res.status(200).json({ products });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/cake-components", async (req, res, next) => {
+  try {
+    const cakeComponents = await CakeComponent.find({ internal: false || undefined }).populate('recipe.ingredient');
+
+    if (!cakeComponents) {
+      res.status(404).json({ message: "Cake components not found" });
+      return;
+    }
+
+    res.status(200).json({ cakeComponents });
   } catch (err) {
     next(err);
   }
