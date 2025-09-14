@@ -2,17 +2,12 @@ import adminService from '../../services/admin.service';
 import type { Order } from '../../types';
 import { useAdminStore } from '../../store';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 
 function OrdersPage() {
   const { orders, setOrders, sortPreferences, setSortPreferences } = useAdminStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
   const navigate = useNavigate();
-
-  useEffect(() => {
-    adminService.getOrders().then(setOrders);
-  }, []);
 
   async function handleCreateOrder() {
     const newOrder = await adminService.createOrder();

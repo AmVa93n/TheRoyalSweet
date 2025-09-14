@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon, CakeIcon } from '@phosphor-icons/react';
 import { useStore } from '../store';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
+import appService from '../services/app.service';
 
 function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore();
+  const { language, setLanguage, cart, isCartOpen, setIsCartOpen, setProducts, setCakeComponents } = useStore();
 
   const navLinks = [
     { text: language === 'en' ? 'Products' : 'Produtos', route: '/', sectionId: 'products', icon: <CakeIcon size={24} /> },
@@ -19,6 +20,11 @@ function Navbar() {
     { text: 'Menu', route: '/menu', icon: <ForkKnifeIcon size={24} /> },
     { text: language === 'en' ? 'Blog' : 'Blogue', route: `https://theroyalsweet.com/${language === 'en' ? 'en/' : ''}`, external: true, icon: <PencilCircleIcon size={24} /> },
   ];
+
+  useEffect(() => {
+    appService.getProducts().then(setProducts);
+    appService.getCakeComponents().then(setCakeComponents);
+  }, []);
 
   return (
     <header className="fixed w-full bg-[#593b3e] shadow z-50">

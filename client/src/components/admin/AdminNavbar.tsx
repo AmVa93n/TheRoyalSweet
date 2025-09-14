@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ListIcon, ShoppingBagIcon, CakeIcon, EggIcon } from '@phosphor-icons/react';
-import { useStore } from '../../store';
+import { useStore, useAdminStore } from '../../store';
 import Logo from '../../assets/the-royal-sweet-high-resolution-logo-transparent.png';
+import adminService from '../../services/admin.service';
 
 function AdminNavbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { setProducts, setCakeComponents, setIngredients, setOrders } = useAdminStore();
   const { language, setLanguage } = useStore();
 
   const navLinks = [
@@ -14,6 +16,13 @@ function AdminNavbar() {
     { text: language === 'en' ? 'Cake Components' : 'Componentes de Bolo', route: '/admin/cake-components', icon: <CakeIcon size={24} /> },
     { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/admin/orders', icon: <ShoppingBagIcon size={24} /> },
   ];
+
+  useEffect(() => {
+    adminService.getProducts().then(setProducts);
+    adminService.getCakeComponents().then(setCakeComponents);
+    adminService.getIngredients().then(setIngredients);
+    adminService.getOrders().then(setOrders);
+  }, []);
 
   return (
     <header className="fixed w-full bg-[#593b3e] shadow z-50">

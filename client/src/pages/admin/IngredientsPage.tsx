@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
 import { useAdminStore } from "../../store";
@@ -10,10 +9,6 @@ function IngredientsPage() {
     const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useAdminStore()
     const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.ingredients;
     const navigate = useNavigate();
-
-    useEffect(() => {
-        adminService.getIngredients().then(setIngredients);
-    }, []);
 
     async function handleCreateIngredient() {
         const newIngredient = await adminService.createIngredient();

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { Product } from "../../types";
 import { getProductPrice, getTotalProductCost, imagePlaceholder, productCategories } from "../../utils";
@@ -13,10 +12,6 @@ function ProductsPage() {
   const navigate = useNavigate();
   const publicProducts = products.filter(product => !product.internal);
   const internalProducts = products.filter(product => product.internal);
-
-  useEffect(() => {
-    adminService.getProducts().then(setProducts);
-  }, []);
 
   async function handleCreateProduct() {
     const newProduct = await adminService.createProduct();

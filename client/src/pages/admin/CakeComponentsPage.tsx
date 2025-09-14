@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { CakeComponent } from "../../types";
 import { cakeComponentCategories, getCakeComponentPrice, getTotalCakeComponentCost } from "../../utils";
@@ -11,10 +10,6 @@ function CakeComponentsPage() {
   const { language } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.cakeComponents;
   const navigate = useNavigate();
-
-  useEffect(() => {
-    adminService.getCakeComponents().then(setCakeComponents);
-  }, []);
 
   async function handleCreateCakeComponent() {
     const newCakeComponent = await adminService.createCakeComponent();
