@@ -1,12 +1,12 @@
 import adminService from '../../services/admin.service';
 import type { Order } from '../../types';
-import { useStore } from '../../store';
+import { useAdminStore } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 
 function OrdersPage() {
-  const { orders, setOrders, sortPreferences, setSortPreferences } = useStore();
+  const { orders, setOrders, sortPreferences, setSortPreferences } = useAdminStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.orders;
   const navigate = useNavigate();
 

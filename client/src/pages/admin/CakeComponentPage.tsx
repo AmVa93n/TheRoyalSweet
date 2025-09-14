@@ -1,5 +1,5 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore } from '../../store';
+import { useStore, useAdminStore } from '../../store';
 import EditCakeComponent from '../../components/admin/EditCakeComponent';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
@@ -11,7 +11,8 @@ import adminService from '../../services/admin.service';
 
 export default function CakeComponentPage() {
     const { componentId } = useParams();
-    const { cakeComponents, language } = useStore();
+    const { cakeComponents } = useAdminStore();
+    const { language } = useStore();
     const component = cakeComponents.find(component => component._id === componentId)!;
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);

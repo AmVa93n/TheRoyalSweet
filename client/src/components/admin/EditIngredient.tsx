@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Ingredient } from "../../types";
-import { useStore } from "../../store";
+import { useAdminStore } from "../../store";
 import adminService from '../../services/admin.service'
 import { FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
 import { supermarkets } from "../../utils";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function EditIngredient({ ingredient, onClose }: Props) {
-    const { ingredients, setIngredients } = useStore();
+    const { ingredients, setIngredients } = useAdminStore();
     const [ingredientForm, setIngredientForm] = useState(ingredient as Ingredient);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

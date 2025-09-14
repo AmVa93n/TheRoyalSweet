@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { Ingredient } from "../../types";
-import { useStore } from "../../store";
+import { useAdminStore } from "../../store";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
 import { supermarkets } from "../../utils";
 
 function IngredientsPage() {
-    const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useStore()
+    const { ingredients, setIngredients, sortPreferences, setSortPreferences } = useAdminStore()
     const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.ingredients;
     const navigate = useNavigate();
 

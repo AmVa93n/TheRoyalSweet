@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sizes } from "../../utils";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import { XCircleIcon } from "@phosphor-icons/react";
 import type { CustomCake } from "../../types";
 
@@ -10,7 +10,8 @@ type Props = {
 };
 
 export default function AddCustomCakeModal({ onClose, onConfirm }: Props) {
-    const { cakeComponents, language } = useStore();
+    const { cakeComponents } = useAdminStore();
+    const { language } = useStore();
     const doughOptions = cakeComponents.filter(component => component.category === 'dough').sort((a, b) => a.name[language].localeCompare(b.name[language]));
     const fillingOptions = cakeComponents.filter(component => component.category === 'filling').sort((a, b) => a.name[language].localeCompare(b.name[language]));
     const frostingOptions = cakeComponents.filter(component => component.category === 'frosting').sort((a, b) => a.name[language].localeCompare(b.name[language]));

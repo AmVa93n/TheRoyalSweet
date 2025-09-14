@@ -1,6 +1,6 @@
 import type { Ingredient } from '../../types';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore } from '../../store';
+import { useStore, useAdminStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
@@ -11,7 +11,8 @@ import adminService from '../../services/admin.service';
 
 export default function OrderPage() {
     const { orderId } = useParams();
-    const { orders, language } = useStore();
+    const { orders } = useAdminStore();
+    const { language } = useStore();
     const order = orders.find(order => order._id === orderId)!;
     const recipe = createRecipe();
     const location = useLocation();

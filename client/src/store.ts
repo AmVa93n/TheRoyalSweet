@@ -19,6 +19,37 @@ const storage: StateStorage = {
 }
 
 type Store = {
+    products: Product[]
+    setProducts: (products: Product[]) => void
+    cakeComponents: CakeComponent[]
+    setCakeComponents: (cakeComponents: CakeComponent[]) => void
+    cart: CartItem[]
+    setCart: (cart: CartItem[]) => void
+    isCartOpen: boolean
+    setIsCartOpen: (isCartOpen: boolean) => void
+    language: 'pt' | 'en'
+    setLanguage: (language: 'pt' | 'en') => void
+}
+
+export const useStore = create<Store>()(
+    devtools(persist(
+        (set) => ({
+            products: [],
+            setProducts: (products) => set({ products }),
+            cakeComponents: [],
+            setCakeComponents: (cakeComponents) => set({ cakeComponents }),
+            cart: [],
+            setCart: (cart) => set({ cart }),
+            isCartOpen: false,
+            setIsCartOpen: (isCartOpen) => set({ isCartOpen }),
+            language: 'pt',
+            setLanguage: (language) => set({ language }),
+        }),
+        { name: "store", storage: createJSONStorage(() => storage) }
+    )
+))
+
+type AdminStore = {
     ingredients: Ingredient[]
     setIngredients: (ingredients: Ingredient[]) => void
     products: Product[]
@@ -27,12 +58,6 @@ type Store = {
     setCakeComponents: (cakeComponents: CakeComponent[]) => void
     orders: Order[]
     setOrders: (orders: Order[]) => void
-    cart: CartItem[]
-    setCart: (cart: CartItem[]) => void
-    isCartOpen: boolean
-    setIsCartOpen: (isCartOpen: boolean) => void
-    language: 'pt' | 'en'
-    setLanguage: (language: 'pt' | 'en') => void
     sortPreferences: {
         products: { criteria: string, direction: 'asc' | 'desc' },
         ingredients: { criteria: string, direction: 'asc' | 'desc' }
@@ -42,7 +67,7 @@ type Store = {
     setSortPreferences: (section: 'products' | 'ingredients' | 'cakeComponents' | 'orders', sort: { criteria: string, direction: 'asc' | 'desc' }) => void
 }
 
-export const useStore = create<Store>()(
+export const useAdminStore = create<AdminStore>()(
     devtools(persist(
         (set) => ({
             ingredients: [],
@@ -53,12 +78,6 @@ export const useStore = create<Store>()(
             setCakeComponents: (cakeComponents) => set({ cakeComponents }),
             orders: [],
             setOrders: (orders) => set({ orders }),
-            cart: [],
-            setCart: (cart) => set({ cart }),
-            isCartOpen: false,
-            setIsCartOpen: (isCartOpen) => set({ isCartOpen }),
-            language: 'pt',
-            setLanguage: (language) => set({ language }),
             sortPreferences: {
                 products: { criteria: 'name', direction: 'asc' },
                 ingredients: { criteria: 'name', direction: 'asc' },
@@ -72,6 +91,6 @@ export const useStore = create<Store>()(
                 }
             }))
         }),
-        { name: "store", storage: createJSONStorage(() => storage) }
+        { name: "admin-store", storage: createJSONStorage(() => storage) }
     )
 ))

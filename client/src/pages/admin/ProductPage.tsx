@@ -1,5 +1,5 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore } from '../../store';
+import { useStore, useAdminStore } from '../../store';
 import EditProduct from '../../components/admin/EditProduct';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
@@ -11,7 +11,8 @@ import adminService from '../../services/admin.service';
 
 export default function ProductPage() {
     const { productId } = useParams();
-    const { products, language } = useStore();
+    const { products } = useAdminStore();
+    const { language } = useStore();
     const product = products.find(product => product._id === productId)!;
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);

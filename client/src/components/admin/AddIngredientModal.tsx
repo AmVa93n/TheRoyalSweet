@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStore } from "../../store";
+import { useAdminStore } from "../../store";
 import { XCircleIcon } from "@phosphor-icons/react";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function AddIngredientModal({ onClose, onConfirm }: Props) {
-    const { ingredients } = useStore();
+    const { ingredients } = useAdminStore();
     const ingredientOptions = ingredients.sort((a, b) => a.name.localeCompare(b.name))
     const [newIngredientId, setNewIngredientId] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState(0);

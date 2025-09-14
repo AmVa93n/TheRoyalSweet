@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sizes } from "../../utils";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import { XCircleIcon } from "@phosphor-icons/react";
 
 type Props = {
@@ -9,7 +9,8 @@ type Props = {
 };
 
 export default function AddProductModal({ onClose, onConfirm }: Props) {
-    const { products, language } = useStore();
+    const { products } = useAdminStore();
+    const { language } = useStore();
     const productOptions = products.sort((a, b) => a.name[language].localeCompare(b.name[language]))
     const [newProductId, setNewProductId] = useState("");
     const [newProductSize, setNewProductSize] = useState(1);

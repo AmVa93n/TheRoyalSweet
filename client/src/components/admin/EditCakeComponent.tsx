@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { CakeComponent, CakeComponentCategory } from "../../types";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import adminService from '../../services/admin.service'
 import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import { cakeComponentCategories } from "../../utils";
@@ -12,7 +12,8 @@ type Props = {
 };
 
 export default function EditCakeComponent({ cakeComponent, onClose }: Props) {
-    const { ingredients, cakeComponents, setCakeComponents, language } = useStore();
+    const { cakeComponents, setCakeComponents, ingredients } = useAdminStore();
+    const { language } = useStore();
     const [cakeComponentForm, setCakeComponentForm] = useState(cakeComponent as CakeComponent);
     const [isAddingIngredient, setIsAddingIngredient] = useState(false);
     type textKey = 'name';

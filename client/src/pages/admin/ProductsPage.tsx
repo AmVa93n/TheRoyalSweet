@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { Product } from "../../types";
 import { getProductPrice, getTotalProductCost, imagePlaceholder, productCategories } from "../../utils";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
 
 function ProductsPage() {
-  const { products, setProducts, sortPreferences, setSortPreferences, language } = useStore();
+  const { products, setProducts, sortPreferences, setSortPreferences } = useAdminStore();
+  const { language } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.products;
   const navigate = useNavigate();
   const publicProducts = products.filter(product => !product.internal);

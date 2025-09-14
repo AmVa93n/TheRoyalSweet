@@ -1,5 +1,5 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore } from '../../store';
+import { useAdminStore } from '../../store';
 import EditIngredient from '../../components/admin/EditIngredient';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
@@ -9,7 +9,7 @@ import adminService from '../../services/admin.service';
 
 export default function IngredientPage() {
     const { ingredientId } = useParams();
-    const { ingredients } = useStore();
+    const { ingredients } = useAdminStore();
     const ingredient = ingredients.find(ingredient => ingredient._id === ingredientId)!;
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);

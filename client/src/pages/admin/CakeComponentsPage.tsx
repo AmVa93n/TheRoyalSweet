@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import adminService from '../../services/admin.service'
 import type { CakeComponent } from "../../types";
 import { cakeComponentCategories, getCakeComponentPrice, getTotalCakeComponentCost } from "../../utils";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
 
 function CakeComponentsPage() {
-  const { cakeComponents, setCakeComponents, sortPreferences, setSortPreferences, language } = useStore();
+  const { cakeComponents, setCakeComponents, sortPreferences, setSortPreferences } = useAdminStore();
+  const { language } = useStore();
   const { criteria: sortCriteria, direction: sortDirection } = sortPreferences.cakeComponents;
   const navigate = useNavigate();
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Product, ProductCategory } from "../../types";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import adminService from '../../services/admin.service'
 import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import { productCategories } from "../../utils";
@@ -12,7 +12,8 @@ type Props = {
 };
 
 export default function EditProduct({ product, onClose }: Props) {
-    const { ingredients, products, setProducts, language } = useStore();
+    const { ingredients, products, setProducts } = useAdminStore();
+    const { language } = useStore();
     const [productForm, setProductForm] = useState(product as Product);
     const [isAddingIngredient, setIsAddingIngredient] = useState(false);
     const [newImageUrl, setNewImageUrl] = useState("");

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { CustomCake, Order } from "../../types";
 import { getCustomCakePrice, getProductPrice, getCakeComponentPrice, sizes } from "../../utils";
-import { useStore } from "../../store";
+import { useStore, useAdminStore } from "../../store";
 import adminService from '../../services/admin.service';
 import { TrashIcon, FloppyDiskIcon, XIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import AddProductModal from "./AddProductModal";
@@ -14,7 +14,8 @@ type Props = {
 };
 
 export default function EditOrder({ order, onClose }: Props) {
-    const { products, ingredients, orders, setOrders, language } = useStore();
+    const { products, ingredients, orders, setOrders } = useAdminStore();
+    const { language } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
     const [isAddingProduct, setIsAddingProduct] = useState(false);
