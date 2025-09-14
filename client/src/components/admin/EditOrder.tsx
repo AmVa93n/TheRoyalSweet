@@ -4,6 +4,8 @@ import { getCustomCakePrice, getProductPrice, getCakeComponentPrice, sizes } fro
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service';
 import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
+import AddProductModal from "./AddProductModal";
+import AddCustomCakeModal from "./AddCustomCakeModal";
 
 type Props = {
     order: Order;
@@ -11,21 +13,13 @@ type Props = {
 };
 
 export default function EditOrder({ order, onClose }: Props) {
-    const { products, ingredients, orders, setOrders, language, cakeComponents } = useStore();
+    const { products, ingredients, orders, setOrders, language } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
-    const [newProductId, setNewProductId] = useState("");
-    const [newProductSize, setNewProductSize] = useState(1);
-    const [newProductQuantity, setNewProductQuantity] = useState(0);
-    const [newCustomCake, setNewCustomCake] = useState<CustomCake>({} as CustomCake);
-    const [newCustomCakeSize, setNewCustomCakeSize] = useState(1);
-    const [newCustomCakeQuantity, setNewCustomCakeQuantity] = useState(0);
     const [newIngredientId, setNewIngredientId] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState(0);
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
-    const doughOptions = cakeComponents.filter(component => component.category === 'dough');
-    const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
-    const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
-    const toppingOptions = cakeComponents.filter(component => component.category === 'topping');
+    const [isAddingProduct, setIsAddingProduct] = useState(false);
+    const [isAddingCustomCake, setIsAddingCustomCake] = useState(false);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -39,20 +33,16 @@ export default function EditOrder({ order, onClose }: Props) {
         setOrderForm(prev => ({ ...prev, [name]: value }));
     };
 
-    function handleAddProduct() {
-        const product = products.find(product => product._id === newProductId)!;
-        const price = getProductPrice(product, newProductSize);
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, size: newProductSize, quantity: newProductQuantity, price: price }] }));
-        setNewProductId(""); // Clear input
-        setNewProductQuantity(0); // Clear amount
+    function handleAddProduct(id: string, size: number, quantity: number) {
+        const product = products.find(product => product._id === id)!;
+        const price = getProductPrice(product, size);
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, size, quantity, price }] }));
     };
 
-    function handleAddCustomCake() {
-        const price = getCustomCakePrice(newCustomCake, newCustomCakeSize);
-        const label = `${newCustomCake.dough.name.en}, ${newCustomCake.filling.name.en}, ${newCustomCake.frosting.name.en}, ${newCustomCake.topping?.name.en || ""}`
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...newCustomCake, label }, size: newCustomCakeSize, quantity: newCustomCakeQuantity, price: price }] }));
-        setNewCustomCake({} as CustomCake); // Clear input
-        setNewCustomCakeQuantity(0); // Clear amount
+    function handleAddCustomCake(customCake: CustomCake, size: number, quantity: number) {
+        const price = getCustomCakePrice(customCake, size);
+        const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...customCake, label }, size, quantity, price }] }));
     }
 
     function handleDeleteItem(idOrLabel: string) {
@@ -258,111 +248,19 @@ export default function EditOrder({ order, onClose }: Props) {
                     </table>
                 </div>
 
-                {/* Add Product */}
+                {/* Add Items */}
                 <div className="flex gap-2 mt-4">
-                    <select
-                        value={newProductId}
-                        onChange={(e) => setNewProductId(e.target.value)}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select a product</option>
-                        {products.map((p) => (
-                            <option key={p._id} value={p._id}>{p.name[language]}</option>
-                        ))}
-                    </select>
-                    <select
-                        value={newProductSize}
-                        onChange={e => setNewProductSize(Number(e.target.value))}
-                        className="w-24 p-2 rounded bg-white border"
-                    >
-                        {Object.entries(sizes).map(([key, value]) => (
-                            <option key={key} value={key}>
-                                {value[language]}
-                            </option>
-                        ))}
-                    </select>
-                    <input
-                        type="number"
-                        value={newProductQuantity}
-                        onChange={(e) => setNewProductQuantity(Number(e.target.value))}
-                        placeholder="Qty"
-                        className="w-12 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    />
                     <button
-                        onClick={handleAddProduct}
-                        disabled={newProductId === "" || newProductQuantity <= 0}
+                        onClick={() => setIsAddingProduct(true)}
                         className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
                     >
-                        Add
+                        Add Product
                     </button>
-                </div>
-
-                {/* Add Custom Cake */}
-                <div className="flex gap-2 mt-4">
-                    <select
-                        value={newCustomCake.dough?._id}
-                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, dough: doughOptions.find(d => d._id === e.target.value)! }))}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select a dough</option>
-                        {doughOptions.map((d) => (
-                            <option key={d._id} value={d._id}>{d.name[language]}</option>
-                        ))}
-                    </select>
-                    <select
-                        value={newCustomCake.filling?._id}
-                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, filling: fillingOptions.find(f => f._id === e.target.value)! }))}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select a filling</option>
-                        {fillingOptions.map((f) => (
-                            <option key={f._id} value={f._id}>{f.name[language]}</option>
-                        ))}
-                    </select>
-                    <select
-                        value={newCustomCake.frosting?._id}
-                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, frosting: frostingOptions.find(f => f._id === e.target.value)! }))}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select a frosting</option>
-                        {frostingOptions.map((f) => (
-                            <option key={f._id} value={f._id}>{f.name[language]}</option>
-                        ))}
-                    </select>
-                    <select
-                        value={newCustomCake.topping?._id}
-                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, topping: toppingOptions.find(t => t._id === e.target.value)! }))}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select a topping</option>
-                        {toppingOptions.map((t) => (
-                            <option key={t._id} value={t._id}>{t.name[language]}</option>
-                        ))}
-                    </select>
-                    <select
-                        value={newCustomCakeSize}
-                        onChange={e => setNewCustomCakeSize(Number(e.target.value))}
-                        className="w-24 p-2 rounded bg-white border"
-                    >
-                        {Object.entries(sizes).map(([key, value]) => (
-                            <option key={key} value={key}>
-                                {value[language]}
-                            </option>
-                        ))}
-                    </select>
-                    <input
-                        type="number"
-                        value={newCustomCakeQuantity}
-                        onChange={(e) => setNewCustomCakeQuantity(Number(e.target.value))}
-                        placeholder="Qty"
-                        className="w-12 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    />
                     <button
-                        onClick={handleAddCustomCake}
-                        disabled={!newCustomCake.dough || !newCustomCake.filling || !newCustomCake.frosting || newCustomCakeQuantity <= 0}
+                        onClick={() => setIsAddingCustomCake(true)}
                         className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
                     >
-                        Add
+                        Add Custom Cake
                     </button>
                 </div>
             </div>
@@ -447,6 +345,14 @@ export default function EditOrder({ order, onClose }: Props) {
             >
                 <XIcon size={24} />
             </button>
+
+            {/* Modals */}
+            {isAddingProduct && (
+                <AddProductModal onClose={() => setIsAddingProduct(false)} onConfirm={handleAddProduct} />
+            )}
+            {isAddingCustomCake && (
+                <AddCustomCakeModal onClose={() => setIsAddingCustomCake(false)} onConfirm={handleAddCustomCake} />
+            )}
         </div>
     )
 }
