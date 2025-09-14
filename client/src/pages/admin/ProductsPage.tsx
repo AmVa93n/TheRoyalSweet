@@ -3,7 +3,6 @@ import adminService from '../../services/admin.service'
 import type { Product } from "../../types";
 import { getProductPrice, getTotalProductCost, imagePlaceholder, productCategories } from "../../utils";
 import { useStore } from "../../store";
-import appService from "../../services/app.service";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +12,7 @@ function ProductsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    appService.getProducts().then(setProducts);
+    adminService.getProducts().then(setProducts);
   }, []);
 
   async function handleCreateProduct() {

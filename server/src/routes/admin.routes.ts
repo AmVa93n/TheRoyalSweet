@@ -5,6 +5,21 @@ import Order from "../models/Order.model";
 import Ingredient from "../models/Ingredient.model";
 import CakeComponent from "../models/CakeComponent.model";
 
+router.get("/products", async (req, res, next) => {
+  try {
+    const products = await Product.find().populate('recipe.ingredient');
+    
+    if (!products) {
+      res.status(404).json({ message: "Products not found" });
+      return;
+    }
+
+    res.status(200).json({ products });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post("/products", async (req, res, next) => {
     try {
       const createdProduct = await Product.create({ 

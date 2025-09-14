@@ -9,8 +9,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 router.get("/products", async (req, res, next) => {
   try {
-    const products = await Product.find().populate('recipe.ingredient');
-    
+    const products = await Product.find({ internal: false }).populate('recipe.ingredient');
+
     if (!products) {
       res.status(404).json({ message: "Products not found" });
       return;

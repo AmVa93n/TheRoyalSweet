@@ -9,6 +9,11 @@ class AdminService {
     });
   }
 
+  async getProducts(): Promise<Product[]> {
+    const response = await this.api.get(`/admin/products`);
+    return response.data.products
+  }
+
   async createProduct(): Promise<Product> {
     const response = await this.api.post(`/admin/products`);
     return response.data.product
