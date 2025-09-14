@@ -23,6 +23,7 @@ export default function EditOrder({ order, onClose }: Props) {
     const doughOptions = cakeComponents.filter(component => component.category === 'dough');
     const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
     const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
+    const toppingOptions = cakeComponents.filter(component => component.category === 'topping');
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -308,6 +309,16 @@ export default function EditOrder({ order, onClose }: Props) {
                         <option value="">Select a frosting</option>
                         {frostingOptions.map((f) => (
                             <option key={f._id} value={f._id}>{f.name.pt}</option>
+                        ))}
+                    </select>
+                    <select
+                        value={newCustomCake.topping?._id}
+                        onChange={(e) => setNewCustomCake(prev => ({ ...prev, topping: toppingOptions.find(t => t._id === e.target.value)! }))}
+                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                    >
+                        <option value="">Select a topping</option>
+                        {toppingOptions.map((t) => (
+                            <option key={t._id} value={t._id}>{t.name.pt}</option>
                         ))}
                     </select>
                     <input

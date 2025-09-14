@@ -10,13 +10,15 @@ function CustomCakePage() {
     const doughOptions = cakeComponents.filter(component => component.category === 'dough');
     const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
     const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
+    const toppingOptions = cakeComponents.filter(component => component.category === 'topping');
     const [customCake, setCustomCake] = useState<CustomCake>({
         label: '',
         dough: doughOptions[0],
         filling: fillingOptions[0],
-        frosting: frostingOptions[0]
+        frosting: frostingOptions[0],
+        topping: undefined,
     });
-    const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}`
+    const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
     const navigate = useNavigate()
@@ -99,6 +101,21 @@ function CustomCakePage() {
                                 className="w-full p-2 rounded bg-white border"
                             >
                                 {frostingOptions.map(component => (
+                                    <option key={component._id} value={component._id}>
+                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="mb-6">
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Topping (Optional)' : 'Decoração (Opcional)'}</label>
+                            <select
+                                value={customCake.topping?._id}
+                                onChange={e => setCustomCake(cake => ({...cake, topping: toppingOptions.find(c => c._id === e.target.value)!}))}
+                                className="w-full p-2 rounded bg-white border"
+                            >
+                                {toppingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
                                         {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
                                     </option>

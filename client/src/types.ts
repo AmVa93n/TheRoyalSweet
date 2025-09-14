@@ -90,7 +90,8 @@ export type CustomCake = {
     dough: CakeComponent,
     filling: CakeComponent,
     frosting: CakeComponent,
+    topping?: CakeComponent,
 }
 
 export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "mini";
-export type CakeComponentCategory = "dough" | "filling" | "frosting";
+export type CakeComponentCategory = "dough" | "filling" | "frosting" | "topping";

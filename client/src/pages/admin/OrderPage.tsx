@@ -165,6 +165,9 @@ export default function OrderPage() {
                           <p>{getProductPrice(item.customCake.dough).toFixed(2)} €</p>
                           <p>{getProductPrice(item.customCake.filling).toFixed(2)} €</p>
                           <p>{getProductPrice(item.customCake.frosting).toFixed(2)} €</p>
+                          {item.customCake.topping && 
+                            <p>{getProductPrice(item.customCake.topping).toFixed(2)} €</p>
+                          }
                         </div>
                       )}
                     </td>

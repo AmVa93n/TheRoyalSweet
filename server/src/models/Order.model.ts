@@ -13,6 +13,7 @@ const orderSchema = new Schema(
           dough: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
           filling: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
           frosting: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
+          topping: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
         },
         quantity: Number,
         price: Number,

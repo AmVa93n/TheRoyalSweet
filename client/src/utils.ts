@@ -38,11 +38,11 @@ export function getProductInfo(product: Product | CakeComponent) {
 }
 
 export function getCustomCakeInfo(customCake: CustomCake) {
-    const { dough, filling, frosting } = customCake
-    const electricityCost = getElectricityCost(dough) + getElectricityCost(filling) + getElectricityCost(frosting)
-    const ingredientsCost = getIngredientsCost(dough) + getIngredientsCost(filling) + getIngredientsCost(frosting)
-    const totalCost = getTotalProductCost(dough) + getTotalProductCost(filling) + getTotalProductCost(frosting)
-    const workHoursValue = getWorkHoursValue(dough) + getWorkHoursValue(filling) + getWorkHoursValue(frosting)
+    const { dough, filling, frosting, topping } = customCake
+    const electricityCost = getElectricityCost(dough) + getElectricityCost(filling) + getElectricityCost(frosting) + (topping ? getElectricityCost(topping) : 0)
+    const ingredientsCost = getIngredientsCost(dough) + getIngredientsCost(filling) + getIngredientsCost(frosting) + (topping ? getIngredientsCost(topping) : 0)
+    const totalCost = getTotalProductCost(dough) + getTotalProductCost(filling) + getTotalProductCost(frosting) + (topping ? getTotalProductCost(topping) : 0)
+    const workHoursValue = getWorkHoursValue(dough) + getWorkHoursValue(filling) + getWorkHoursValue(frosting) + (topping ? getWorkHoursValue(topping) : 0)
     return { electricityCost, ingredientsCost, totalCost, workHoursValue }
 }
 
@@ -54,11 +54,12 @@ export function getProductPrice(product: Product | CakeComponent) {
 }
 
 export function getCustomCakePrice(customCake: CustomCake) {
-    const doughPrice = getProductPrice(customCake.dough)
-    const fillingPrice = getProductPrice(customCake.filling)
-    const frostingPrice = getProductPrice(customCake.frosting)
-    const totalPrice = doughPrice + fillingPrice + frostingPrice
-    return totalPrice
+    const { dough, filling, frosting, topping } = customCake
+    const doughPrice = getProductPrice(dough)
+    const fillingPrice = getProductPrice(filling)
+    const frostingPrice = getProductPrice(frosting)
+    const toppingPrice = topping ? getProductPrice(topping) : 0
+    return doughPrice + fillingPrice + frostingPrice + toppingPrice
 }
 
 export const imagePlaceholder = "https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000"
@@ -75,6 +76,7 @@ export const cakeComponentCategories = {
     dough: { en: 'Dough', pt: 'Massa' },
     filling: { en: 'Filling', pt: 'Recheio' },
     frosting: { en: 'Frosting', pt: 'Cobertura' },
+    topping: { en: 'Topping', pt: 'Decoração' },
 };
 
 export const supermarkets: Record<string, string> = {
