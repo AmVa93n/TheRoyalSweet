@@ -39,7 +39,7 @@ export default function OrderPage() {
               orderRecipe.push(entry);
             }
             
-            entry.amount += amount * item.quantity;
+            entry.amount += amount * item.size * item.quantity;
           });
         });
 
@@ -60,7 +60,7 @@ export default function OrderPage() {
     function getTotalIngredientsCost() {
       const { items } = order;
       const products = items.filter(item => item.product);
-      const IngredientsFromProductsCost = products.reduce((total, item) => total + getInfo(item.product!).ingredientsCost * item.quantity, 0);
+      const IngredientsFromProductsCost = products.reduce((total, item) => total + getInfo(item.product!, item.size).ingredientsCost * item.quantity, 0);
       const customCakes = items.filter(item => item.customCake);
       const IngredientsFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!, item.size).ingredientsCost * item.quantity, 0);
       return IngredientsFromProductsCost + IngredientsFromCustomCakesCost;
@@ -71,7 +71,7 @@ export default function OrderPage() {
       const products = items.filter(item => item.product);
       const ElectricityFromProductsCost = products.reduce((total, item) => total + getInfo(item.product!).electricityCost * item.quantity, 0);
       const customCakes = items.filter(item => item.customCake);
-      const ElectricityFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!, item.size).electricityCost * item.quantity, 0);
+      const ElectricityFromCustomCakesCost = customCakes.reduce((total, item) => total + getCustomCakeInfo(item.customCake!).electricityCost * item.quantity, 0);
       return ElectricityFromProductsCost + ElectricityFromCustomCakesCost;
     }
 

@@ -44,7 +44,7 @@ export default function CakeComponentPage() {
         <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Cake Component Details</h2>
           <p className="text-gray-600">
-            <span className="font-medium">Category:</span> {cakeComponentCategories[component.category][language]}
+            <span className="font-medium">Category:</span> {cakeComponentCategories[component.category]?.[language]}
           </p>
           <p className="text-gray-600">
             <span className="font-medium">Work Hours:</span> {component.workHours}
