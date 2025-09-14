@@ -80,7 +80,8 @@ export type Order = {
 export type CartItem = {
     product?: Product,
     customCake?: CustomCake,
-    quantity: number
+    size: number,
+    quantity: number,
     price: number,
     note?: string
 }

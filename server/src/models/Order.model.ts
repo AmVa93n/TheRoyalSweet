@@ -15,6 +15,7 @@ const orderSchema = new Schema(
           frosting: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
           topping: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
         },
+        size: { type: Number, default: 1 },
         quantity: Number,
         price: Number,
         note: String

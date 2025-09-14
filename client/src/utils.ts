@@ -84,4 +84,9 @@ export const supermarkets: Record<string, string> = {
     "Continente": continenteLogo,
     "Auchan": auchanLogo,
     "Supercor": supercorLogo,
+};
+
+export const sizes = {
+    1: { en: "Small", pt: "Pequeno" },
+    1.5: { en: "Standard", pt: "Padrão" },
 }
