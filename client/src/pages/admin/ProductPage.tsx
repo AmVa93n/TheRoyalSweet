@@ -51,34 +51,40 @@ export default function ProductPage() {
             <span>{product.name.pt}</span>
             <span>{product.name.en}</span>
           </div>
-          <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
-            <span className="font-medium">Intro:</span> 
-            <span>{product.intro.pt}</span>
-            <span>{product.intro.en}</span>
-          </div>
-          <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
-            <span className="font-medium">Description:</span> 
-            <span>{product.description.pt}</span>
-            <span>{product.description.en}</span>
-          </div>
-          <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
-            <span className="font-medium">Serve:</span> 
-            <span>{product.serve.pt}</span>
-            <span>{product.serve.en}</span>
-          </div>
-          <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
-            <span className="font-medium">Store:</span> 
-            <span>{product.store.pt}</span>
-            <span>{product.store.en}</span>
-          </div>
+          {!product.internal &&
+          <>
+            <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
+              <span className="font-medium">Intro:</span> 
+              <span>{product.intro.pt}</span>
+              <span>{product.intro.en}</span>
+            </div>
+            <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
+              <span className="font-medium">Description:</span> 
+              <span>{product.description.pt}</span>
+              <span>{product.description.en}</span>
+            </div>
+            <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
+              <span className="font-medium">Serve:</span> 
+              <span>{product.serve.pt}</span>
+              <span>{product.serve.en}</span>
+            </div>
+            <div className="text-gray-600 grid grid-cols-3 grid-cols-[150px_1fr_1fr]">
+              <span className="font-medium">Store:</span> 
+              <span>{product.store.pt}</span>
+              <span>{product.store.en}</span>
+            </div>
+          </>
+          }
         </div>
 
         {/* Product Details */}
         <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Product Details</h2>
+          {!product.internal &&
           <p className="text-gray-600">
             <span className="font-medium">Category:</span> {productCategories[product.category]?.[language]}
           </p>
+          }
           <p className="text-gray-600">
             <span className="font-medium">Work Hours:</span> {product.workHours}
           </p>
@@ -91,16 +97,18 @@ export default function ProductPage() {
         <Recipe recipe={product.recipe} />
 
         {/* Images */}
-        <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Images</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {product.images.map((img, index) => (
-              <div key={index} className="rounded-lg overflow-hidden">
-                <img src={img} alt={`Product Image ${index + 1}`} className="w-full h-48 object-cover" />
-              </div>
-            ))}
+        {!product.internal &&
+          <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Images</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {product.images.map((img, index) => (
+                <div key={index} className="rounded-lg overflow-hidden">
+                  <img src={img} alt={`Product Image ${index + 1}`} className="w-full h-48 object-cover" />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        }
 
         {/* Pricing */}
         <Pricing product={product} />

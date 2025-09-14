@@ -40,6 +40,7 @@ export type Product = {
     category: ProductCategory
     workHours: number,
     electricityHours: number,
+    internal: boolean,
 }
 
 export type CakeComponent = {

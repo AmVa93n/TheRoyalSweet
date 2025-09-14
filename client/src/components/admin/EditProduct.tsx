@@ -209,6 +209,19 @@ export default function EditProduct({ product, onClose }: Props) {
                         className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                 </div>
+                <div className="grid grid-cols-2 grid-cols-[1fr_3fr] gap-4">
+                    <label className="font-medium text-gray-700">Internal:</label>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            name="internal"
+                            checked={productForm.internal || false}
+                            onChange={(e) => setProductForm((prev) => ({ ...prev, internal: e.target.checked }))}
+                            className="h-6 w-6 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                        <span className="text-gray-600">If checked, this product will be marked as internal and won't be visible to customers.</span>
+                    </div>
+                </div>
             </div>
                 
             {/* Recipe */}
