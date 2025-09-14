@@ -1,9 +1,10 @@
 import { useState } from "react";
-import type { Ingredient, Product, ProductCategory } from "../../types";
+import type { Product, ProductCategory } from "../../types";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service'
-import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon } from "@phosphor-icons/react";
+import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import { productCategories } from "../../utils";
+import AddIngredientModal from "./AddIngredientModal";
 
 type Props = {
     product?: Product;
@@ -13,8 +14,7 @@ type Props = {
 export default function EditProduct({ product, onClose }: Props) {
     const { ingredients, products, setProducts, language } = useStore();
     const [productForm, setProductForm] = useState(product as Product);
-    const [newIngredientId, setNewIngredientId] = useState("");
-    const [newIngredientAmount, setNewIngredientAmount] = useState(0);
+    const [isAddingIngredient, setIsAddingIngredient] = useState(false);
     const [newImageUrl, setNewImageUrl] = useState("");
     type textKey = 'name' | 'description' | 'intro' | 'serve' | 'store'
 
@@ -25,19 +25,9 @@ export default function EditProduct({ product, onClose }: Props) {
         });
     };
 
-    function handleAddIngredient() {
-        setProductForm((prev) => ({
-            ...prev,
-            recipe: [
-                ...prev.recipe,
-                {
-                    ingredient: ingredients.find(ingredient => ingredient._id === newIngredientId) as Ingredient,
-                    amount: newIngredientAmount
-                }
-            ]
-        }));
-        setNewIngredientId(""); // Clear input
-        setNewIngredientAmount(0); // Clear amount
+    function handleAddIngredient(id: string, amount: number) {
+        const ingredient = ingredients.find(ingredient => ingredient._id === id)!
+        setProductForm((prev) => ({...prev, recipe: [...prev.recipe, { ingredient, amount }] }));
     };
 
     function handleAddImage() {
@@ -282,30 +272,13 @@ export default function EditProduct({ product, onClose }: Props) {
                 </div>
 
                 {/* Add Ingredient */}
-                <div className="flex gap-2 mt-4">
-                    <select
-                        value={newIngredientId}
-                        onChange={(e) => setNewIngredientId(e.target.value)}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select an ingredient</option>
-                        {ingredients.map((ing) => (
-                            <option key={ing._id} value={ing._id}>{ing.name}</option>
-                        ))}
-                    </select>
-                    <input
-                        type="number"
-                        value={newIngredientAmount}
-                        onChange={(e) => setNewIngredientAmount(Number(e.target.value))}
-                        placeholder="Amount"
-                        className="w-28 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    />
+                <div className="flex gap-2 mt-4 justify-center">
                     <button
-                        onClick={handleAddIngredient}
-                        disabled={newIngredientId === "" || newIngredientAmount <= 0}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
+                        onClick={() => setIsAddingIngredient(true)}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed flex items-center gap-1"
                     >
-                        Add
+                        <PlusCircleIcon size={20} />
+                        Ingredient
                     </button>
                 </div>
             </div>
@@ -367,6 +340,11 @@ export default function EditProduct({ product, onClose }: Props) {
             >
                 <XIcon size={24} />
             </button>
+
+            {/* Modals */}
+            {isAddingIngredient && (
+                <AddIngredientModal onClose={() => setIsAddingIngredient(false)} onConfirm={handleAddIngredient} />
+            )}
         </div>
     )
 }

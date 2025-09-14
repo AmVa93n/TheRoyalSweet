@@ -3,9 +3,10 @@ import type { CustomCake, Order } from "../../types";
 import { getCustomCakePrice, getProductPrice, getCakeComponentPrice, sizes } from "../../utils";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service';
-import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
+import { TrashIcon, FloppyDiskIcon, XIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import AddProductModal from "./AddProductModal";
 import AddCustomCakeModal from "./AddCustomCakeModal";
+import AddIngredientModal from "./AddIngredientModal";
 
 type Props = {
     order: Order;
@@ -15,11 +16,10 @@ type Props = {
 export default function EditOrder({ order, onClose }: Props) {
     const { products, ingredients, orders, setOrders, language } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
-    const [newIngredientId, setNewIngredientId] = useState("");
-    const [newIngredientAmount, setNewIngredientAmount] = useState(0);
     const customCakeTitle = language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake';
     const [isAddingProduct, setIsAddingProduct] = useState(false);
     const [isAddingCustomCake, setIsAddingCustomCake] = useState(false);
+    const [isAddingIngredient, setIsAddingIngredient] = useState(false);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -49,15 +49,11 @@ export default function EditOrder({ order, onClose }: Props) {
         setOrderForm(prev => ({ ...prev, items: prev.items.filter(item => item.product?._id !== idOrLabel && item.customCake?.label !== idOrLabel) }));
     };
 
-    function handleAddIngredient() {
-        console.log(newIngredientId);
-        const ingredient = ingredients.find(ingredient => ingredient._id === newIngredientId)!
-        console.log(ingredient);
+    function handleAddIngredient(id: string, amount: number) {
+        const ingredient = ingredients.find(ingredient => ingredient._id === id)!
         setOrderForm((prev) => ({
-            ...prev, additionalIngredients: [...prev.additionalIngredients, { ingredient, amount: newIngredientAmount }]
+            ...prev, additionalIngredients: [...prev.additionalIngredients, { ingredient, amount }]
         }));
-        setNewIngredientId(""); // Clear input
-        setNewIngredientAmount(0); // Clear amount
     };
         
     function handleDeleteIngredient(ingredientId: string) {
@@ -249,18 +245,20 @@ export default function EditOrder({ order, onClose }: Props) {
                 </div>
 
                 {/* Add Items */}
-                <div className="flex gap-2 mt-4">
+                <div className="flex gap-2 mt-4 justify-center">
                     <button
                         onClick={() => setIsAddingProduct(true)}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed flex items-center gap-1"
                     >
-                        Add Product
+                        <PlusCircleIcon size={20} />
+                        Product
                     </button>
                     <button
                         onClick={() => setIsAddingCustomCake(true)}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed flex items-center gap-1"
                     >
-                        Add Custom Cake
+                        <PlusCircleIcon size={20} />
+                        Custom Cake
                     </button>
                 </div>
             </div>
@@ -302,30 +300,13 @@ export default function EditOrder({ order, onClose }: Props) {
                 </div>
 
                 {/* Add Ingredient */}
-                <div className="flex gap-2 mt-4">
-                    <select
-                        value={newIngredientId}
-                        onChange={(e) => setNewIngredientId(e.target.value)}
-                        className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    >
-                        <option value="">Select an ingredient</option>
-                        {ingredients.map((ing) => (
-                            <option key={ing._id} value={ing._id}>{ing.name}</option>
-                        ))}
-                    </select>
-                    <input
-                        type="number"
-                        value={newIngredientAmount}
-                        onChange={(e) => setNewIngredientAmount(Number(e.target.value))}
-                        placeholder="Amount"
-                        className="w-28 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                    />
+                <div className="flex gap-2 mt-4 justify-center">
                     <button
-                        onClick={handleAddIngredient}
-                        disabled={newIngredientId === "" || newIngredientAmount <= 0}
-                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed"
+                        onClick={() => setIsAddingIngredient(true)}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed flex items-center gap-1"
                     >
-                        Add
+                        <PlusCircleIcon size={20} />
+                        Ingredient
                     </button>
                 </div>
             </div>
@@ -352,6 +333,9 @@ export default function EditOrder({ order, onClose }: Props) {
             )}
             {isAddingCustomCake && (
                 <AddCustomCakeModal onClose={() => setIsAddingCustomCake(false)} onConfirm={handleAddCustomCake} />
+            )}
+            {isAddingIngredient && (
+                <AddIngredientModal onClose={() => setIsAddingIngredient(false)} onConfirm={handleAddIngredient} />
             )}
         </div>
     )
