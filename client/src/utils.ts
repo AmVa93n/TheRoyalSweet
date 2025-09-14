@@ -87,7 +87,7 @@ export const supermarkets: Record<string, string> = {
     "Supercor": supercorLogo,
 };
 
-export const sizes = {
+export const sizes: Record<number, { en: string; pt: string }> = {
     1: { en: "Small", pt: "Pequeno" },
     1.5: { en: "Standard", pt: "Padrão" },
 }

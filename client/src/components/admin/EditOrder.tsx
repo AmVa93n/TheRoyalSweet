@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { CustomCake, Order } from "../../types";
-import { getCustomCakePrice, getProductPrice } from "../../utils";
+import { getCustomCakePrice, getProductPrice, getCakeComponentPrice, sizes } from "../../utils";
 import { useStore } from "../../store";
 import adminService from '../../services/admin.service';
 import { TrashIcon, FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
@@ -14,8 +14,10 @@ export default function EditOrder({ order, onClose }: Props) {
     const { products, ingredients, orders, setOrders, language, cakeComponents } = useStore();
     const [orderForm, setOrderForm] = useState<Order>(order as Order);
     const [newProductId, setNewProductId] = useState("");
+    const [newItemSize, setNewItemSize] = useState(1);
     const [newItemQuantity, setNewItemQuantity] = useState(0);
     const [newCustomCake, setNewCustomCake] = useState<CustomCake>({} as CustomCake);
+    const [newCustomCakeSize, setNewCustomCakeSize] = useState(1);
     const [newCustomCakeQuantity, setNewCustomCakeQuantity] = useState(0);
     const [newIngredientId, setNewIngredientId] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState(0);
@@ -40,7 +42,7 @@ export default function EditOrder({ order, onClose }: Props) {
     function handleAddItem() {
         const product = products.find(product => product._id === newProductId)!;
         const price = getProductPrice(product)
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, quantity: newItemQuantity, price: price }] }));
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, size: newItemSize, quantity: newItemQuantity, price: price }] }));
         setNewProductId(""); // Clear input
         setNewItemQuantity(0); // Clear amount
     };
@@ -48,7 +50,7 @@ export default function EditOrder({ order, onClose }: Props) {
     function handleAddCustomCake() {
         const price = getCustomCakePrice(newCustomCake);
         const label = `${newCustomCake.dough.name.en}, ${newCustomCake.filling.name.en}, ${newCustomCake.frosting.name.en}`
-        setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...newCustomCake, label }, quantity: newCustomCakeQuantity, price: price }] }));
+        setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...newCustomCake, label }, size: newCustomCakeSize, quantity: newCustomCakeQuantity, price: price }] }));
         setNewCustomCake({} as CustomCake); // Clear input
         setNewCustomCakeQuantity(0); // Clear amount
     }
@@ -198,6 +200,7 @@ export default function EditOrder({ order, onClose }: Props) {
                             <tr>
                                 <th className="px-4 py-2 text-left">Product</th>
                                 <th className="px-4 py-2 text-left">Note</th>
+                                <th className="px-4 py-2 text-center">Size</th>
                                 <th className="px-4 py-2 text-center">Quantity</th>
                                 <th className="px-4 py-2 text-center">Price (each)</th>
                                 <th className="px-4 py-2 text-center">Total</th>
@@ -224,6 +227,7 @@ export default function EditOrder({ order, onClose }: Props) {
                                         )}
                                     </td>
                                     <td className="px-4 py-2 text-gray-500">{item.note}</td>
+                                    <td className="px-4 py-2 text-center">{sizes[item.size][language]}</td>
                                     <td className="px-4 py-2 text-center">{item.quantity}</td>
                                     <td className="px-4 py-2 text-center">
                                         {item.price.toFixed(2)} €
@@ -263,12 +267,23 @@ export default function EditOrder({ order, onClose }: Props) {
                             <option key={p._id} value={p._id}>{p.name.pt}</option>
                         ))}
                     </select>
+                    <select
+                        value={newItemSize}
+                        onChange={e => setNewItemSize(Number(e.target.value))}
+                        className="w-24 p-2 rounded bg-white border"
+                    >
+                        {Object.entries(sizes).map(([key, value]) => (
+                            <option key={key} value={key}>
+                                {value[language]}
+                            </option>
+                        ))}
+                    </select>
                     <input
                         type="number"
                         value={newItemQuantity}
                         onChange={(e) => setNewItemQuantity(Number(e.target.value))}
                         placeholder="Qty"
-                        className="w-24 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        className="w-12 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                     <button
                         onClick={handleAddItem}
@@ -321,12 +336,23 @@ export default function EditOrder({ order, onClose }: Props) {
                             <option key={t._id} value={t._id}>{t.name.pt}</option>
                         ))}
                     </select>
+                    <select
+                        value={newCustomCakeSize}
+                        onChange={e => setNewCustomCakeSize(Number(e.target.value))}
+                        className="w-24 p-2 rounded bg-white border"
+                    >
+                        {Object.entries(sizes).map(([key, value]) => (
+                            <option key={key} value={key}>
+                                {value[language]}
+                            </option>
+                        ))}
+                    </select>
                     <input
                         type="number"
                         value={newCustomCakeQuantity}
                         onChange={(e) => setNewCustomCakeQuantity(Number(e.target.value))}
                         placeholder="Qty"
-                        className="w-24 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        className="w-12 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
                     <button
                         onClick={handleAddCustomCake}
