@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '../types';
-import { getProductPrice } from '../utils';
+import { getProductPrice, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function ProductPage() {
     const { productId } = useParams();
     const { products, setIsCartOpen, language, cart, setCart } = useStore();
     const product = products.find((product: Product) => product._id === productId)!;
+    const [size, setSize] = useState(1);
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
     const navigate = useNavigate()
@@ -18,13 +19,13 @@ function ProductPage() {
         if (cart.some(item => item.product?._id === product._id)) {
             // If product already exists in cart, just update the quantity
             const updatedCart = cart.map(item => 
-                item.product?._id === product._id ? {...item, quantity: item.quantity + quantity, note} : item
+                item.product?._id === product._id ? {...item, quantity: item.quantity + quantity } : item
             );
             setCart(updatedCart);
         } else {
             // If product is not in cart, add it
-            const price = getProductPrice(product)
-            const updatedCart = [...cart, {product, quantity, price, note}]
+            const price = getProductPrice(product, size)
+            const updatedCart = [...cart, {product, size, quantity, price, note}]
             setCart(updatedCart)
         }
         setIsCartOpen(true) // Open cart after adding product
@@ -61,8 +62,24 @@ function ProductPage() {
 
                     <div className="flex flex-col">
                         <p className="text-2xl font-semibold mb-4">
-                            {getProductPrice(product).toFixed(2).replace('.', ',')} €
+                            {getProductPrice(product, size).toFixed(2).replace('.', ',')} €
                         </p>
+
+                        {/* Size */}
+                        <div className="mb-6">
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Size' : 'Tamanho'}</label>
+                            <select
+                                value={size}
+                                onChange={e => setSize(Number(e.target.value))}
+                                className="w-[50%] p-2 rounded bg-white border"
+                            >
+                                {Object.entries(sizes).map(([key, value]) => (
+                                    <option key={key} value={key}>
+                                        {value[language]}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
                         {/* Quantity */}
                         <div className="mb-6 relative">

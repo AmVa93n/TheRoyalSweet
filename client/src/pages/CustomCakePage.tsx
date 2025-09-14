@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import type { CustomCake } from '../types';
-import { getCustomCakePrice, getProductPrice, imagePlaceholder } from '../utils';
+import { getCustomCakePrice, getProductPrice, imagePlaceholder, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 
 function CustomCakePage() {
@@ -19,6 +19,7 @@ function CustomCakePage() {
         topping: undefined,
     });
     const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
+    const [size, setSize] = useState(1);
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
     const navigate = useNavigate()
@@ -27,13 +28,13 @@ function CustomCakePage() {
         if (cart.some(item => item.customCake?.label === label)) {
             // If a custom cake with the same components is already in the cart, increase its quantity
             const updatedCart = cart.map(item => 
-                item.customCake?.label === label ? {...item, quantity: item.quantity + quantity, note} : item
+                item.customCake?.label === label ? {...item, quantity: item.quantity + quantity } : item
             );
             setCart(updatedCart);
         } else {
             // If a custom cake with the same components is not in cart, add it
-            const price = getCustomCakePrice(customCake)
-            const updatedCart = [...cart, {customCake: {...customCake, label}, quantity, price, note}]
+            const price = getCustomCakePrice(customCake, size)
+            const updatedCart = [...cart, {customCake: {...customCake, label}, size, quantity, price, note}]
             setCart(updatedCart)
         }
         setIsCartOpen(true) // Open cart after adding product
@@ -59,7 +60,7 @@ function CustomCakePage() {
 
                     <div className="flex flex-col">
                         <p className="text-2xl font-semibold mb-4">
-                            {getCustomCakePrice(customCake).toFixed(2).replace('.', ',')} €
+                            {getCustomCakePrice(customCake, size).toFixed(2).replace('.', ',')} €
                         </p>
 
                         {/* Components */}
@@ -72,7 +73,7 @@ function CustomCakePage() {
                             >
                                 {doughOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component, size).toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -87,7 +88,7 @@ function CustomCakePage() {
                             >
                                 {fillingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component, size).toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -102,7 +103,7 @@ function CustomCakePage() {
                             >
                                 {frostingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component, size).toFixed(2).replace('.', ',')} €)
                                     </option>
                                 ))}
                             </select>
@@ -117,7 +118,23 @@ function CustomCakePage() {
                             >
                                 {toppingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getProductPrice(component).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]} ({getProductPrice(component, size).toFixed(2).replace('.', ',')} €)
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Size */}
+                        <div className="mb-6">
+                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Size' : 'Tamanho'}</label>
+                            <select
+                                value={size}
+                                onChange={e => setSize(Number(e.target.value))}
+                                className="w-[50%] p-2 rounded bg-white border"
+                            >
+                                {Object.entries(sizes).map(([key, value]) => (
+                                    <option key={key} value={key}>
+                                        {value[language]}
                                     </option>
                                 ))}
                             </select>
