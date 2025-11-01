@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import Product from "../models/Product.model";
-import Order from "../models/Order.model";
+import { orderModel } from "../models/Order.model";
 import Ingredient from "../models/Ingredient.model";
 import CakeComponent from "../models/CakeComponent.model";
 
@@ -232,7 +232,7 @@ router.delete("/cakeComponents/:cakeComponentId", async (req, res, next) => {
 
 router.get("/orders", async (req, res, next) => {
     try {
-      const orders = await Order.find().populate([
+      const orders = await orderModel.find().populate([
         {
           path: 'items.product', // Populate the 'product' in 'items'
           populate: {
@@ -289,7 +289,7 @@ router.post("/orders", async (req, res, next) => {
         additionalIngredients: [],
       }
   
-      const createdOrder = await Order.create(newOrder);
+      const createdOrder = await orderModel.create(newOrder);
   
       if (!createdOrder) {
         res.status(404).json({ message: "Order not created" });
@@ -307,7 +307,7 @@ router.put("/orders", async (req, res, next) => {
       const data = req.body;
       data.deliveryDate = new Date(data.deliveryDate);
   
-      const updatedOrder = await Order.findByIdAndUpdate(data._id, data, { new: true })
+      const updatedOrder = await orderModel.findByIdAndUpdate(data._id, data, { new: true })
   
       if (!updatedOrder) {
         res.status(404).json({ message: "Order not found" });
@@ -352,7 +352,7 @@ router.delete("/orders/:orderId", async (req, res, next) => {
     try {
       const { orderId } = req.params;
 
-      const deletedOrder = await Order.findByIdAndDelete(orderId);
+      const deletedOrder = await orderModel.findByIdAndDelete(orderId);
 
       if (!deletedOrder) {
         res.status(404).json({ message: "Order not found" });

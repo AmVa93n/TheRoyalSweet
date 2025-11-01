@@ -1,11 +1,11 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, InferSchemaType } from "mongoose";
 
 const orderSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User'},
-    name: String,
-    email: String,
-    phone: String,
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
         customCake: { 
@@ -16,15 +16,15 @@ const orderSchema = new Schema(
           topping: { type: Schema.Types.ObjectId, ref: 'CakeComponent'},
         },
         size: { type: Number, default: 1 },
-        quantity: Number,
-        price: Number,
-        note: String
+        quantity: { type: Number, default: 1 },
+        price: { type: Number, required: true },
+        note: { type: String, default: '' },
     }],
     pickup: Boolean,
     shipping: {
-        city: String,
-        address: String,
-        zip: String,
+        city: { type: String, default: '' },
+        address: { type: String, default: '' },
+        zip: { type: String, default: '' },
     },
     deliveryDate: Date,
     additionalIngredients: [{
@@ -38,6 +38,5 @@ const orderSchema = new Schema(
   }
 );
 
-const Order = model("Order", orderSchema);
-
-export default Order;
+export type Order = InferSchemaType<typeof orderSchema>;
+export const orderModel = model("Order", orderSchema);

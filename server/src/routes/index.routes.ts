@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import Product from "../models/Product.model";
 import CakeComponent from "../models/CakeComponent.model";
-import Order from "../models/Order.model";
+import { orderModel, Order } from "../models/Order.model";
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2024-09-30.acacia"
@@ -39,14 +39,14 @@ router.get("/cake-components", async (req, res, next) => {
 });
 
 router.post('/checkout', async (req, res) => {
-  const { name, email, shipping, pickup, items } = req.body;
-  const { address, city, zip } = shipping;
+  const { name, email, shipping, pickup, items } = req.body as Order;
+  const { address, city, zip } = shipping || {};
   const deliveryFee = pickup ? 0 : 5;
-  const total = items.reduce((sum: number, item: {price: number, quantity: number}) => sum + item.price * item.quantity, 0) + deliveryFee;
+  const total = items.reduce((sum: number, item) => sum + item.price * item.quantity, 0) + deliveryFee;
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: total * 100, // amount is in cents
+      amount: Math.floor(total * 100), // amount is in cents
       currency: 'eur',
       payment_method_types: ['card'],
       receipt_email: email,
@@ -67,7 +67,7 @@ router.post('/checkout', async (req, res) => {
 
 router.post('/orders', async (req, res) => {
   const data = req.body;
-  const newOrder = await Order.create(data);
+  const newOrder = await orderModel.create(data);
   res.status(201).json(newOrder);
 });
 
