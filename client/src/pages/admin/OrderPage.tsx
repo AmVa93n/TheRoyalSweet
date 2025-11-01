@@ -11,7 +11,7 @@ import adminService from '../../services/admin.service';
 
 export default function OrderPage() {
     const { orderId } = useParams();
-    const { orders } = useAdminStore();
+    const { orders, setOrders } = useAdminStore();
     const { language } = useStore();
     const order = orders.find(order => order._id === orderId)!;
     const recipe = createRecipe();
@@ -87,6 +87,7 @@ export default function OrderPage() {
     async function handleDelete() {
       try {
         await adminService.deleteOrder(order._id);
+        setOrders(orders.filter(o => o._id !== order._id));
         navigate('/admin/orders'); // Redirect to orders list after deletion
       } catch (error) {
         console.error("Failed to delete order:", error);

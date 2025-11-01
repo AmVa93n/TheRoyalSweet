@@ -11,7 +11,7 @@ import adminService from '../../services/admin.service';
 
 export default function CakeComponentPage() {
     const { componentId } = useParams();
-    const { cakeComponents } = useAdminStore();
+    const { cakeComponents, setCakeComponents } = useAdminStore();
     const { language } = useStore();
     const component = cakeComponents.find(component => component._id === componentId)!;
     const location = useLocation();
@@ -22,6 +22,7 @@ export default function CakeComponentPage() {
     async function handleDelete() {
       try {
         await adminService.deleteCakeComponent(component._id);
+        setCakeComponents(cakeComponents.filter(c => c._id !== component._id));
         navigate('/admin/cake-components'); // Redirect to cake components list after deletion
       } catch (error) {
         console.error("Failed to delete cake component:", error);

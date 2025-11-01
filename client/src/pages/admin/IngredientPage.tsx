@@ -9,7 +9,7 @@ import adminService from '../../services/admin.service';
 
 export default function IngredientPage() {
     const { ingredientId } = useParams();
-    const { ingredients } = useAdminStore();
+    const { ingredients, setIngredients } = useAdminStore();
     const ingredient = ingredients.find(ingredient => ingredient._id === ingredientId)!;
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
@@ -19,6 +19,7 @@ export default function IngredientPage() {
     async function handleDelete() {
       try {
         await adminService.deleteIngredient(ingredient._id);
+        setIngredients(ingredients.filter(i => i._id !== ingredient._id));
         navigate('/admin/ingredients'); // Redirect to ingredients list after deletion
       } catch (error) {
         console.error("Failed to delete ingredient:", error);

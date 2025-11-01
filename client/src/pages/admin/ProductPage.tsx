@@ -11,7 +11,7 @@ import adminService from '../../services/admin.service';
 
 export default function ProductPage() {
     const { productId } = useParams();
-    const { products } = useAdminStore();
+    const { products, setProducts } = useAdminStore();
     const { language } = useStore();
     const product = products.find(product => product._id === productId)!;
     const location = useLocation();
@@ -22,6 +22,7 @@ export default function ProductPage() {
     async function handleDelete() {
       try {
         await adminService.deleteProduct(product._id);
+        setProducts(products.filter(p => p._id !== product._id));
         navigate('/admin/products'); // Redirect to products list after deletion
       } catch (error) {
         console.error("Failed to delete product:", error);
