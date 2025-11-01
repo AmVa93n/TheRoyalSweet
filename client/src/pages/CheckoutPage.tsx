@@ -179,7 +179,7 @@ function CheckoutPage() {
                     <button
                         onClick={createPayment}
                         className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || cart.length === 0}
                     >
                         {language === 'en' ? 'Continue' : 'Continuar'}
                     </button>
