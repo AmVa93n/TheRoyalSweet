@@ -44,21 +44,25 @@ router.post('/checkout', async (req, res) => {
   const deliveryFee = pickup ? 0 : 5;
   const total = items.reduce((sum: number, item: {price: number, quantity: number}) => sum + item.price * item.quantity, 0) + deliveryFee;
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: total * 100, // amount is in cents
-    currency: 'eur',
-    payment_method_types: ['card'],
-    receipt_email: email,
-    shipping: {
-      name: name,
-      address: {
-        line1: address,
-        city: city,
-        postal_code: zip,
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: total * 100, // amount is in cents
+      currency: 'eur',
+      payment_method_types: ['card'],
+      receipt_email: email,
+      shipping: {
+        name: name,
+        address: {
+          line1: address,
+          city: city,
+          postal_code: zip,
+        },
       },
-    },
-  });
-  res.json({client_secret: paymentIntent.client_secret});
+    });
+    res.status(200).json({client_secret: paymentIntent.client_secret});
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create payment intent' });
+  }
 });
 
 router.post('/orders', async (req, res) => {
