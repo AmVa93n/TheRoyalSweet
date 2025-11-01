@@ -15,11 +15,13 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 function CheckoutPage() {
     const { language, cart, setCart } = useStore()
+    const dayAfterTomorrow = new Date();
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
     const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients'>>({
         name: '',
         email: '',
         phone: '',
-        deliveryDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        deliveryDate: dayjs(dayAfterTomorrow).format('YYYY-MM-DD'),
         pickup: false,
         shipping: {
             address: '',
@@ -117,7 +119,14 @@ function CheckoutPage() {
                             }}
                             disabled={!!clientSecret}
                             disablePast
-                            shouldDisableDate={date => date.format('YYYY-MM-DD') === new Date().toISOString().split('T')[0]} // disable today
+                            shouldDisableDate={date => {
+                                const dateString = date.format('YYYY-MM-DD')
+                                const today = new Date().toISOString().split('T')[0]
+                                const tomorrow = new Date();
+                                tomorrow.setDate(tomorrow.getDate() + 1)
+                                // Disable today and tomorrow
+                                return dateString === today || dateString === tomorrow.toISOString().split('T')[0]
+                            }}
                         />
                     </LocalizationProvider>
 
