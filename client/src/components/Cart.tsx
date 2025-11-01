@@ -69,7 +69,7 @@ function Cart() {
               }}
               className="w-full block mx-auto text-center bg-[#593b3e] text-white font-bold py-2 px-4 rounded-full hover:bg-[#593b3e75] transition hover:cursor-pointer"
             >
-              {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
+              {language === 'en' ? 'Proceed to Checkout' : 'Ir para o checkout'}
             </button>
           </div>
         </div>
