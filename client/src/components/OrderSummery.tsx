@@ -28,7 +28,7 @@ function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
                         alt={item.product?._id || 'Custom Cake'}
                         className="w-10 h-10 object-cover mr-3"
                     />
-                    <span className="flex-grow">{item.product?.name[language] || language === 'en' ? 'Custom Cake' : 'Bolo Personalizado'} x {item.quantity}</span>
+                    <span className="flex-grow">{item.product?.name[language] || (language === 'en' ? 'Custom Cake' : 'Bolo Personalizado')} x {item.quantity}</span>
                     <span>{(item.price * item.quantity).toFixed(2).replace('.', ',')} €</span>
                 </div>
             ))}
