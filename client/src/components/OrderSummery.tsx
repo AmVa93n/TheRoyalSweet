@@ -41,14 +41,13 @@ function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
                 <span className="flex-grow">{language === 'en' ? 'Delivery' : 'Entrega'}</span>
                 <span>{deliveryFee.toFixed(2).replace('.', ',')} €</span>
             </div>
-            <div className="flex items-center mb-2">
-                <span className="flex-grow">{language === 'en' ? 'VAT' : 'IVA'}</span>
-                <span>0,00 €</span>
-            </div>
             <hr className="my-4 border-gray-300" />
-            <div className="flex items-center">
+            <div className="flex">
                 <h3 className="text-lg font-bold flex-grow">Total</h3>
-                <span className="text-lg font-bold">{(totalAmount + deliveryFee).toFixed(2).replace('.', ',')} €</span>
+                <div className='flex flex-col items-end'>
+                    <span className="text-lg font-bold">{(totalAmount + deliveryFee).toFixed(2).replace('.', ',')} €</span>
+                    <span className='text-xs text-gray-500'>{language === 'en' ? 'Including 23% VAT' : 'Inclui 23% IVA'}</span>
+                </div>
             </div>
         </div>
     );
