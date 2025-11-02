@@ -4,14 +4,17 @@ import { XCircleIcon } from "@phosphor-icons/react";
 
 type Props = {
     onClose: () => void;
-    onConfirm: (id: string, amount: number) => void;
+    onConfirm: (id: string, amount: number, component?: string) => void;
+    recipeComponents?: { name: string, multiplier: number }[];
 };
 
-export default function AddIngredientModal({ onClose, onConfirm }: Props) {
+export default function AddIngredientModal({ onClose, onConfirm, recipeComponents }: Props) {
     const { ingredients } = useAdminStore();
     const ingredientOptions = ingredients.sort((a, b) => a.name.localeCompare(b.name))
+    const componentOptions = recipeComponents?.map(rc => rc.name) || [];
     const [newIngredientId, setNewIngredientId] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState(0);
+    const [newIngredientComponent, setNewIngredientComponent] = useState("");
 
     return (
         <div className="inset-0 fixed bg-black/50 flex items-center justify-center">
@@ -39,8 +42,24 @@ export default function AddIngredientModal({ onClose, onConfirm }: Props) {
                         className="w-28 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     />
 
+                    {componentOptions.length > 0 && (
+                    <>
+                        <label className="font-semibold">Component:</label>
+                        <select
+                            value={newIngredientComponent}
+                            onChange={(e) => setNewIngredientComponent(e.target.value)}
+                            className="flex-1 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                        >
+                            <option value="">Select a component</option>
+                            {componentOptions.map((comp) => (
+                                <option key={comp} value={comp}>{comp}</option>
+                            ))}
+                        </select>
+                    </>
+                    )}
+
                     <button
-                        onClick={() => {onConfirm(newIngredientId, newIngredientAmount); onClose()}}
+                        onClick={() => {onConfirm(newIngredientId, newIngredientAmount, newIngredientComponent); onClose()}}
                         disabled={newIngredientId === "" || newIngredientAmount <= 0}
                         className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed mt-4"
                     >

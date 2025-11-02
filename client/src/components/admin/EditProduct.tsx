@@ -5,6 +5,7 @@ import adminService from '../../services/admin.service'
 import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import { productCategories } from "../../utils";
 import AddIngredientModal from "./AddIngredientModal";
+import AddRecipeComponentModal from "./AddRecipeComponentModal";
 
 type Props = {
     product?: Product;
@@ -16,6 +17,7 @@ export default function EditProduct({ product, onClose }: Props) {
     const { language } = useStore();
     const [productForm, setProductForm] = useState(product as Product);
     const [isAddingIngredient, setIsAddingIngredient] = useState(false);
+    const [isAddingComponent, setIsAddingComponent] = useState(false);
     const [newImageUrl, setNewImageUrl] = useState("");
     type textKey = 'name' | 'description' | 'intro' | 'serve' | 'store'
 
@@ -26,9 +28,13 @@ export default function EditProduct({ product, onClose }: Props) {
         });
     };
 
-    function handleAddIngredient(id: string, amount: number) {
+    function handleAddIngredient(id: string, amount: number, component?: string) {
         const ingredient = ingredients.find(ingredient => ingredient._id === id)!
-        setProductForm((prev) => ({...prev, recipe: [...prev.recipe, { ingredient, amount }] }));
+        setProductForm((prev) => ({...prev, recipe: [...prev.recipe, { ingredient, amount, component: component as string }] }));
+    };
+
+    function handleAddComponent(name: string, multiplier: number) {
+        setProductForm((prev) => ({...prev, recipeComponents: [...prev.recipeComponents, { name, multiplier }] }));
     };
 
     function handleAddImage() {
@@ -234,6 +240,7 @@ export default function EditProduct({ product, onClose }: Props) {
                             <tr>
                                 <th className="px-4 py-2 text-left">Ingredient</th>
                                 <th className="px-4 py-2 text-left">Amount</th>
+                                <th className="px-4 py-2 text-left">Component</th>
                                 <th className="px-4 py-2 text-center">Price / Unit</th>
                                 <th className="px-4 py-2 text-center">Total Price</th>
                                 <th className="px-4 py-2 text-center">Actions</th>
@@ -251,6 +258,18 @@ export default function EditProduct({ product, onClose }: Props) {
                                             className="w-20 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                                         />
                                         {item.ingredient.recipeUnits}
+                                    </td>
+                                    <td className="px-4 py-2 text-gray-800">
+                                        <select
+                                            value={item.component || ""}
+                                            onChange={(e) => setProductForm((prev) => ({ ...prev, recipe: prev.recipe.map((r) => r.ingredient._id === item.ingredient._id ? { ...r, component: e.target.value } : r) }))}
+                                            className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                                        >
+                                            <option value="">{""}</option>
+                                            {productForm.recipeComponents.map((rc) => (
+                                                <option key={rc.name} value={rc.name}>{rc.name}</option>
+                                            ))}
+                                        </select>
                                     </td>
                                     <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
                                     <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
@@ -293,6 +312,14 @@ export default function EditProduct({ product, onClose }: Props) {
                     >
                         <PlusCircleIcon size={20} />
                         Ingredient
+                    </button>
+
+                    <button
+                        onClick={() => setIsAddingComponent(true)}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:bg-gray-300 hover:bg-indigo-700 cursor-pointer disabled:cursor-not-allowed flex items-center gap-1"
+                    >
+                        <PlusCircleIcon size={20} />
+                        Recipe Component
                     </button>
                 </div>
             </div>
@@ -357,7 +384,11 @@ export default function EditProduct({ product, onClose }: Props) {
 
             {/* Modals */}
             {isAddingIngredient && (
-                <AddIngredientModal onClose={() => setIsAddingIngredient(false)} onConfirm={handleAddIngredient} />
+                <AddIngredientModal recipeComponents={productForm.recipeComponents} onClose={() => setIsAddingIngredient(false)} onConfirm={handleAddIngredient} />
+            )}
+
+            {isAddingComponent && (
+                <AddRecipeComponentModal onClose={() => setIsAddingComponent(false)} onConfirm={handleAddComponent} />
             )}
         </div>
     )
