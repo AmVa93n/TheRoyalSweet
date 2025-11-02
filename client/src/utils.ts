@@ -4,7 +4,7 @@ import continenteLogo from './assets/Logo_Continente.svg'
 import auchanLogo from './assets/Auchan-Logo.svg'
 import supercorLogo from './assets/Supercor-supermercados.png'
 
-export const workHourPrice = 10
+export const workHourPrice = 8
 export const electricityHourPrice = 0.54
 export const fixedCostsPerItem = 2
 export const gainMultiplier = 1.2 // 20% gain
@@ -22,6 +22,15 @@ function getIngredientsCost(product: Product | CakeComponent, size: number = 1) 
 
 function getWorkHoursValue(product: Product | CakeComponent) {
     return product.workHours * workHourPrice
+}
+
+function roundToNextWholeOrHalf(num: number) {
+    const integerPart = Math.floor(num);
+    const decimalPart = num - integerPart;
+
+    if (decimalPart === 0) return integerPart; // already whole number
+    if (decimalPart < 0.5) return integerPart + 0.5; // round up to next half
+    return integerPart + 1; // round up to next whole
 }
 
 export function getInfo(product: Product | CakeComponent, size: number = 1) {
@@ -43,7 +52,7 @@ export function getProductPrice(product: Product, size: number = 1) {
     const totalCost = getTotalProductCost(product, size)
     const workHoursValue = getWorkHoursValue(product)
     const rawPrice = (totalCost + workHoursValue) * gainMultiplier
-    return (Math.round(rawPrice * 10) / 10)
+    return roundToNextWholeOrHalf(rawPrice)
 }
 
 // Cake Component
@@ -58,7 +67,7 @@ export function getCakeComponentPrice(component: CakeComponent, size: number = 1
     const totalCost = getTotalCakeComponentCost(component, size)
     const workHoursValue = getWorkHoursValue(component)
     const rawPrice = (totalCost + workHoursValue) * gainMultiplier
-    return (Math.round(rawPrice * 10) / 10)
+    return roundToNextWholeOrHalf(rawPrice)
 }
 
 // Custom Cake
@@ -78,7 +87,7 @@ export function getCustomCakePrice(customCake: CustomCake, size: number = 1) {
     const totalCost = components.reduce((total, component) => total + getTotalCakeComponentCost(component, size), 0) + fixedCostsPerItem
     const workHoursValue = components.reduce((total, component) => total + getWorkHoursValue(component), 0)
     const rawPrice = (totalCost + workHoursValue) * gainMultiplier
-    return (Math.round(rawPrice * 10) / 10)
+    return roundToNextWholeOrHalf(rawPrice)
 }
 
 export const imagePlaceholder = "https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000"
