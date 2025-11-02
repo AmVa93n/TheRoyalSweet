@@ -30,6 +30,7 @@ router.post("/products", async (req, res, next) => {
         store: {en: "", pt: ""},
         images: [],
         recipe: [],
+        recipeComponents: [],
         category: "",
         workHours: 0,
         electricityHours: 0,

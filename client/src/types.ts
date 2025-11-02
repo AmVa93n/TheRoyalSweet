@@ -35,7 +35,12 @@ export type Product = {
     images: string[],
     recipe: {
         ingredient: Ingredient,
-        amount: number
+        amount: number,
+        component: string,
+    }[],
+    recipeComponents: {
+        name: string,
+        multiplier: number,
     }[],
     category: ProductCategory
     workHours: number,

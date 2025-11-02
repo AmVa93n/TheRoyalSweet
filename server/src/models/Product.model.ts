@@ -10,7 +10,12 @@ const productSchema = new Schema(
     images: [String],
     recipe: [{
       ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
-      amount: Number
+      amount: Number,
+      component: String,
+    }],
+    recipeComponents: [{
+      name: String,
+      multiplier: Number,
     }],
     category: String,
     workHours: Number,
