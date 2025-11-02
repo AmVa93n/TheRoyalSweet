@@ -4,7 +4,7 @@ import EditProduct from '../../components/admin/EditProduct';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
 import { productCategories } from '../../utils';
-import Recipe from '../../components/admin/Recipe';
+import SegmentedRecipe from '../../components/admin/SegmentedRecipe';
 import Pricing from '../../components/admin/Pricing';
 import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
 import adminService from '../../services/admin.service';
@@ -96,7 +96,7 @@ export default function ProductPage() {
         </div>
 
         {/* Recipe */}
-        <Recipe recipe={product.recipe} />
+        <SegmentedRecipe recipe={product.recipe} recipeComponents={product.recipeComponents} />
 
         {/* Images */}
         {!product.internal &&
