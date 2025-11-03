@@ -5,7 +5,7 @@ import { XCircleIcon } from "@phosphor-icons/react";
 
 type Props = {
     onClose: () => void;
-    onConfirm: (id: string, size: number, quantity: number) => void;
+    onConfirm: (id: string, size: "small" | "standard", quantity: number) => void;
 };
 
 export default function AddProductModal({ onClose, onConfirm }: Props) {
@@ -13,7 +13,7 @@ export default function AddProductModal({ onClose, onConfirm }: Props) {
     const { language } = useStore();
     const productOptions = products.sort((a, b) => a.name[language].localeCompare(b.name[language]))
     const [newProductId, setNewProductId] = useState("");
-    const [newProductSize, setNewProductSize] = useState(1);
+    const [newProductSize, setNewProductSize] = useState<("small" | "standard")>("small");
     const [newProductQuantity, setNewProductQuantity] = useState(0);
 
     return (
@@ -36,7 +36,7 @@ export default function AddProductModal({ onClose, onConfirm }: Props) {
                     <label htmlFor="size" className="font-semibold">Size</label>
                     <select
                         value={newProductSize}
-                        onChange={e => setNewProductSize(Number(e.target.value))}
+                        onChange={e => setNewProductSize(e.target.value as "small" | "standard")}
                         className="w-30 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     >
                         {Object.entries(sizes).map(([key, value]) => (

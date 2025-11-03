@@ -1,13 +1,15 @@
 import type { Product, CakeComponent } from "../../types";
-import { fixedCostsPerItem, getProductPrice, getCakeComponentPrice, gainMultiplier, workHourPrice, electricityHourPrice, getInfo, getTotalProductCost, getTotalCakeComponentCost } from '../../utils';
+import { fixedCostsPerItem, getProductPrice, getCakeComponentPrice, gainMultiplier, workHourPrice, electricityHourPrice, getInfo, 
+  getTotalProductCost, getTotalCakeComponentCost, getProductIngredientsCost, getCakeComponentIngredientsCost } from '../../utils';
 
 type Props = {
     product: Product | CakeComponent;
 }
 
 export default function Pricing({ product }: Props) {
-    const { electricityCost, ingredientsCost, workHoursValue } = getInfo(product);
+    const { electricityCost, workHoursValue } = getInfo(product);
     const isProduct = "description" in product; // Check if it's a Product
+    const ingredientsCost = isProduct ? getProductIngredientsCost(product) : getCakeComponentIngredientsCost(product);
     const totalCost = isProduct ? getTotalProductCost(product) : getTotalCakeComponentCost(product);
     const price = isProduct ? getProductPrice(product) : getCakeComponentPrice(product);
     const netGain = price - totalCost;

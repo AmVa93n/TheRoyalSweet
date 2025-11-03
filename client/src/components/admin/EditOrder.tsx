@@ -34,13 +34,13 @@ export default function EditOrder({ order, onClose }: Props) {
         setOrderForm(prev => ({ ...prev, [name]: value }));
     };
 
-    function handleAddProduct(id: string, size: number, quantity: number) {
+    function handleAddProduct(id: string, size: "small" | "standard", quantity: number) {
         const product = products.find(product => product._id === id)!;
         const price = getProductPrice(product, size);
         setOrderForm(prev => ({ ...prev, items: [...prev.items, { product: product, size, quantity, price }] }));
     };
 
-    function handleAddCustomCake(customCake: CustomCake, size: number, quantity: number) {
+    function handleAddCustomCake(customCake: CustomCake, size: "small" | "standard", quantity: number) {
         const price = getCustomCakePrice(customCake, size);
         const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
         setOrderForm(prev => ({ ...prev, items: [...prev.items, { customCake: { ...customCake, label }, size, quantity, price }] }));

@@ -6,7 +6,7 @@ import type { CustomCake } from "../../types";
 
 type Props = {
     onClose: () => void;
-    onConfirm: (customCake: CustomCake, size: number, quantity: number) => void;
+    onConfirm: (customCake: CustomCake, size: "small" | "standard", quantity: number) => void;
 };
 
 export default function AddCustomCakeModal({ onClose, onConfirm }: Props) {
@@ -17,7 +17,7 @@ export default function AddCustomCakeModal({ onClose, onConfirm }: Props) {
     const frostingOptions = cakeComponents.filter(component => component.category === 'frosting').sort((a, b) => a.name[language].localeCompare(b.name[language]));
     const toppingOptions = cakeComponents.filter(component => component.category === 'topping').sort((a, b) => a.name[language].localeCompare(b.name[language]));
     const [newCustomCake, setNewCustomCake] = useState<CustomCake>({} as CustomCake);
-    const [newCustomCakeSize, setNewCustomCakeSize] = useState(1);
+    const [newCustomCakeSize, setNewCustomCakeSize] = useState<"small" | "standard">("small");
     const [newCustomCakeQuantity, setNewCustomCakeQuantity] = useState(0);
 
     return (
@@ -76,7 +76,7 @@ export default function AddCustomCakeModal({ onClose, onConfirm }: Props) {
                     <label htmlFor="size" className="font-semibold">Size</label>
                     <select
                         value={newCustomCakeSize}
-                        onChange={e => setNewCustomCakeSize(Number(e.target.value))}
+                        onChange={e => setNewCustomCakeSize(e.target.value as "small" | "standard")}
                         className="w-30 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                     >
                         {Object.entries(sizes).map(([key, value]) => (

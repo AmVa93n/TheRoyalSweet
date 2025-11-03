@@ -19,7 +19,7 @@ function CustomCakePage() {
         topping: undefined,
     });
     const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
-    const [size, setSize] = useState(1);
+    const [size, setSize] = useState<'small' | 'standard'>('small');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
     const navigate = useNavigate()
@@ -129,7 +129,7 @@ function CustomCakePage() {
                             <label className="block mb-1 font-semibold">{language === 'en' ? 'Size' : 'Tamanho'}</label>
                             <select
                                 value={size}
-                                onChange={e => setSize(Number(e.target.value))}
+                                onChange={e => setSize(e.target.value as 'small' | 'standard')}
                                 className="w-[50%] p-2 rounded bg-white border"
                             >
                                 {Object.entries(sizes).map(([key, value]) => (
