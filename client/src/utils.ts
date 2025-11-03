@@ -33,6 +33,14 @@ function roundToNextWholeOrHalf(num: number) {
     return integerPart + 1; // round up to next whole
 }
 
+export function getComponentIngredients(product: Product, componentName: string) {
+    const { recipe, recipeComponents } = product;
+    if (componentName === 'Uncategorized') {
+        return recipe.filter(item => !item.component || !recipeComponents.find(rc => rc.name === item.component));
+    }
+    return recipe.filter(item => item.component === componentName);
+}
+
 export function getInfo(product: Product | CakeComponent, size: number = 1) {
     const electricityCost = getElectricityCost(product)
     const ingredientsCost = getIngredientsCost(product, size)

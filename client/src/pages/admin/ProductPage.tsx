@@ -96,7 +96,7 @@ export default function ProductPage() {
         </div>
 
         {/* Recipe */}
-        <SegmentedRecipe recipe={product.recipe} recipeComponents={product.recipeComponents} />
+        <SegmentedRecipe product={product} />
 
         {/* Images */}
         {!product.internal &&

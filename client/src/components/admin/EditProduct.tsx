@@ -3,7 +3,7 @@ import type { Product, ProductCategory } from "../../types";
 import { useStore, useAdminStore } from "../../store";
 import adminService from '../../services/admin.service'
 import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
-import { productCategories } from "../../utils";
+import { productCategories, getComponentIngredients } from "../../utils";
 import AddIngredientModal from "./AddIngredientModal";
 import AddRecipeComponentModal from "./AddRecipeComponentModal";
 
@@ -20,6 +20,7 @@ export default function EditProduct({ product, onClose }: Props) {
     const [isAddingComponent, setIsAddingComponent] = useState(false);
     const [newImageUrl, setNewImageUrl] = useState("");
     type textKey = 'name' | 'description' | 'intro' | 'serve' | 'store'
+    const segments = [...productForm.recipeComponents, { name: 'Uncategorized', multiplier: 1 }];
 
     function handleChangeText(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, language: 'pt' | 'en') {
         const { name, value } = e.target;
@@ -66,6 +67,30 @@ export default function EditProduct({ product, onClose }: Props) {
             return { ...prev, recipe: newRecipe };
         });
     };
+
+    function handleChangeIngredientAmount(ingredientId: string, component: string, newAmount: number) {
+        setProductForm((prev) => {
+            const recipe = prev.recipe.map(item => {
+                if (item.ingredient._id === ingredientId && item.component === component) {
+                    return { ...item, amount: newAmount };
+                }
+                return item;
+            });
+            return { ...prev, recipe };
+        });
+    }
+
+    function handleChangeIngredientComponent(ingredientId: string, oldComponent: string, newComponent: string) {
+        setProductForm((prev) => {
+            const recipe = prev.recipe.map(item => {
+                if (item.ingredient._id === ingredientId && item.component === oldComponent) {
+                    return { ...item, component: newComponent };
+                }
+                return item;
+            });
+            return { ...prev, recipe };
+        });
+    }
 
     function handleChangeImage(index: number, newUrl: string) {
         setProductForm((prev) => ({ ...prev, images: prev.images.map((url, i) => i === index ? newUrl : url) }));
@@ -234,75 +259,85 @@ export default function EditProduct({ product, onClose }: Props) {
             {/* Recipe */}
             <div className="max-w-5xl mx-auto mt-10 bg-white rounded-2xl shadow-md p-8">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Recipe</h2>
-                <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                        <thead className="bg-gray-100 text-gray-700">
-                            <tr>
-                                <th className="px-4 py-2 text-left">Ingredient</th>
-                                <th className="px-4 py-2 text-left">Amount</th>
-                                <th className="px-4 py-2 text-left">Component</th>
-                                <th className="px-4 py-2 text-center">Price / Unit</th>
-                                <th className="px-4 py-2 text-center">Total Price</th>
-                                <th className="px-4 py-2 text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {productForm.recipe.map((item, index) => (
-                                <tr key={item.ingredient._id} className="hover:bg-gray-50 relative">
-                                    <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
-                                    <td className="px-4 py-2 text-left flex items-center gap-2">
-                                        <input
-                                            type="number"
-                                            value={item.amount}
-                                            onChange={(e) => setProductForm((prev) => ({ ...prev, recipe: prev.recipe.map((r) => r.ingredient._id === item.ingredient._id ? { ...r, amount: Number(e.target.value) } : r) }))}
-                                            className="w-20 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                                        />
-                                        {item.ingredient.recipeUnits}
-                                    </td>
-                                    <td className="px-4 py-2 text-gray-800">
-                                        <select
-                                            value={item.component || ""}
-                                            onChange={(e) => setProductForm((prev) => ({ ...prev, recipe: prev.recipe.map((r) => r.ingredient._id === item.ingredient._id ? { ...r, component: e.target.value } : r) }))}
-                                            className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
-                                        >
-                                            <option value="">{""}</option>
-                                            {productForm.recipeComponents.map((rc) => (
-                                                <option key={rc.name} value={rc.name}>{rc.name}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                    <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
-                                    <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
-                                    <td className="px-4 py-2 text-center">
-                                        <button
-                                            onClick={() => handleDeleteIngredient(item.ingredient._id)}
-                                            className="text-red-500 hover:text-red-700 cursor-pointer"
-                                            title="Remove Additional Ingredient"
-                                        >
-                                            <TrashIcon size={20} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleMoveIngredient('up', item.ingredient._id)}
-                                            className="cursor-pointer disabled:opacity-25"
-                                            title="Move Ingredient Up"
-                                            disabled={index === 0}
-                                        >
-                                            <ArrowUpIcon size={20} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleMoveIngredient('down', item.ingredient._id)}
-                                            className="cursor-pointer disabled:opacity-25"
-                                            title="Move Ingredient Down"
-                                            disabled={index === productForm.recipe.length - 1}
-                                        >
-                                            <ArrowDownIcon size={20} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                {segments.map((component) => {
+                    const ingredientsInComponent = getComponentIngredients(productForm, component.name);
+                    if (ingredientsInComponent.length === 0) return null;
+
+                    return (
+                        <div className="overflow-x-auto">
+                            <h3 className="text-lg font-medium text-gray-700 mt-6 mb-2">
+                                {component.name} {component.multiplier !== 1 && `(x${component.multiplier} for big size)`}
+                            </h3>
+                            <table className="w-full border-collapse">
+                                <thead className="bg-gray-100 text-gray-700">
+                                    <tr>
+                                        <th className="px-4 py-2 text-left">Ingredient</th>
+                                        <th className="px-4 py-2 text-left">Amount</th>
+                                        <th className="px-4 py-2 text-left">Component</th>
+                                        <th className="px-4 py-2 text-center">Price / Unit</th>
+                                        <th className="px-4 py-2 text-center">Total Price</th>
+                                        <th className="px-4 py-2 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {ingredientsInComponent.map((item, index) => (
+                                        <tr key={item.ingredient._id} className="hover:bg-gray-50 relative">
+                                            <td className="px-4 py-2 text-gray-800">{item.ingredient.name}</td>
+                                            <td className="px-4 py-2 text-left flex items-center gap-2">
+                                                <input
+                                                    type="number"
+                                                    value={item.amount}
+                                                    onChange={(e) => handleChangeIngredientAmount(item.ingredient._id, item.component || "", Number(e.target.value))}
+                                                    className="w-20 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                                                />
+                                                {item.ingredient.recipeUnits}
+                                            </td>
+                                            <td className="px-4 py-2 text-gray-800">
+                                                <select
+                                                    value={item.component || ""}
+                                                    onChange={(e) => handleChangeIngredientComponent(item.ingredient._id, item.component || "", e.target.value)}
+                                                    className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
+                                                >
+                                                    <option value="">{""}</option>
+                                                    {productForm.recipeComponents.map((rc) => (
+                                                        <option key={rc.name} value={rc.name}>{rc.name}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                            <td className="px-4 py-2 text-center">{item.ingredient.pricePerUnit.toFixed(3)} €</td>
+                                            <td className="px-4 py-2 text-center font-medium text-gray-800">{(item.ingredient.pricePerUnit * item.amount).toFixed(3)} €</td>
+                                            <td className="px-4 py-2 text-center">
+                                                <button
+                                                    onClick={() => handleDeleteIngredient(item.ingredient._id)}
+                                                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                                                    title="Remove Additional Ingredient"
+                                                >
+                                                    <TrashIcon size={20} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleMoveIngredient('up', item.ingredient._id)}
+                                                    className="cursor-pointer disabled:opacity-25"
+                                                    title="Move Ingredient Up"
+                                                    disabled={index === 0}
+                                                >
+                                                    <ArrowUpIcon size={20} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleMoveIngredient('down', item.ingredient._id)}
+                                                    className="cursor-pointer disabled:opacity-25"
+                                                    title="Move Ingredient Down"
+                                                    disabled={index === productForm.recipe.length - 1}
+                                                >
+                                                    <ArrowDownIcon size={20} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )
+                })}
 
                 {/* Add Ingredient */}
                 <div className="flex gap-2 mt-4 justify-center">
