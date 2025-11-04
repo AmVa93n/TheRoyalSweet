@@ -294,7 +294,7 @@ export default function EditProduct({ product, onClose }: Props) {
                                             </td>
                                             <td className="px-4 py-2 text-gray-800">
                                                 <select
-                                                    value={item.component || ""}
+                                                    value={item.component}
                                                     onChange={(e) => handleChangeIngredientComponent(item.ingredient._id, item.component || "", e.target.value)}
                                                     className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                                                 >
