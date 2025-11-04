@@ -24,7 +24,7 @@ export default function SegmentedRecipe({ product }: Props) {
             if (ingredientsInComponent.length === 0) return null;
 
             return (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto" key={component.name}>
                 <h3 className="text-lg font-medium text-gray-700 mt-6 mb-2">
                   {component.name} {component.multiplier !== 1 && `(x${component.multiplier} for big size)`}
                 </h3>

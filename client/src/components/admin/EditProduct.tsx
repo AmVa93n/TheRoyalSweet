@@ -264,7 +264,7 @@ export default function EditProduct({ product, onClose }: Props) {
                     if (ingredientsInComponent.length === 0) return null;
 
                     return (
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-auto" key={component.name}>
                             <h3 className="text-lg font-medium text-gray-700 mt-6 mb-2">
                                 {component.name} {component.multiplier !== 1 && `(x${component.multiplier} for big size)`}
                             </h3>
@@ -287,7 +287,7 @@ export default function EditProduct({ product, onClose }: Props) {
                                                 <input
                                                     type="number"
                                                     value={item.amount}
-                                                    onChange={(e) => handleChangeIngredientAmount(item.ingredient._id, item.component || "", Number(e.target.value))}
+                                                    onChange={(e) => handleChangeIngredientAmount(item.ingredient._id, item.component, Number(e.target.value))}
                                                     className="w-20 rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                                                 />
                                                 {item.ingredient.recipeUnits}
@@ -295,7 +295,7 @@ export default function EditProduct({ product, onClose }: Props) {
                                             <td className="px-4 py-2 text-gray-800">
                                                 <select
                                                     value={item.component}
-                                                    onChange={(e) => handleChangeIngredientComponent(item.ingredient._id, item.component || "", e.target.value)}
+                                                    onChange={(e) => handleChangeIngredientComponent(item.ingredient._id, item.component, e.target.value)}
                                                     className="w-full rounded-lg border-1 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500 p-1"
                                                 >
                                                     <option value="">{""}</option>
