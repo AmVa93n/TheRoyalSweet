@@ -1,4 +1,4 @@
-import type { Ingredient } from '../../types';
+import type { Ingredient, CakeComponentCategory } from '../../types';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { useStore, useAdminStore } from '../../store';
 import EditOrder from '../../components/admin/EditOrder';
@@ -14,7 +14,7 @@ export default function OrderPage() {
     const { orders, setOrders } = useAdminStore();
     const { language } = useStore();
     const order = orders.find(order => order._id === orderId)!;
-    const recipe = createRecipe();
+    const recipe = aggregateOrderIngredients();
     const location = useLocation();
     const [isEditing, setIsEditing] = useState(location.state?.new || false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -29,7 +29,7 @@ export default function OrderPage() {
     const totalPrice = itemsPrice + additionalIngredientsCost;
     const netGain = totalPrice - (totalCost + additionalIngredientsCost);
 
-    function createRecipe() {
+    function aggregateOrderIngredients() {
         const orderRecipe: { ingredient: Ingredient; amount: number }[] = [];
         const products = order.items.filter(item => item.product)
         const customCakes = order.items.filter(item => item.customCake)
@@ -37,64 +37,38 @@ export default function OrderPage() {
         // Iterate through each product in the order and accumulate ingredient amounts
         products.forEach(item => {
           const { recipe, recipeComponents } = item.product!;
+          // For each ingredient in the product's recipe
           recipe.forEach(({ ingredient, amount, component }) => {
             const entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
+            const comp = recipeComponents.find(rc => rc.name === component);
+            const multiplier = item.size === 'standard' && comp ? comp.multiplier : 1;
+            const addedAmount = amount * multiplier * item.quantity;
             if (entry) {
-              const comp = recipeComponents.find(rc => rc.name === component);
-              const multiplier = item.size === 'standard' && comp ? comp.multiplier : 1;
-              entry.amount += amount * multiplier * item.quantity;
+              entry.amount += addedAmount;
             } else {
-              orderRecipe.push({ ingredient, amount: 0 });
+              orderRecipe.push({ ingredient, amount: addedAmount });
             }
           });
         });
 
         // Iterate through each custom cake in the order and accumulate ingredient amounts
         customCakes.forEach(item => {
-          const { dough, filling, frosting, topping } = item.customCake!;
-          // Add ingredients from dough
-          dough.recipe.forEach(({ ingredient, amount }) => {
-            const entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
-            if (entry) {
-              const multiplier = item.size === 'standard' ? cakeComponentCategories['dough'].multiplier : 1
-              entry.amount += amount * multiplier * item.quantity;
-            } else {
-              orderRecipe.push({ ingredient, amount: 0 });
-            }
-          });
-          // Add ingredients from filling
-          filling.recipe.forEach(({ ingredient, amount }) => {
-            const entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
-            if (entry) {
-              const multiplier = item.size === 'standard' ? cakeComponentCategories['filling'].multiplier : 1
-              entry.amount += amount * multiplier * item.quantity;
-            } else {
-              orderRecipe.push({ ingredient, amount: 0 });
-            }
-
-          });
-          // Add ingredients from frosting
-          frosting.recipe.forEach(({ ingredient, amount }) => {
-            const entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
-            if (entry) {
-              const multiplier = item.size === 'standard' ? cakeComponentCategories['frosting'].multiplier : 1
-              entry.amount += amount * multiplier * item.quantity;
-            } else {
-              orderRecipe.push({ ingredient, amount: 0 });
-            }
-          });
-          // Add ingredients from topping if exists
-          if (topping) {
-            topping.recipe.forEach(({ ingredient, amount }) => {
+          const components = ["dough", "filling", "frosting", "topping"] as CakeComponentCategory[];
+          // For each component of the custom cake
+          components.forEach((componentName) => {
+            const { recipe } = item.customCake![componentName]!;
+            // For each ingredient in the component's recipe
+            recipe.forEach(({ ingredient, amount }) => {
               const entry = orderRecipe.find(ing => ing.ingredient._id === ingredient._id);
+              const multiplier = item.size === 'standard' ? cakeComponentCategories[componentName].multiplier : 1
+              const addedAmount = amount * multiplier * item.quantity;
               if (entry) {
-                const multiplier = item.size === 'standard' ? cakeComponentCategories['topping'].multiplier : 1
-                entry.amount += amount * multiplier * item.quantity;
+                entry.amount += addedAmount;
               } else {
-                orderRecipe.push({ ingredient, amount: 0 });
+                orderRecipe.push({ ingredient, amount: addedAmount });
               }
             });
-          }
+          });
         });
 
         // Add additional ingredients from the order
