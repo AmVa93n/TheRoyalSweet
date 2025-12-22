@@ -277,8 +277,9 @@ router.get("/orders", async (req, res, next) => {
 router.post("/orders", async (req, res, next) => {
     try {
       const newOrder = {
-        name: "",
-        email: "",
+        name: "John Doe",
+        email: "john.doe@example.com",
+        phone: "1234567890",
         pickup: false,
         shipping: {
             city: "",
