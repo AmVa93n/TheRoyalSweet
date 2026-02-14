@@ -1,10 +1,12 @@
+"use client";
+
 import { useStore } from '../store';
-import type { ProductCategory } from '../types';
+import type { Product, ProductCategory } from '../types';
 import ProductCard from '../components/ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
 import type { JSX } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { imagePlaceholder } from '../utils';
+import Link from 'next/link';
 
 const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
     { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },
@@ -14,9 +16,8 @@ const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Elem
     { cat: 'mini', en: 'Minis', pt: 'Individuais', icon: <CookieIcon size={24} /> },
 ];
 
-function ShopPage() {
-    const { language, products } = useStore();
-    const navigate = useNavigate();
+function ShopPage({ products }: { products: Product[] }) {
+    const { language } = useStore();
 
     return (
         <div className="pt-24 lg:px-24 w-full">
@@ -67,8 +68,8 @@ function ShopPage() {
                 <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{language === 'pt' ? 'Bolo Personalizado' : 'Custom Cake'}</h2>
             </div>
             <div className="flex flex-wrap justify-center gap-6 w-full">
-                <div
-                    onClick={() => navigate('/custom-cake')}
+                <Link
+                    href="/custom-cake"
                     className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#593b3e50] group mx-auto"
                 >
                     <div className="w-full h-[250px] overflow-hidden relative">
@@ -87,7 +88,7 @@ function ShopPage() {
                             {language === 'pt' ? 'Personalize seu bolo com massa, recheio e cobertura de sua escolha.' : 'Customize your cake with dough, filling, and frosting of your choice.'}
                         </p>
                     </div>
-                </div>
+                </Link>
             </div>
         </section>
 
