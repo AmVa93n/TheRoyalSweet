@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import Link from "next/link"
 
-function ShopPreview() {
-  const { language, products } = useStore();
+function ShopPreview({ products }: { products: Product[] }) {
+  const { language } = useStore();
   const [preview, setPreview] = useState<Product[]>([]);
   
   useEffect(() => {

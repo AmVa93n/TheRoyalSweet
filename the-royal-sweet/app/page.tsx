@@ -1,5 +1,7 @@
 import HomePage from "./pages/HomePage";
+import appService from "./services/app.service";
 
-export default function Home() {
-  return <HomePage />
+export default async function Home() {
+  const products = await appService.getProducts();
+  return <HomePage products={products} />
 }

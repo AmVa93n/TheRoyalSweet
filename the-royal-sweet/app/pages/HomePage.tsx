@@ -7,8 +7,9 @@ import Contacts from '../components/Contacts'
 import HowToOrder from '../components/HowToOrder';
 import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Product } from '../types';
 
-function HomePage() {
+function HomePage({ products }: { products: Product[] }) {
   const searchParams = useSearchParams()
   const sectionId = searchParams.get("sectionId")
 
@@ -25,7 +26,7 @@ function HomePage() {
 
   return (
     <div className="flex flex-col pt-12">
-      <ShopPreview />
+      <ShopPreview products={products} />
       <Testimonials />
       <AboutMe />
       <HowToOrder />

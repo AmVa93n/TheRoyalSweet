@@ -9,6 +9,14 @@ const appService = {
     return response.json();
   },
 
+  async getProductById(productId: string): Promise<Product> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch product: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
   async getCakeComponents() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cake-components`);
     if (!response.ok) {
