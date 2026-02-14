@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const cakeComponentSchema = new Schema(
   {
@@ -18,6 +18,4 @@ const cakeComponentSchema = new Schema(
   }
 );
 
-const CakeComponent = model("CakeComponent", cakeComponentSchema);
-
-export default CakeComponent;
+export default models.CakeComponent || model("CakeComponent", cakeComponentSchema);

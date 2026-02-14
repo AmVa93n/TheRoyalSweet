@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const ingredientSchema = new Schema(
   {
@@ -17,6 +17,4 @@ const ingredientSchema = new Schema(
   }
 );
 
-const Ingredient = model("Ingredient", ingredientSchema);
-
-export default Ingredient;
+export default models.Ingredient || model("Ingredient", ingredientSchema);
