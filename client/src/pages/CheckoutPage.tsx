@@ -10,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
 import type { Order } from '../types';
 import OrderSummary from '../components/OrderSummery';
+import { useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -32,7 +33,8 @@ function CheckoutPage() {
     });
     const [clientSecret, setClientSecret] = useState('');
     const isFormValid = orderData.name && orderData.email && orderData.phone && (orderData.pickup || (orderData.shipping.address && orderData.shipping.city && orderData.shipping.zip));
-    
+    const navigate = useNavigate();
+
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
         if (['address', 'city', 'zip'].includes(name)) {
@@ -56,6 +58,7 @@ function CheckoutPage() {
     async function onPaymentComplete() {
         await appService.createOrder(orderData);
         setCart([]);
+        navigate('/');
     }
 
     const stripeOptions = {
