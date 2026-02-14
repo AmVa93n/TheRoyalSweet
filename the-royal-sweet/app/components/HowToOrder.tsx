@@ -1,10 +1,9 @@
 import { useStore } from '../store';
 import { MagnifyingGlassIcon, ShoppingCartIcon, CreditCardIcon, MapPinIcon, ForkKnifeIcon, ChatCenteredDotsIcon } from '@phosphor-icons/react';
-import { useNavigate } from "react-router-dom";
+import Link from "next/link"
 
 function HowToOrder() {
     const { language } = useStore()
-    const navigate = useNavigate();
 
     const text = [
         {
@@ -55,12 +54,12 @@ function HowToOrder() {
                     </div>
                     ))}
                 </div>
-                <button
-                    onClick={() => navigate("/shop")}
+                <Link
+                    href={"/shop"}
                     className="block mx-auto w-44 text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                 >
                     {language === 'en' ? 'See all desserts' : 'Ver todos os doces'}
-                </button>
+                </Link>
             </div>
         </section>
     )

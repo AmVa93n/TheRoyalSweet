@@ -1,12 +1,11 @@
-import { useNavigate } from "react-router-dom";
 import { useStore } from '../store';
 import ProductCard from './ProductCard';
 import { useEffect, useState } from "react";
 import type { Product } from "../types";
+import Link from "next/link"
 
 function ShopPreview() {
   const { language, products } = useStore();
-  const navigate = useNavigate();
   const [preview, setPreview] = useState<Product[]>([]);
   
   useEffect(() => {
@@ -27,12 +26,12 @@ function ShopPreview() {
         ))}
       </div>
 
-      <button
-        onClick={() => navigate("/shop")}
+      <Link
+        href={"/shop"}
         className="block mx-auto w-44 text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
       >
         {language === 'en' ? 'See more...' : 'Ver Mais...'}
-      </button>
+      </Link>
     </section>
   );
 }

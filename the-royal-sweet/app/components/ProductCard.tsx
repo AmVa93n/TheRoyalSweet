@@ -1,24 +1,18 @@
 import type { Product } from "../types";
-import { useNavigate } from "react-router-dom";
 import { useStore } from "../store";
 import { imagePlaceholder } from "../utils";
+import Link from "next/link"
 
 type ProductCardProps = {
     product: Product;
 };
 
 function ProductCard({ product }: ProductCardProps) {
-    const navigate = useNavigate();
     const { language } = useStore();
-    
-
-    function handleCardClick() {
-        navigate(`/product/${product._id}`);
-    }
 
     return (
-        <div
-            onClick={handleCardClick}
+        <Link
+            href={`/product/${product._id}`}
             className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#593b3e50] group mx-auto"
         >
             <div className="w-full h-[250px] overflow-hidden relative">
@@ -37,7 +31,7 @@ function ProductCard({ product }: ProductCardProps) {
                     {product.description[language]}
                 </p>
             </div>
-        </div>
+        </Link>
     );
 }
 

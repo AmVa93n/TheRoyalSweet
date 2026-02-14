@@ -1,24 +1,27 @@
-import ShopPreview from '../../src/components/ShopPreview';
-import Testimonials from '../../src/components/Testimonials';
-import AboutMe from '../../src/components/AboutMe'
-import Contacts from '../../src/components/Contacts'
+"use client"
+
+import ShopPreview from '../components/ShopPreview';
+import Testimonials from '../components/Testimonials';
+import AboutMe from '../components/AboutMe'
+import Contacts from '../components/Contacts'
 import HowToOrder from '../components/HowToOrder';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'next/navigation';
 
 function HomePage() {
-  const location = useLocation();
+  const searchParams = useSearchParams()
+  const sectionId = searchParams.get("sectionId")
 
   useEffect(() => {
-    if (location.state?.sectionId) {
+    if (sectionId) {
       requestAnimationFrame(() => {
         setTimeout(() => {
-          const scrollY = (document.getElementById(location.state.sectionId)?.offsetTop || 0) - 60;
+          const scrollY = (document.getElementById(sectionId)?.offsetTop || 0) - 60;
           window.scrollTo({ top: scrollY, behavior: 'smooth' });
         }, 0);
       });
     }
-  }, [location.state]);
+  }, [sectionId]);
 
   return (
     <div className="flex flex-col pt-12">

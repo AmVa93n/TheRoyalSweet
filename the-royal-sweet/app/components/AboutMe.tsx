@@ -1,4 +1,6 @@
 import { useStore } from '../store';
+import AboutMeImage from '../assets/aboutme.jpg';
+import Image from 'next/image';
 
 function AboutMe() {
     const { language } = useStore();
@@ -35,8 +37,8 @@ function AboutMe() {
             <div className="flex flex-col md:flex-row gap-10 items-center">
                 {/* Image Section */}
                 <div className="w-full md:w-1/3 flex justify-center md:justify-start">
-                <img
-                    src="./aboutme.jpg"
+                <Image
+                    src={AboutMeImage}
                     alt="About Me"
                     className="w-full max-w-[400px] rounded-lg shadow-md"
                 />
