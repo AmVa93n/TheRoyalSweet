@@ -1,12 +1,14 @@
+"use client";
+
 import { useState } from 'react';
 import { useStore } from '../store';
-import { useNavigate } from 'react-router-dom';
-import type { CustomCake } from '../types';
+import type { CakeComponent, CustomCake } from '../types';
 import { getCustomCakePrice, getCakeComponentPrice, imagePlaceholder, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
+import Link from 'next/link';
 
-function CustomCakePage() {
-    const { cakeComponents, setIsCartOpen, language, cart, setCart } = useStore();
+function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] }) {
+    const { setIsCartOpen, language, cart, setCart } = useStore();
     const doughOptions = cakeComponents.filter(component => component.category === 'dough');
     const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
     const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
@@ -22,7 +24,6 @@ function CustomCakePage() {
     const [size, setSize] = useState<'small' | 'standard'>('small');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
-    const navigate = useNavigate()
 
     function addCustomCake() {
         if (cart.some(item => item.customCake?.label === label)) {
@@ -196,18 +197,18 @@ function CustomCakePage() {
 
             {/* Bottom Buttons */}
             <div className="my-8 w-full md:w-[35%] mx-auto flex flex-col sm:flex-row justify-between gap-4">
-                <button
-                    onClick={() => navigate('/shop')}
+                <Link
+                    href="/shop"
                     className="block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
-                </button>
-                <button
-                    onClick={() => navigate('/checkout')}
+                </Link>
+                <Link
+                    href="/checkout"
                     className="block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
-                </button>
+                </Link>
             </div>
         </div>
     );
