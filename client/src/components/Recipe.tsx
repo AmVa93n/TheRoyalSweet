@@ -1,5 +1,5 @@
-import type { Ingredient } from "../../types";
-import { supermarkets } from "../../utils";
+import type { Ingredient } from "../types";
+import { supermarkets } from "../utils";
 
 type Props = {
     recipe: { ingredient: Ingredient; amount: number }[];

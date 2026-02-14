@@ -1,6 +1,6 @@
-import type { Product, CakeComponent } from "../../types";
+import type { Product, CakeComponent } from "../types";
 import { fixedCostsPerItem, getProductPrice, getCakeComponentPrice, gainMultiplier, workHourPrice, electricityHourPrice, getInfo, 
-  getTotalProductCost, getTotalCakeComponentCost, getProductIngredientsCost, getCakeComponentIngredientsCost } from '../../utils';
+  getTotalProductCost, getTotalCakeComponentCost, getProductIngredientsCost, getCakeComponentIngredientsCost } from '../utils';
 
 type Props = {
     product: Product | CakeComponent;

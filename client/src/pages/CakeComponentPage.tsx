@@ -1,13 +1,13 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore, useAdminStore } from '../../store';
-import EditCakeComponent from '../../components/admin/EditCakeComponent';
+import { useStore, useAdminStore } from '../store';
+import EditCakeComponent from '../components/EditCakeComponent';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
-import { cakeComponentCategories} from '../../utils';
-import Recipe from '../../components/admin/Recipe';
-import Pricing from '../../components/admin/Pricing';
-import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
-import adminService from '../../services/admin.service';
+import { cakeComponentCategories} from '../utils';
+import Recipe from '../components/Recipe';
+import Pricing from '../components/Pricing';
+import DeleteConfirmation from '../components/DeleteConfirmation';
+import adminService from '../service';
 
 export default function CakeComponentPage() {
     const { componentId } = useParams();

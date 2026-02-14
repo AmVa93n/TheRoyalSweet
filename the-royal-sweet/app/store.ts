@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage, type StateStorage } from 'zustand/middleware'
-import type { CartItem, Ingredient, Order, Product, CakeComponent } from './types'
+import type { CartItem } from './types'
 
 const storage: StateStorage = {
     getItem: (name) => {
@@ -19,10 +19,6 @@ const storage: StateStorage = {
 }
 
 type Store = {
-    products: Product[]
-    setProducts: (products: Product[]) => void
-    cakeComponents: CakeComponent[]
-    setCakeComponents: (cakeComponents: CakeComponent[]) => void
     cart: CartItem[]
     setCart: (cart: CartItem[]) => void
     isCartOpen: boolean
@@ -34,10 +30,6 @@ type Store = {
 export const useStore = create<Store>()(
     devtools(persist(
         (set) => ({
-            products: [],
-            setProducts: (products) => set({ products }),
-            cakeComponents: [],
-            setCakeComponents: (cakeComponents) => set({ cakeComponents }),
             cart: [],
             setCart: (cart) => set({ cart }),
             isCartOpen: false,
@@ -46,51 +38,5 @@ export const useStore = create<Store>()(
             setLanguage: (language) => set({ language }),
         }),
         { name: "store", storage: createJSONStorage(() => storage) }
-    )
-))
-
-type AdminStore = {
-    ingredients: Ingredient[]
-    setIngredients: (ingredients: Ingredient[]) => void
-    products: Product[]
-    setProducts: (products: Product[]) => void
-    cakeComponents: CakeComponent[]
-    setCakeComponents: (cakeComponents: CakeComponent[]) => void
-    orders: Order[]
-    setOrders: (orders: Order[]) => void
-    sortPreferences: {
-        products: { criteria: string, direction: 'asc' | 'desc' },
-        ingredients: { criteria: string, direction: 'asc' | 'desc' }
-        cakeComponents: { criteria: string, direction: 'asc' | 'desc' }
-        orders: { criteria: string, direction: 'asc' | 'desc' }
-    }
-    setSortPreferences: (section: 'products' | 'ingredients' | 'cakeComponents' | 'orders', sort: { criteria: string, direction: 'asc' | 'desc' }) => void
-}
-
-export const useAdminStore = create<AdminStore>()(
-    devtools(persist(
-        (set) => ({
-            ingredients: [],
-            setIngredients: (ingredients) => set({ ingredients }),
-            products: [],
-            setProducts: (products) => set({ products }),
-            cakeComponents: [],
-            setCakeComponents: (cakeComponents) => set({ cakeComponents }),
-            orders: [],
-            setOrders: (orders) => set({ orders }),
-            sortPreferences: {
-                products: { criteria: 'name', direction: 'asc' },
-                ingredients: { criteria: 'name', direction: 'asc' },
-                cakeComponents: { criteria: 'name', direction: 'asc' },
-                orders: { criteria: 'createdAt', direction: 'asc' }
-            },
-            setSortPreferences: (section, sort) => set((state) => ({
-                sortPreferences: {
-                    ...state.sortPreferences,
-                    [section]: sort
-                }
-            }))
-        }),
-        { name: "admin-store", storage: createJSONStorage(() => storage) }
     )
 ))

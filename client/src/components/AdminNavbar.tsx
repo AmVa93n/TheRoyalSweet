@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ListIcon, ShoppingBagIcon, CakeIcon, EggIcon, ShoppingCartIcon } from '@phosphor-icons/react';
-import { useStore, useAdminStore } from '../../store';
-import Logo from '../../assets/the-royal-sweet-high-resolution-logo-transparent.png';
-import adminService from '../../services/admin.service';
+import { useStore, useAdminStore } from '../store';
+import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
+import adminService from '../service';
 
 function AdminNavbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,11 +11,11 @@ function AdminNavbar() {
   const { language, setLanguage } = useStore();
 
   const navLinks = [
-    { text: language === 'en' ? 'Ingredients' : 'Ingredientes', route: '/admin/ingredients', icon: <EggIcon size={24} /> },
-    { text: language === 'en' ? 'Products' : 'Produtos', route: '/admin/products', icon: <CakeIcon size={24} /> },
-    { text: language === 'en' ? 'Cake Components' : 'Componentes de Bolo', route: '/admin/cake-components', icon: <CakeIcon size={24} /> },
-    { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/admin/orders', icon: <ShoppingBagIcon size={24} /> },
-    { text: language === 'en' ? 'Grocery List' : 'Lista de Compras', route: '/admin/grocery-list', icon: <ShoppingCartIcon size={24} /> },
+    { text: language === 'en' ? 'Ingredients' : 'Ingredientes', route: '/ingredients', icon: <EggIcon size={24} /> },
+    { text: language === 'en' ? 'Products' : 'Produtos', route: '/products', icon: <CakeIcon size={24} /> },
+    { text: language === 'en' ? 'Cake Components' : 'Componentes de Bolo', route: '/cake-components', icon: <CakeIcon size={24} /> },
+    { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/orders', icon: <ShoppingBagIcon size={24} /> },
+    { text: language === 'en' ? 'Grocery List' : 'Lista de Compras', route: '/grocery-list', icon: <ShoppingCartIcon size={24} /> },
   ];
 
   useEffect(() => {

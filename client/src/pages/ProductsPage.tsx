@@ -1,7 +1,7 @@
-import adminService from '../../services/admin.service'
-import type { Product } from "../../types";
-import { getProductPrice, getTotalProductCost, imagePlaceholder, productCategories } from "../../utils";
-import { useStore, useAdminStore } from "../../store";
+import adminService from '../service';
+import type { Product } from "../types";
+import { getProductPrice, getTotalProductCost, imagePlaceholder, productCategories } from "../utils";
+import { useStore, useAdminStore } from "../store";
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
 

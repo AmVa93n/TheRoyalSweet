@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAdminStore } from "../../store";
+import { useAdminStore } from "../store";
 import { XCircleIcon } from "@phosphor-icons/react";
 
 type Props = {

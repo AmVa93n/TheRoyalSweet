@@ -1,13 +1,13 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore, useAdminStore } from '../../store';
-import EditProduct from '../../components/admin/EditProduct';
+import { useStore, useAdminStore } from '../store';
+import EditProduct from '../components/EditProduct';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
-import { productCategories } from '../../utils';
-import SegmentedRecipe from '../../components/admin/SegmentedRecipe';
-import Pricing from '../../components/admin/Pricing';
-import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
-import adminService from '../../services/admin.service';
+import { productCategories } from '../utils';
+import SegmentedRecipe from '../components/SegmentedRecipe';
+import Pricing from '../components/Pricing';
+import DeleteConfirmation from '../components/DeleteConfirmation';
+import adminService from '../service';
 
 export default function ProductPage() {
     const { productId } = useParams();

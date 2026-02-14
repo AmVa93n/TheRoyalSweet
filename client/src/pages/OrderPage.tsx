@@ -1,13 +1,13 @@
-import type { Ingredient, CakeComponentCategory } from '../../types';
+import type { Ingredient, CakeComponentCategory } from '../types';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useStore, useAdminStore } from '../../store';
-import EditOrder from '../../components/admin/EditOrder';
+import { useStore, useAdminStore } from '../store';
+import EditOrder from '../components/EditOrder';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
-import { getCakeComponentPrice, fixedCostsPerItem, electricityHourPrice, getInfo, getCustomCakeInfo, sizes, cakeComponentCategories, getProductIngredientsCost } from '../../utils';
-import Recipe from '../../components/admin/Recipe';
-import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
-import adminService from '../../services/admin.service';
+import { getCakeComponentPrice, fixedCostsPerItem, electricityHourPrice, getInfo, getCustomCakeInfo, sizes, cakeComponentCategories, getProductIngredientsCost } from '../utils';
+import Recipe from '../components/Recipe';
+import DeleteConfirmation from '../components/DeleteConfirmation';
+import adminService from '../service';
 
 export default function OrderPage() {
     const { orderId } = useParams();

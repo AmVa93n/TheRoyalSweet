@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { CustomCake, Order } from "../../types";
-import { getCustomCakePrice, getProductPrice, getCakeComponentPrice, sizes } from "../../utils";
-import { useStore, useAdminStore } from "../../store";
-import adminService from '../../services/admin.service';
+import type { CustomCake, Order } from "../types";
+import { getCustomCakePrice, getProductPrice, getCakeComponentPrice, sizes } from "../utils";
+import { useStore, useAdminStore } from "../store";
+import adminService from '../service';
 import { TrashIcon, FloppyDiskIcon, XIcon, PlusCircleIcon } from "@phosphor-icons/react";
 import AddProductModal from "./AddProductModal";
 import AddCustomCakeModal from "./AddCustomCakeModal";

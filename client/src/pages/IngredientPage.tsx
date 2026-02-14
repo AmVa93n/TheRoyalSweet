@@ -1,11 +1,11 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useAdminStore } from '../../store';
-import EditIngredient from '../../components/admin/EditIngredient';
+import { useAdminStore } from '../store';
+import EditIngredient from '../components/EditIngredient';
 import { useState } from 'react';
 import { PencilIcon, TrashIcon } from '@phosphor-icons/react';
-import { supermarkets } from '../../utils';
-import DeleteConfirmation from '../../components/admin/DeleteConfirmation';
-import adminService from '../../services/admin.service';
+import { supermarkets } from '../utils';
+import DeleteConfirmation from '../components/DeleteConfirmation';
+import adminService from '../service';
 
 export default function IngredientPage() {
     const { ingredientId } = useParams();

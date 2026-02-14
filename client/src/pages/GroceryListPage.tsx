@@ -1,7 +1,7 @@
-import type { Ingredient, CakeComponentCategory, Order } from '../../types';
-import { useAdminStore } from '../../store';
+import type { Ingredient, CakeComponentCategory, Order } from '../types';
+import { useAdminStore } from '../store';
 import { useState } from 'react';
-import { getCustomCakeInfo, cakeComponentCategories, getProductIngredientsCost, supermarkets } from '../../utils';
+import { getCustomCakeInfo, cakeComponentCategories, getProductIngredientsCost, supermarkets } from '../utils';
 import { CircleIcon, CheckCircleIcon } from '@phosphor-icons/react';
 
 export default function GroceryListPage() {

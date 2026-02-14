@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { sizes } from "../../utils";
-import { useStore, useAdminStore } from "../../store";
+import { sizes } from "../utils";
+import { useStore, useAdminStore } from "../store";
 import { XCircleIcon } from "@phosphor-icons/react";
-import type { CustomCake } from "../../types";
+import type { CustomCake } from "../types";
 
 type Props = {
     onClose: () => void;

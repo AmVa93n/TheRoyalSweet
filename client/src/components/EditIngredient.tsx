@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { Ingredient } from "../../types";
-import { useAdminStore } from "../../store";
-import adminService from '../../services/admin.service'
+import type { Ingredient } from "../types";
+import { useAdminStore } from "../store";
+import adminService from '../service';
 import { FloppyDiskIcon, XIcon } from "@phosphor-icons/react";
-import { supermarkets } from "../../utils";
+import { supermarkets } from "../utils";
 
 type Props = {
     ingredient: Ingredient;

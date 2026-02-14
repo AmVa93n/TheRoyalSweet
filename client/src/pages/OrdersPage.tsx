@@ -1,6 +1,6 @@
-import adminService from '../../services/admin.service';
-import type { Order } from '../../types';
-import { useAdminStore } from '../../store';
+import adminService from '../service';
+import type { Order } from '../types';
+import { useAdminStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon, SortAscendingIcon, SortDescendingIcon } from '@phosphor-icons/react';
 

@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
-import type { Ingredient, Product, Order, CakeComponent } from "../types";
+import type { Ingredient, Product, Order, CakeComponent } from "../../the-royal-sweet/app/types";
 
 class AdminService {
   api: AxiosInstance;

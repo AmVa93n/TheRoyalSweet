@@ -1,5 +1,5 @@
-import type { Product } from "../../types";
-import { supermarkets, getComponentIngredients } from "../../utils";
+import type { Product } from "../types";
+import { supermarkets, getComponentIngredients } from "../utils";
 
 type Props = {
     product: Product;

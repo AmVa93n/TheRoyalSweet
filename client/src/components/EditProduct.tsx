@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { Product, ProductCategory } from "../../types";
-import { useStore, useAdminStore } from "../../store";
-import adminService from '../../services/admin.service'
+import type { Product, ProductCategory } from "../types";
+import { useStore, useAdminStore } from "../store";
+import adminService from '../service';
 import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
-import { productCategories, getComponentIngredients } from "../../utils";
+import { productCategories, getComponentIngredients } from "../utils";
 import AddIngredientModal from "./AddIngredientModal";
 import AddRecipeComponentModal from "./AddRecipeComponentModal";
 

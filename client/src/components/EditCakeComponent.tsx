@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { CakeComponent, CakeComponentCategory } from "../../types";
-import { useStore, useAdminStore } from "../../store";
-import adminService from '../../services/admin.service'
+import type { CakeComponent, CakeComponentCategory } from "../types";
+import { useStore, useAdminStore } from "../store";
+import adminService from '../service';
 import { TrashIcon, FloppyDiskIcon, XIcon, ArrowUpIcon, ArrowDownIcon, PlusCircleIcon } from "@phosphor-icons/react";
-import { cakeComponentCategories } from "../../utils";
+import { cakeComponentCategories } from "../utils";
 import AddIngredientModal from "./AddIngredientModal";
 
 type Props = {

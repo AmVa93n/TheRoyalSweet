@@ -11,9 +11,6 @@ const app = express();
 require("./config")(app);
 
 // 👇 Start handling routes here
-import indexRoutes from "./routes/index.routes";
-app.use("/api", indexRoutes);
-
 import adminRoutes from "./routes/admin.routes";
 app.use("/admin", adminRoutes);
 
