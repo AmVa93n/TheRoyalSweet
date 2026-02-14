@@ -39,7 +39,7 @@ function HowToOrder() {
     ]
 
     return (
-        <section className="bg-[#593b3e25]" id='how-to-order'>
+        <section className="bg-[#593b3e25] scroll-mt-16" id='how-to-order'>
             <div className="max-w-6xl mx-auto px-4 py-10">
                 <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">
                     {language === 'en' ? 'How to Order' : 'Como Encomendar'}

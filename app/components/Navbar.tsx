@@ -8,10 +8,12 @@ import { useStore } from '../store';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
+import { usePathname } from 'next/navigation';
 
 function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore();
+  const pathname = usePathname();
 
   const navLinks = [
     { text: language === 'en' ? 'Products' : 'Produtos', route: '/', sectionId: 'products', icon: <CakeIcon size={24} /> },
@@ -41,7 +43,7 @@ function Navbar() {
           {navLinks.map((link) => (
               <Link
                 key={link.text}
-                href={`${link.route}?sectionId=${link.sectionId}`}
+                href={`${link.route !== pathname ? link.route : ''}${link.sectionId ? `#${link.sectionId}` : ''}`}
                 className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#593b3e] px-2 py-1 rounded transition-colors rounded-full text-white"
                 target={link.external ? '_blank' : undefined}
               >
@@ -97,7 +99,7 @@ function Navbar() {
             {navLinks.map((link) => (
                 <Link
                   key={link.text}
-                  href={`${link.route}?sectionId=${link.sectionId}`}
+                  href={`${link.route !== pathname ? link.route : ''}${link.sectionId ? `#${link.sectionId}` : ''}`}
                   onClick={() => {
                     setMobileMenuOpen(false);
                   }}

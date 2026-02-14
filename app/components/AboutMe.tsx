@@ -33,7 +33,7 @@ function AboutMe() {
     ]
 
     return (
-        <section className="max-w-6xl mx-auto px-4 py-10" id='aboutme'>
+        <section className="max-w-6xl mx-auto px-4 py-10 scroll-mt-16" id='aboutme'>
             <div className="flex flex-col md:flex-row gap-10 items-center">
                 {/* Image Section */}
                 <div className="w-full md:w-1/3 flex justify-center md:justify-start">
