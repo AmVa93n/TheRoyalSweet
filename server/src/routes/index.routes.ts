@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 router.get("/products", async (req, res, next) => {
   try {
-    const products = await Product.find({ internal: false || undefined }).populate('recipe.ingredient');
+    const products = await Product.find({ internal: false }).populate('recipe.ingredient');
 
     if (!products) {
       res.status(404).json({ message: "Products not found" });
@@ -25,7 +25,7 @@ router.get("/products", async (req, res, next) => {
 
 router.get("/cake-components", async (req, res, next) => {
   try {
-    const cakeComponents = await CakeComponent.find({ internal: false || undefined }).populate('recipe.ingredient');
+    const cakeComponents = await CakeComponent.find({ $or: [{internal: false}, {internal: {$exists: false}}] }).populate('recipe.ingredient');
 
     if (!cakeComponents) {
       res.status(404).json({ message: "Cake components not found" });
