@@ -1,19 +1,17 @@
-import { useParams } from 'react-router-dom'
+"use client";
+
 import { useState } from 'react';
 import { useStore } from '../store';
-import { useNavigate } from 'react-router-dom';
 import type { Product } from '../types';
 import { getProductPrice, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
+import Link from 'next/link';
 
-function ProductPage() {
-    const { productId } = useParams();
-    const { products, setIsCartOpen, language, cart, setCart } = useStore();
-    const product = products.find((product: Product) => product._id === productId)!;
+function ProductPage({ product }: { product: Product }) {
+    const { setIsCartOpen, language, cart, setCart } = useStore();
     const [size, setSize] = useState<'small' | 'standard'>('small');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
-    const navigate = useNavigate()
 
     function addProduct() {
         if (cart.some(item => item.product?._id === product._id)) {
@@ -137,18 +135,18 @@ function ProductPage() {
 
             {/* Bottom Buttons */}
             <div className="my-8 w-full md:w-[35%] mx-auto flex flex-col sm:flex-row justify-between gap-4">
-                <button
-                    onClick={() => navigate('/shop')}
+                <Link
+                    href="/shop"
                     className="block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
-                </button>
-                <button
-                    onClick={() => navigate('/checkout')}
+                </Link>
+                <Link
+                    href="/checkout"
                     className="block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
-                </button>
+                </Link>
             </div>
         </div>
     );
