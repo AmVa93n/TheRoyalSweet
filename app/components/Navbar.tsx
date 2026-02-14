@@ -8,6 +8,8 @@ import { useStore } from '../store';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
+import LangEn from '../assets/gb.png';
+import LangPt from '../assets/pt.png';
 import { usePathname } from 'next/navigation';
 
 function Navbar() {
@@ -61,13 +63,13 @@ function Navbar() {
               onClick={() => setLanguage('en')}
               className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-[#e6dcd5]' : 'cursor-pointer text-white'}`}
             >
-              <img src="https://flagcdn.com/w20/gb.png" alt="EN" /> EN
+              <Image src={LangEn} alt="EN" /> EN
             </button>
             <button
               onClick={() => setLanguage('pt')}
               className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-[#e6dcd5]' : 'cursor-pointer text-white'}`}
             >
-              <img src="https://flagcdn.com/w20/pt.png" alt="PT" /> PT
+              <Image src={LangPt} alt="PT" /> PT
             </button>
           </div>
 
