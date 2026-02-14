@@ -1,8 +1,10 @@
 import type { Product, Order } from "../types";
 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const appService = {
   async getProducts(): Promise<Product[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+    const response = await fetch(`${baseUrl}/api/products`);
     if (!response.ok) {
       throw new Error(`Failed to fetch products: ${response.statusText}`);
     }
@@ -10,7 +12,7 @@ const appService = {
   },
 
   async getProductById(productId: string): Promise<Product> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`);
+    const response = await fetch(`${baseUrl}/api/products/${productId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch product: ${response.statusText}`);
     }
@@ -18,7 +20,7 @@ const appService = {
   },
 
   async getCakeComponents() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cake-components`);
+    const response = await fetch(`${baseUrl}/api/cake-components`);
     if (!response.ok) {
       throw new Error(`Failed to fetch cake components: ${response.statusText}`);
     }
@@ -26,7 +28,7 @@ const appService = {
   },
 
   async createPayment(order: Partial<Order>) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout`, {
+    const response = await fetch(`${baseUrl}/api/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +42,7 @@ const appService = {
   },
 
   async createOrder(order: Partial<Order>) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
+    const response = await fetch(`${baseUrl}/api/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

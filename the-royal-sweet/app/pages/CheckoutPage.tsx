@@ -1,18 +1,19 @@
+"use client";
+
 import { useState } from 'react';
 import { useStore } from '../store';
 import appService from '../services/app.service'
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, type StripeElementsOptions } from '@stripe/stripe-js';
 import PaymentForm from '../components/PaymentForm';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
 import type { Order } from '../types';
 import OrderSummary from '../components/OrderSummery';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
 function CheckoutPage() {
     const { language, cart, setCart } = useStore()
@@ -33,7 +34,7 @@ function CheckoutPage() {
     });
     const [clientSecret, setClientSecret] = useState('');
     const isFormValid = orderData.name && orderData.email && orderData.phone && (orderData.pickup || (orderData.shipping.address && orderData.shipping.city && orderData.shipping.zip));
-    const navigate = useNavigate();
+    const router = useRouter();
 
     function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
@@ -58,7 +59,7 @@ function CheckoutPage() {
     async function onPaymentComplete() {
         await appService.createOrder(orderData);
         setCart([]);
-        navigate('/');
+        router.push('/');
     }
 
     const stripeOptions = {
