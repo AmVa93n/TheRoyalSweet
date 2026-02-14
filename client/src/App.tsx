@@ -17,6 +17,7 @@ import CakeComponentsPage from "./pages/admin/CakeComponentsPage";
 import CakeComponentPage from "./pages/admin/CakeComponentPage";
 import OrdersPage from "./pages/admin/OrdersPage";
 import OrderPage from "./pages/admin/OrderPage";
+import GroceryListPage from "./pages/admin/GroceryListPage";
 import AdminNavbar from "./components/admin/AdminNavbar";
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path="/admin/cake-components/:componentId" element={<CakeComponentPage />} />
         <Route path="/admin/orders" element={<OrdersPage />} />
         <Route path="/admin/orders/:orderId" element={<OrderPage />} />
+        <Route path="/admin/grocery-list" element={<GroceryListPage />} />
       </Routes>
 
       {!isOnAdminPage && <Footer />}
