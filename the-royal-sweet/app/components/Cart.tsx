@@ -1,12 +1,14 @@
+"use client"
+
 import { useStore } from '../store';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { XIcon } from '@phosphor-icons/react';
 import CartItem from './CartItem';
 
 function Cart() {
     const { language, cart, isCartOpen, setIsCartOpen } = useStore()
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const navigate = useNavigate()
+    const router = useRouter()
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
@@ -64,7 +66,7 @@ function Cart() {
 
             <button
               onClick={() => {
-                navigate("/checkout")
+                router.push("/checkout")
                 setIsCartOpen(false)
               }}
               className="w-full block mx-auto text-center bg-[#593b3e] text-white font-bold py-2 px-4 rounded-full hover:bg-[#593b3e75] transition hover:cursor-pointer"

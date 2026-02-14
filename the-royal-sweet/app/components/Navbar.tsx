@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+"use client"
+
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon, CakeIcon } from '@phosphor-icons/react';
 import { useStore } from '../store';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
-import appService from '../services/app.service';
 
 function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { language, setLanguage, cart, isCartOpen, setIsCartOpen, setProducts, setCakeComponents } = useStore();
+  const { language, setLanguage, cart, isCartOpen, setIsCartOpen } = useStore();
 
   const navLinks = [
     { text: language === 'en' ? 'Products' : 'Produtos', route: '/', sectionId: 'products', icon: <CakeIcon size={24} /> },
@@ -21,11 +23,6 @@ function Navbar() {
     { text: language === 'en' ? 'Blog' : 'Blogue', route: `https://theroyalsweet.com/${language === 'en' ? 'en/' : ''}`, external: true, icon: <PencilCircleIcon size={24} /> },
   ];
 
-  useEffect(() => {
-    appService.getProducts().then(setProducts);
-    appService.getCakeComponents().then(setCakeComponents);
-  }, []);
-
   return (
     <header className="fixed w-full bg-[#593b3e] shadow z-50">
       <div className="container mx-auto px-3 py-2 flex items-center justify-between">
@@ -35,8 +32,8 @@ function Navbar() {
         </button>
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <img src={Logo} alt="The Royal Sweet Logo" className="w-12 h-12" />
+        <Link href="/" className="flex items-center gap-2">
+          <Image src={Logo} alt="The Royal Sweet Logo" className="w-12 h-12" />
         </Link>
 
         {/* Desktop nav */}
@@ -44,8 +41,7 @@ function Navbar() {
           {navLinks.map((link) => (
               <Link
                 key={link.text}
-                to={link.route}
-                state={{ sectionId: link.sectionId }}
+                href={`${link.route}?sectionId=${link.sectionId}`}
                 className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#593b3e] px-2 py-1 rounded transition-colors rounded-full text-white"
                 target={link.external ? '_blank' : undefined}
               >
@@ -75,10 +71,10 @@ function Navbar() {
 
           {/* Social Icons */}
           <a href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank" rel="noopener noreferrer">
-            <img src={FacebookLogo} alt="Facebook" className="w-8 h-8" />
+            <Image src={FacebookLogo} alt="Facebook" className="w-8 h-8" />
           </a>
           <a href="https://www.instagram.com/theroyalsweetblog/" target="_blank" rel="noopener noreferrer">
-            <img src={InstagramLogo} alt="Instagram" className="w-8 h-8" />
+            <Image src={InstagramLogo} alt="Instagram" className="w-8 h-8" />
           </a>
 
           {/* Cart Icon */}
@@ -101,8 +97,7 @@ function Navbar() {
             {navLinks.map((link) => (
                 <Link
                   key={link.text}
-                  to={link.route}
-                  state={{ sectionId: link.sectionId }}
+                  href={`${link.route}?sectionId=${link.sectionId}`}
                   onClick={() => {
                     setMobileMenuOpen(false);
                   }}
