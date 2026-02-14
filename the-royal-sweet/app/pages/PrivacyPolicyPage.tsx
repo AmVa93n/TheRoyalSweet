@@ -1,6 +1,8 @@
+"use client";
+
 import { useStore } from '../store';
 
-function TermsAndConditionsPage() {
+function PrivacyPolicyPage() {
     const { language } = useStore();
 
     const text = {
@@ -91,4 +93,4 @@ function TermsAndConditionsPage() {
     );
 }
 
-export default TermsAndConditionsPage;
+export default PrivacyPolicyPage;
