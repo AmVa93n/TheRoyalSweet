@@ -1,7 +1,11 @@
 import ShopPage from "../pages/ShopPage";
-import appService from "../services/app.service";
+import dbConnect from "@/lib/mongodb";
+import Product from "@/models/Product.model";
+import "@/models/Ingredient.model";
 
 export default async function Shop() {
-  const products = await appService.getProducts();
+  await dbConnect();
+  const data = await Product.find({ internal: false }).populate('recipe.ingredient').lean();
+  const products = JSON.parse(JSON.stringify(data));
   return <ShopPage products={products} />
 }
