@@ -44,7 +44,7 @@ function Navbar() {
         <nav className="hidden md:flex gap-6">
           {navLinks.map((link) => (
               <Link
-                key={link.text}
+                key={link.text + "-desktop"}
                 href={`${link.route !== pathname ? link.route : ''}${link.sectionId ? `#${link.sectionId}` : ''}`}
                 className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-[#593b3e] px-2 py-1 rounded transition-colors rounded-full text-white"
                 target={link.external ? '_blank' : undefined}
@@ -100,7 +100,7 @@ function Navbar() {
           <nav className="flex flex-col gap-3 h-">
             {navLinks.map((link) => (
                 <Link
-                  key={link.text}
+                  key={link.text + "-mobile"}
                   href={`${link.route !== pathname ? link.route : ''}${link.sectionId ? `#${link.sectionId}` : ''}`}
                   onClick={() => {
                     setMobileMenuOpen(false);
