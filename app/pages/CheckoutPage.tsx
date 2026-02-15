@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useStore } from '../store';
-import appService from '../services/app.service'
+import appService from '../service'
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, type StripeElementsOptions } from '@stripe/stripe-js';
 import PaymentForm from '../components/PaymentForm';
