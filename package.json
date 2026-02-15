@@ -21,7 +21,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-responsive-carousel": "^3.2.23",
-    "stripe": "^20.3.1"
+    "stripe": "^20.3.1",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
