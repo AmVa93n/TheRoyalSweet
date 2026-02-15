@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useStore } from '../store';
 import type { CakeComponent, CustomCake } from '../types';
-import { getCustomCakePrice, getCakeComponentPrice, imagePlaceholder, sizes } from '../utils';
+import { getCustomCakePrice, getCakeComponentPrice, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
+import Image from 'next/image';
+import CustomCakeImage from '../assets/customcake.webp';
 
 function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();
@@ -47,8 +49,8 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                 {/* Product Image and Description */}
                 <div>
                     <div className="text-center mb-4">
-                        <img
-                            src={imagePlaceholder}
+                        <Image
+                            src={CustomCakeImage}
                             alt={'Custom Cake'}
                             className="w-full max-h-[400px] object-cover"
                         />

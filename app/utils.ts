@@ -103,8 +103,6 @@ export function getCustomCakePrice(customCake: CustomCake, size: string = "small
     return roundToNextWholeOrHalf(rawPrice)
 }
 
-export const imagePlaceholder = "https://deintortenbild.de/cdn/shop/files/tortenbaender-2-stueck-a-26-x-10-cm-online-designer-910.webp?v=1737648157&width=1000"
-
 export const productCategories = {
     cake: { en: 'Cakes', pt: 'Bolos' },
     pie: { en: 'Pies', pt: 'Tartes' },

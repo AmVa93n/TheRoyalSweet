@@ -1,7 +1,8 @@
 import type { CartItem as CartItemType } from "../types";
 import { PlusIcon, MinusIcon, TrashIcon } from '@phosphor-icons/react';
 import { useStore } from "../store";
-import { imagePlaceholder } from "../utils";
+import Image from 'next/image';
+import CustomCakeImage from '../assets/customcake.webp';
 
 type Props = {
     item: CartItemType;
@@ -25,8 +26,8 @@ function CartItem({ item }: Props) {
     return (
         <div className="relative flex items-start gap-3">
             {/* Image */}
-            <img
-                src={product?.images[0] || imagePlaceholder}
+            <Image
+                src={product?.images[0] || CustomCakeImage}
                 alt={product?.name[language] || 'Custom Cake'}
                 className="w-20 h-20 object-cover"
             />

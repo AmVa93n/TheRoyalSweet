@@ -1,5 +1,6 @@
 import { useStore } from '../store';
-import { imagePlaceholder } from '../utils';
+import Image from 'next/image';
+import CustomCakeImage from '../assets/customcake.webp';
 
 function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
     const { language, cart, setIsCartOpen } = useStore()
@@ -23,8 +24,8 @@ function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
             <hr className="my-4 border-gray-300" />
             {cart.map((item) => (
                 <div key={item.product?._id || item.customCake?.label} className="flex items-center mb-3">
-                    <img
-                        src={item.product?.images[0] || imagePlaceholder}
+                    <Image
+                        src={item.product?.images[0] || CustomCakeImage}
                         alt={item.product?._id || 'Custom Cake'}
                         className="w-10 h-10 object-cover mr-3"
                     />

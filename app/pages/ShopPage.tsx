@@ -5,8 +5,9 @@ import type { Product, ProductCategory } from '../types';
 import ProductCard from '../components/ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
 import type { JSX } from 'react';
-import { imagePlaceholder } from '../utils';
 import Link from 'next/link';
+import Image from 'next/image';
+import CustomCakeImage from '../assets/customcake.webp';
 
 const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
     { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },
@@ -73,8 +74,8 @@ function ShopPage({ products }: { products: Product[] }) {
                     className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#593b3e50] group mx-auto"
                 >
                     <div className="w-full h-[250px] overflow-hidden relative">
-                        <img
-                            src={imagePlaceholder}
+                        <Image
+                            src={CustomCakeImage}
                             alt={'Custom Cake'}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />
