@@ -1,7 +1,6 @@
 import type { Product } from "../types";
 import { useStore } from "../store";
 import Link from "next/link"
-import Image from 'next/image';
 
 type ProductCardProps = {
     product: Product;
@@ -16,7 +15,7 @@ function ProductCard({ product }: ProductCardProps) {
             className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#593b3e50] group mx-auto"
         >
             <div className="w-full h-[250px] overflow-hidden relative">
-                <Image
+                <img
                     src={product.images[0]}
                     alt={product.name[language]}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
