@@ -69,7 +69,8 @@ function Cart() {
                 router.push("/checkout")
                 setIsCartOpen(false)
               }}
-              className="w-full block mx-auto text-center bg-[#593b3e] text-white font-bold py-2 px-4 rounded-full hover:bg-[#593b3e75] transition hover:cursor-pointer"
+              className="w-full block mx-auto text-center bg-[#593b3e] text-white font-bold py-2 px-4 rounded-full hover:bg-[#593b3e75] transition hover:cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled={cart.length === 0}
             >
               {language === 'en' ? 'Proceed to Checkout' : 'Ir para o checkout'}
             </button>
