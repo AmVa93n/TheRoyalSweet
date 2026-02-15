@@ -26,7 +26,7 @@ function CartItem({ item }: Props) {
         <div className="relative flex items-start gap-3">
             {/* Image */}
             <img
-                src={product?.images[0] || CustomCakeImage}
+                src={product?.images[0] || CustomCakeImage.src}
                 alt={product?.name[language] || 'Custom Cake'}
                 className="w-20 h-20 object-cover"
             />

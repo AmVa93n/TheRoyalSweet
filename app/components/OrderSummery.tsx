@@ -1,5 +1,4 @@
 import { useStore } from '../store';
-import Image from 'next/image';
 import CustomCakeImage from '../assets/customcake.webp';
 
 function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
@@ -23,9 +22,10 @@ function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
             </div>
             <hr className="my-4 border-gray-300" />
             {cart.map((item) => (
-                <div key={item.product?._id || item.customCake?.label} className="flex items-center mb-3">
-                    <Image
-                        src={item.product?.images[0] || CustomCakeImage}
+                <>
+                <div key={item.product?._id || item.customCake?.label} className={`flex items-center ${item.product ? 'mb-3' : ''}`}>
+                    <img
+                        src={item.product?.images[0] || CustomCakeImage.src}
                         alt={item.product?._id || 'Custom Cake'}
                         className="w-10 h-10 object-cover mr-3"
                     />
