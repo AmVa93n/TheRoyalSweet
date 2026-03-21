@@ -6,6 +6,7 @@ import type { Product } from '../types';
 import { getProductPrice, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function ProductPage({ product }: { product: Product }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();
@@ -35,10 +36,11 @@ function ProductPage({ product }: { product: Product }) {
                 {/* Product Image and Description */}
                 <div>
                     <div className="text-center mb-4">
-                        <img
+                        <Image
                             src={product.images?.[0]}
                             alt={product._id}
-                            className="w-full max-h-[400px] object-cover"
+                            width={400}
+                            height={400}
                         />
                     </div>
 

@@ -73,7 +73,7 @@ function ShopPage({ products }: { products: Product[] }) {
                     href="/custom-cake"
                     className="w-[340px] bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-[#593b3e50] group mx-auto"
                 >
-                    <div className="w-full h-[250px] overflow-hidden relative">
+                    <div className="w-full h-auto overflow-hidden relative">
                         <Image
                             src={CustomCakeImage}
                             alt={'Custom Cake'}
