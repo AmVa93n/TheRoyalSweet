@@ -50,6 +50,7 @@ export type Product = {
     workHours: number,
     electricityHours: number,
     internal: boolean,
+    highlighted: boolean,
 }
 
 export type CakeComponent = {

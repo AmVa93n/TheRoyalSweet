@@ -22,6 +22,7 @@ const productSchema = new Schema(
     workHours: Number,
     electricityHours: Number,
     internal: { type: Boolean, default: false },
+    highlighted: { type: Boolean, default: false },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
