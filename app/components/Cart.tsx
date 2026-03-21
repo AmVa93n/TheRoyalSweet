@@ -44,10 +44,7 @@ function Cart() {
           {/* Cart Items */}
           <div className="flex-1 overflow-y-auto flex flex-col gap-4 p-4">
             {cart.map((item) => (
-            <>
               <CartItem key={item.product?._id || item.customCake?.label} item={item} />
-              <hr className='border-gray-300' />
-            </>
             ))}
           </div>
 
