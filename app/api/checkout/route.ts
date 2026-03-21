@@ -1,14 +1,14 @@
-import { Order } from "@/models/Order.model";
+import { CartItem } from "@/app/types";
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2026-01-28.clover"
 });
 
 export async function POST(req: Request) {
-  const { name, email, shipping, pickup, items } = await req.json() as Order;
+  const { name, email, shipping, pickup, items } = await req.json();
   const { address, city, zip } = shipping || {};
   const deliveryFee = pickup ? 0 : 5;
-  const total = items.reduce((sum: number, item) => sum + item.price * item.quantity, 0) + deliveryFee;
+  const total = items.reduce((sum: number, item: CartItem) => sum + item.price * item.quantity, 0) + deliveryFee;
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
