@@ -1,18 +1,10 @@
 import { useStore } from '../store';
 import ProductCard from './ProductCard';
-import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import Link from "next/link"
 
 function ShopPreview({ products }: { products: Product[] }) {
   const { language } = useStore();
-  const [preview, setPreview] = useState<Product[]>([]);
-  
-  useEffect(() => {
-    // Randomly select 4 products for the preview on initial render
-    const preview = products.sort(() => 0.5 - Math.random()).slice(0, 4);
-    setPreview(preview);
-  }, [products]);
 
   return (
     <section className="mx-auto py-10 scroll-mt-16" id='products'>
@@ -21,7 +13,7 @@ function ShopPreview({ products }: { products: Product[] }) {
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center mb-10 flex-wrap">
-        {preview.map((product) => (
+        {products.map((product) => (
             <ProductCard product={product} key={product._id} />
         ))}
       </div>

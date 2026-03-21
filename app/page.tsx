@@ -5,7 +5,7 @@ import "@/models/Ingredient.model";
 
 export default async function Home() {
   await dbConnect();
-  const data = await Product.find({ internal: false }).populate('recipe.ingredient').lean();
+  const data = await Product.find({ internal: false, highlighted: true }).lean();
   const products = JSON.parse(JSON.stringify(data));
   return <HomePage products={products} />
 }
