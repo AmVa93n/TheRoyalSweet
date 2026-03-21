@@ -32,6 +32,10 @@ export type Product = {
         en: string, 
         pt: string
     },
+    allergens: {
+        en: string, 
+        pt: string
+    },
     images: string[],
     recipe: {
         ingredient: Ingredient,

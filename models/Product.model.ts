@@ -7,6 +7,7 @@ const productSchema = new Schema(
     description: {en: String, pt: String},
     serve: {en: String, pt: String},
     store: {en: String, pt: String},
+    allergens: {en: String, pt: String},
     images: [String],
     recipe: [{
       ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
