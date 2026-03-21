@@ -54,6 +54,9 @@ function ProductPage({ product }: { product: Product }) {
                     <p className="mb-4">
                         <b>{language === 'en' ? 'Store' : 'Conservar'}:</b> {product.store?.[language]}
                     </p>
+                    <p className="mb-4">
+                        <b>{language === 'en' ? 'Contains' : 'Contém'}:</b> {product.allergens?.[language]}
+                    </p>
                 </div>
 
                 {/* Order Info */}
