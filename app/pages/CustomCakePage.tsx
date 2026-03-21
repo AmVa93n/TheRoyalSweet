@@ -52,7 +52,8 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         <Image
                             src={CustomCakeImage}
                             alt={'Custom Cake'}
-                            className="w-full max-h-[400px] object-cover"
+                            width={400}
+                            height={400}
                         />
                     </div>
                 </div>
