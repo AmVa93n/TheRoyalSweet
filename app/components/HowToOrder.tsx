@@ -17,8 +17,8 @@ function HowToOrder() {
             icon: ShoppingCartIcon
         },
         {
-            en: '3. Make the payment via MB Way or multibanco transfer.',
-            pt: '3. Efectue o pagamento por MB way ou transferência multibanco.', 
+            en: '3. After receiving confirmation of your order, make the payment via MBway or bank transfer.',
+            pt: '3. Após receber confirmação da sua encomenda, efectue o pagamento por MBway ou transferência bancária.', 
             icon: CreditCardIcon
         },
         {
