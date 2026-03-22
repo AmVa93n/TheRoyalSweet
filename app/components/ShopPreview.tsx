@@ -3,8 +3,8 @@ import ProductCard from './ProductCard';
 import type { Product } from "../types";
 import Link from "next/link"
 import { useEffect, useState } from 'react';
+import useMediaQuery from '../hooks/useMediaQuery';
 
-const VISIBLE_CARDS = 4;
 const CARD_WIDTH = 320;
 const GAP = 32; // gap-8 = 2rem = 32px
 
@@ -12,6 +12,9 @@ function ShopPreview({ products }: { products: Product[] }) {
   const { language } = useStore();
   const [index, setIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMedium = useMediaQuery("(max-width: 1024px)");
+  const visibleCards = isMobile ? 1 : isMedium ? 2 : 4;
 
   // duplicate to avoid edge issues
   const extended = [...products, ...products];
@@ -59,7 +62,7 @@ function ShopPreview({ products }: { products: Product[] }) {
       <div
         className="overflow-hidden relative py-8 mx-auto"
         style={{
-          width: `${(VISIBLE_CARDS * CARD_WIDTH + (VISIBLE_CARDS - 1) * GAP) + (GAP * 2)}px`,
+          width: `${(visibleCards * CARD_WIDTH + (visibleCards - 1) * GAP) + (GAP * 2)}px`,
         }}
       >
         {/* Track */}
