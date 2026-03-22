@@ -13,8 +13,8 @@ function ShopPreview({ products }: { products: Product[] }) {
   const [index, setIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const isMedium = useMediaQuery("(max-width: 1024px)");
-  const visibleCards = isMobile ? 1 : isMedium ? 2 : 4;
+  const visibleCards = isMobile ? 1 : 4;
+  const margin = isMobile ? 0 : 32; // gap-8 = 2rem = 32px
 
   // duplicate to avoid edge issues
   const extended = [...products, ...products];
@@ -62,12 +62,12 @@ function ShopPreview({ products }: { products: Product[] }) {
       <div
         className="overflow-hidden relative py-8 mx-auto"
         style={{
-          width: `${(visibleCards * CARD_WIDTH + (visibleCards - 1) * GAP) + (GAP * 2)}px`,
+          width: `${(visibleCards * CARD_WIDTH + (visibleCards - 1) * GAP) + (margin * 2)}px`,
         }}
       >
         {/* Track */}
         <div
-          className={`flex gap-8 ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''} w-max mx-8`}
+          className={`flex gap-8 ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''} w-max ${!isMobile ? 'mx-8' : ''}`}
           style={{
             transform: `translateX(-${translateX}px)`,
           }}
@@ -82,8 +82,12 @@ function ShopPreview({ products }: { products: Product[] }) {
         </div>
 
         {/* Fade edges */}
-        <div className="pointer-events-none absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-[#e6dcd5] to-transparent z-10" />
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-[#e6dcd5] to-transparent z-10" />
+        {!isMobile && (
+          <>
+            <div className="pointer-events-none absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-[#e6dcd5] to-transparent z-10" />
+            <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-[#e6dcd5] to-transparent z-10" />
+          </>
+        )}
       </div>
 
       <Link
