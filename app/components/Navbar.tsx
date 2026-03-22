@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon, CakeIcon } from '@phosphor-icons/react';
+import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon } from '@phosphor-icons/react';
 import { useStore } from '../store';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
@@ -18,7 +18,6 @@ function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
-    { text: language === 'en' ? 'Products' : 'Produtos', route: '/', sectionId: 'products', icon: <CakeIcon size={24} /> },
     { text: language === 'en' ? 'About me' : 'Sobre mim', route: '/', sectionId: 'aboutme', icon: <ChefHatIcon size={24} /> },
     { text: language === 'en' ? 'Orders' : 'Encomendas', route: '/', sectionId: 'how-to-order', icon: <ShoppingBagIcon size={24} /> },
     { text: language === 'en' ? 'Contacts' : 'Contactos', route: '/', sectionId: 'contacts', icon: <PhoneIcon size={24} /> },
