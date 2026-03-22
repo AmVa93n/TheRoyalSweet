@@ -36,7 +36,7 @@ function ProductPage({ product }: { product: Product }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Product Image and Description */}
                 <div>
-                    <div className="mb-4 w-[400px] h-auto">
+                    <div className="mb-4 w-full lg:w-[400px] h-auto">
                       <Carousel
                         showThumbs={false}
                         showStatus={false}
