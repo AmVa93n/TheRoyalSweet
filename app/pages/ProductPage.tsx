@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import type { Product } from '../types';
 import { getProductPrice, sizes } from '../utils';
-import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
+import { PlusIcon, MinusIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Carousel } from 'react-responsive-carousel';
 
 function ProductPage({ product }: { product: Product }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();
@@ -35,13 +36,45 @@ function ProductPage({ product }: { product: Product }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Product Image and Description */}
                 <div>
-                    <div className="text-center mb-4">
-                        <Image
-                            src={product.images?.[0]}
+                    <div className="mb-4 w-[400px] h-auto">
+                      <Carousel
+                        showThumbs={false}
+                        showStatus={false}
+                        infiniteLoop
+                        autoPlay
+                        renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                          hasPrev && (
+                            <button
+                              onClick={onClickHandler}
+                              aria-label={label}
+                              className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 text-[#593b3e]"
+                            >
+                              <CaretLeftIcon size={30} />
+                            </button>
+                          )
+                        }
+                        renderArrowNext={(onClickHandler, hasNext, label) =>
+                          hasNext && (
+                            <button
+                              onClick={onClickHandler}
+                              aria-label={label}
+                              className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 text-[#593b3e]"
+                            >
+                              <CaretRightIcon size={30} />
+                            </button>
+                          )
+                        }
+                      >
+                        {product.images.map((image, index) => (
+                          <Image
+                            key={index}
+                            src={image}
                             alt={product._id}
                             width={400}
                             height={400}
-                        />
+                          />
+                        ))}
+                      </Carousel>
                     </div>
 
                     <p className="mb-4 font-bold">{product.intro?.[language]}</p>
