@@ -8,6 +8,7 @@ import type { JSX } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import CustomCakeImage from '../assets/customcake.webp';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
     { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },
@@ -19,18 +20,19 @@ const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Elem
 
 function ShopPage({ products }: { products: Product[] }) {
     const { language } = useStore();
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     return (
         <div className="pt-24 lg:px-24 w-full">
         {/* Top Navigation */}
-        <nav className="flex justify-around my-6 max-w-4xl mx-auto overflow-auto">
+        <nav className="flex justify-center gap-2 lg:gap-8 lg:my-6 max-w-4xl mx-auto overflow-auto flex-wrap">
             {categories.map((category) => (
             <button
                 key={category.cat}
                 onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
-                className="flex items-center gap-2 text-[#593b3e] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#593b3e] px-4 py-2 rounded-full duration-300"
+                className="flex items-center gap-2 text-[#593b3e] border border-[#593b3e] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#593b3e] px-4 py-2 rounded-full duration-300"
             >
-                {category.icon}
+                {!isMobile && category.icon}
                 {category[language]}
             </button>
             ))}
