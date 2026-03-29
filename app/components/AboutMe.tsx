@@ -25,8 +25,8 @@ function AboutMe() {
     ]
 
     return (
-        <section className="max-w-6xl mx-auto px-4 py-10 scroll-mt-16" id='aboutme'>
-            <div className="flex flex-col md:flex-row gap-10 items-center">
+        <section className="scroll-mt-16 bg-[#593b3e25]" id='aboutme'>
+            <div className="flex flex-col md:flex-row gap-10 items-center max-w-6xl mx-auto px-4 py-10">
                 {/* Image Section */}
                 <div className="w-full md:w-1/3 flex justify-center md:justify-start">
                   <Image

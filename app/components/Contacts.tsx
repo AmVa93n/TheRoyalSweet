@@ -31,34 +31,36 @@ function Contacts() {
   }
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-10 text-center" id='contacts'>
-      <h2 className="text-3xl font-montserrat italic mb-8 text-[#593b3e]">
-        {language === 'en' ? 'Contacts' : 'Contactos'}
-      </h2>
+    <section className="bg-[#593b3e25]" id='contacts'>
+      <div className='max-w-6xl mx-auto px-4 py-10 text-center'>
+        <h2 className="text-3xl font-montserrat italic mb-8 text-[#593b3e]">
+          {language === 'en' ? 'Contacts' : 'Contactos'}
+        </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-[#593b3e]">
-        {/* Email */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold">{text.email}</h3>
-          <button
-            onClick={handleMailTo}
-            className="text-[#593b3e] hover:underline transition-all font-medium"
-          >
-            {text.emailValue}
-          </button>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-[#593b3e]">
+          {/* Email */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold">{text.email}</h3>
+            <button
+              onClick={handleMailTo}
+              className="text-[#593b3e] hover:underline transition-all font-medium"
+            >
+              {text.emailValue}
+            </button>
+          </div>
 
-        {/* Phone */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold">{text.phone}</h3>
-          <p className="font-medium">{text.phoneValue}</p>
-          <p className="text-sm">{text.phoneTimes}</p>
-        </div>
+          {/* Phone */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold">{text.phone}</h3>
+            <p className="font-medium">{text.phoneValue}</p>
+            <p className="text-sm">{text.phoneTimes}</p>
+          </div>
 
-        {/* Address */}
-        <div className="space-y-2">
-          <h3 className="text-xl font-semibold">{text.address}</h3>
-          <p className="font-medium">{text.addressValue}</p>
+          {/* Address */}
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold">{text.address}</h3>
+            <p className="font-medium">{text.addressValue}</p>
+          </div>
         </div>
       </div>
     </section>
