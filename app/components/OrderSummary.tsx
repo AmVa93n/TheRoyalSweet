@@ -21,9 +21,11 @@ function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
 
             </div>
             <hr className="my-4 border-gray-300" />
-            {cart.map((item) => (
-              <OrderSummaryItem key={item.product?._id || item.customCake?.label} item={item} />
-            ))}
+            <div className="flex flex-col gap-3">
+              {cart.map((item) => (
+                <OrderSummaryItem key={item.product?._id || item.customCake?.label} item={item} />
+              ))}
+            </div>
             <hr className="my-4 border-gray-300" />
             <div className="flex items-center mb-2">
                 <span className="flex-grow">{language === 'en' ? 'Items' : 'Produtos'}</span>

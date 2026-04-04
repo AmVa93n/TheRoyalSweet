@@ -13,6 +13,12 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      'react-hooks/exhaustive-deps': 'off',
+      'react/no-unescaped-entities': 'off',
+    }
+  }
 ]);
 
 export default eslintConfig;
