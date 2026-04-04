@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useStore } from '../store';
 import type { CakeComponent, CustomCake } from '../types';
-import { getCustomCakePrice, getCakeComponentPrice, sizes } from '../utils';
+import { getCustomCakePrice, sizes } from '../utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -77,7 +77,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                             >
                                 {doughOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getCakeComponentPrice(component, size).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]}
                                     </option>
                                 ))}
                             </select>
@@ -92,7 +92,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                             >
                                 {fillingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getCakeComponentPrice(component, size).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]}
                                     </option>
                                 ))}
                             </select>
@@ -107,7 +107,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                             >
                                 {frostingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getCakeComponentPrice(component, size).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]}
                                     </option>
                                 ))}
                             </select>
@@ -122,7 +122,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                             >
                                 {toppingOptions.map(component => (
                                     <option key={component._id} value={component._id}>
-                                        {component.name[language]} ({getCakeComponentPrice(component, size).toFixed(2).replace('.', ',')} €)
+                                        {component.name[language]}
                                     </option>
                                 ))}
                             </select>
