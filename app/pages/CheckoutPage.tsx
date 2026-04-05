@@ -9,7 +9,6 @@ import PaymentForm from '../components/PaymentForm';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
-import type { Order } from '../types';
 import OrderSummary from '../components/OrderSummary';
 import { useRouter } from 'next/navigation';
 
@@ -19,18 +18,17 @@ function CheckoutPage() {
     const { language, cart, setCart } = useStore()
     const dayAfterTomorrow = new Date();
     dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
-    const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients' | 'language'>>({
+    const [orderData, setOrderData] = useState({
         name: '',
         email: '',
         phone: '',
         deliveryDate: dayjs(dayAfterTomorrow).format('YYYY-MM-DD'),
         pickup: false,
         shipping: {
-            address: '',
-            city: '',
-            zip: '',
+          address: '',
+          city: '',
+          zip: '',
         },
-        items: cart
     });
     const [clientSecret, setClientSecret] = useState('');
     const isFormValid = orderData.name && orderData.email && orderData.phone && (orderData.pickup || (orderData.shipping.address && orderData.shipping.city && orderData.shipping.zip));
@@ -52,14 +50,14 @@ function CheckoutPage() {
     };
 
     async function createPayment() {
-        const { client_secret } = await appService.createPayment(orderData);
+        const { client_secret } = await appService.createPayment({ ...orderData, items: cart, language });
         setClientSecret(client_secret);
     };
 
     async function onPaymentComplete() {
+        await appService.createOrder({ ...orderData, items: cart, language });
         setCart([]);
         router.push('/');
-        await appService.createOrder({ ...orderData, language });
     }
 
     const stripeOptions = {
