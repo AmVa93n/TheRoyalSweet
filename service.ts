@@ -1,4 +1,4 @@
-import type { Order } from "./types";
+import type { Order } from "@/types";
 
 const appService = {
   async createPayment(order: Partial<Order>) {

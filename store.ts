@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage, type StateStorage } from 'zustand/middleware'
-import type { CartItem } from './types'
+import type { CartItem } from '@/types'
 
 const storage: StateStorage = {
     getItem: (name) => {

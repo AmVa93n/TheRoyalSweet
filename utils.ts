@@ -1,4 +1,4 @@
-import type { CakeComponent, CustomCake, Product } from './types'
+import type { CakeComponent, CustomCake, Product } from '@/types'
 
 export const workHourPrice = 8
 export const electricityHourPrice = 0.54
