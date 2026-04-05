@@ -19,7 +19,7 @@ function CheckoutPage() {
     const { language, cart, setCart } = useStore()
     const dayAfterTomorrow = new Date();
     dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
-    const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients'>>({
+    const [orderData, setOrderData] = useState<Omit<Order, '_id' | 'createdAt' | 'additionalIngredients' | 'language'>>({
         name: '',
         email: '',
         phone: '',
@@ -57,9 +57,9 @@ function CheckoutPage() {
     };
 
     async function onPaymentComplete() {
-        await appService.createOrder(orderData);
         setCart([]);
         router.push('/');
+        await appService.createOrder({ ...orderData, language });
     }
 
     const stripeOptions = {

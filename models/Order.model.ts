@@ -2,10 +2,10 @@ import { Schema, model, models } from "mongoose";
 
 const orderSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User'},
     name: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
+    language: { type: String, enum: ['en', 'pt'] },
     items: [{
         product: { type: Schema.Types.ObjectId, ref: 'Product'},
         customCake: { 

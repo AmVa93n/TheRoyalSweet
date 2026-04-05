@@ -74,6 +74,7 @@ export type Order = {
     name: string,
     email: string,
     phone: string,
+    language: 'en' | 'pt',
     items: CartItem[],
     pickup: boolean,
     shipping: {
