@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from '../store';
+import { useStore } from '@/store';
 
 function TermsAndConditionsPage() {
     const { language } = useStore();

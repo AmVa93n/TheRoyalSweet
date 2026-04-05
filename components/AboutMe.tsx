@@ -1,4 +1,4 @@
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import AboutMeImage from '../assets/aboutme.jpg';
 import Image from 'next/image';
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import { useRouter } from 'next/navigation';
 import { XIcon } from '@phosphor-icons/react';
 import CartItem from './CartItem';

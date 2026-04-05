@@ -1,5 +1,5 @@
 import type { Product } from "../types";
-import { useStore } from "../store";
+import { useStore } from "@/store";
 import Link from "next/link"
 import Image from "next/image";
 

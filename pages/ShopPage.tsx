@@ -1,6 +1,6 @@
 "use client";
 
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import type { Product, ProductCategory } from '../types';
 import ProductCard from '../components/ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';

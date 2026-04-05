@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useStore } from '../store';
+import { useStore } from '@/store';
 
 type PaymentFormProps = {
   onPaymentComplete: () => void;

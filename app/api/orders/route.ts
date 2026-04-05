@@ -2,7 +2,7 @@ import dbConnect from "@/lib/mongodb";
 import orderModel from "@/models/Order.model";
 import transporter from "@/lib/nodemailer";
 import { render } from "@react-email/render";
-import ConfirmationEmail from "@/app/components/ConfirmationEmail";
+import ConfirmationEmail from "@/components/ConfirmationEmail";
 import "@/models/Product.model";
 import "@/models/CakeComponent.model";
 

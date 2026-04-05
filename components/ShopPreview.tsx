@@ -1,4 +1,4 @@
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import ProductCard from './ProductCard';
 import type { Product } from "../types";
 import Link from "next/link"

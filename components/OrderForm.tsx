@@ -1,4 +1,4 @@
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import { Order } from '../types';
 import { useState } from 'react';
 import appService from '../service'
@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
-import PaymentForm from '../components/PaymentForm';
+import PaymentForm from './PaymentForm';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 

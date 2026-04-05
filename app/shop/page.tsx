@@ -1,4 +1,4 @@
-import ShopPage from "../pages/ShopPage";
+import ShopPage from "@/pages/ShopPage";
 import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product.model";
 import "@/models/Ingredient.model";

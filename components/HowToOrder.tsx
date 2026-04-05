@@ -1,4 +1,4 @@
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import { MagnifyingGlassIcon, ShoppingCartIcon, CreditCardIcon, MapPinIcon, ForkKnifeIcon, ChatCenteredDotsIcon } from '@phosphor-icons/react';
 import Link from "next/link"
 

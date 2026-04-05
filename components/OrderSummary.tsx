@@ -1,4 +1,4 @@
-import { useStore } from '../store';
+import { useStore } from '@/store';
 import { Order } from '../types';
 import OrderSummaryItem from './OrderSummaryItem';
 

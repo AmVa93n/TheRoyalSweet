@@ -1,4 +1,4 @@
-import { CartItem } from "@/app/types";
+import { CartItem } from "@/types";
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2026-01-28.clover"

@@ -1,43 +1,31 @@
 "use client";
 
 import { useState } from 'react';
-import { useStore } from '../store';
-import type { CakeComponent, CustomCake } from '../types';
-import { getCustomCakePrice, sizes } from '../utils';
-import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
+import { useStore } from '@/store';
+import type { Product } from '../types';
+import { getProductPrice, sizes } from '@/utils';
+import { PlusIcon, MinusIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import CustomCakeImage from '../assets/customcake.webp';
+import { Carousel } from 'react-responsive-carousel';
 
-function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] }) {
+function ProductPage({ product }: { product: Product }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();
-    const doughOptions = cakeComponents.filter(component => component.category === 'dough');
-    const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
-    const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
-    const toppingOptions = cakeComponents.filter(component => component.category === 'topping');
-    const [customCake, setCustomCake] = useState<CustomCake>({
-        label: '',
-        dough: doughOptions[0],
-        filling: fillingOptions[0],
-        frosting: frostingOptions[0],
-        topping: undefined,
-    });
-    const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
     const [size, setSize] = useState<'small' | 'standard'>('small');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
 
-    function addCustomCake() {
-        if (cart.some(item => item.customCake?.label === label)) {
-            // If a custom cake with the same components is already in the cart, increase its quantity
+    function addProduct() {
+        if (cart.some(item => item.product?._id === product._id)) {
+            // If product already exists in cart, just update the quantity
             const updatedCart = cart.map(item => 
-                item.customCake?.label === label ? {...item, quantity: item.quantity + quantity } : item
+                item.product?._id === product._id ? {...item, quantity: item.quantity + quantity } : item
             );
             setCart(updatedCart);
         } else {
-            // If a custom cake with the same components is not in cart, add it
-            const price = getCustomCakePrice(customCake, size)
-            const updatedCart = [...cart, {customCake: {...customCake, label}, size, quantity, price, note}]
+            // If product is not in cart, add it
+            const price = getProductPrice(product, size)
+            const updatedCart = [...cart, {product, size, quantity, price, note}]
             setCart(updatedCart)
         }
         setIsCartOpen(true) // Open cart after adding product
@@ -48,85 +36,70 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Product Image and Description */}
                 <div>
-                    <div className="text-center mb-4">
-                        <Image
-                            src={CustomCakeImage}
-                            alt={'Custom Cake'}
+                    <div className="mb-4 w-full lg:w-[400px] h-auto">
+                      <Carousel
+                        showThumbs={false}
+                        showStatus={false}
+                        infiniteLoop
+                        autoPlay
+                        renderArrowPrev={(onClickHandler, hasPrev, label) =>
+                          hasPrev && (
+                            <button
+                              onClick={onClickHandler}
+                              aria-label={label}
+                              className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 text-[#593b3e]"
+                            >
+                              <CaretLeftIcon size={30} />
+                            </button>
+                          )
+                        }
+                        renderArrowNext={(onClickHandler, hasNext, label) =>
+                          hasNext && (
+                            <button
+                              onClick={onClickHandler}
+                              aria-label={label}
+                              className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 text-[#593b3e]"
+                            >
+                              <CaretRightIcon size={30} />
+                            </button>
+                          )
+                        }
+                      >
+                        {product.images.map((image, index) => (
+                          <Image
+                            key={index}
+                            src={image}
+                            alt={product._id}
                             width={400}
                             height={400}
-                        />
+                          />
+                        ))}
+                      </Carousel>
                     </div>
+
+                    <p className="mb-4 font-bold">{product.intro?.[language]}</p>
+                    <p className="mb-4">
+                        <b>{language === 'en' ? 'Description' : 'Descrição'}:</b> {product.description?.[language]}
+                    </p>
+                    <p className="mb-4">
+                        <b>{language === 'en' ? 'Serve' : 'Servir'}:</b> {product.serve?.[language]}
+                    </p>
+                    <p className="mb-4">
+                        <b>{language === 'en' ? 'Store' : 'Conservar'}:</b> {product.store?.[language]}
+                    </p>
+                    <p className="mb-4">
+                        <b>{language === 'en' ? 'Contains' : 'Contém'}:</b> {product.allergens?.[language]}
+                    </p>
                 </div>
 
                 {/* Order Info */}
                 <div>
-                    <h2 className="text-3xl font-semibold mb-4">{language === 'en' ? 'Custom Cake' : 'Bolo Personalizado'}</h2>
+                    <h2 className="text-3xl font-semibold mb-4">{product.name?.[language]}</h2>
 
                     <div className="flex flex-col">
                         <p className="text-2xl font-semibold mb-4">
-                            {getCustomCakePrice(customCake, size).toFixed(2).replace('.', ',')} €
+                            {getProductPrice(product, size).toFixed(2).replace('.', ',')} €
                         </p>
-
-                        {/* Components */}
-                        <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Dough' : 'Massa'}</label>
-                            <select
-                                value={customCake.dough._id}
-                                onChange={e => setCustomCake(cake => ({...cake, dough: doughOptions.find(c => c._id === e.target.value)!}))}
-                                className="w-full p-2 rounded bg-white border"
-                            >
-                                {doughOptions.map(component => (
-                                    <option key={component._id} value={component._id}>
-                                        {component.name[language]}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Filling' : 'Recheio'}</label>
-                            <select
-                                value={customCake.filling._id}
-                                onChange={e => setCustomCake(cake => ({...cake, filling: fillingOptions.find(c => c._id === e.target.value)!}))}
-                                className="w-full p-2 rounded bg-white border"
-                            >
-                                {fillingOptions.map(component => (
-                                    <option key={component._id} value={component._id}>
-                                        {component.name[language]}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Frosting' : 'Cobertura'}</label>
-                            <select
-                                value={customCake.frosting._id}
-                                onChange={e => setCustomCake(cake => ({...cake, frosting: frostingOptions.find(c => c._id === e.target.value)!}))}
-                                className="w-full p-2 rounded bg-white border"
-                            >
-                                {frostingOptions.map(component => (
-                                    <option key={component._id} value={component._id}>
-                                        {component.name[language]}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Topping (Optional)' : 'Decoração (Opcional)'}</label>
-                            <select
-                                value={customCake.topping?._id}
-                                onChange={e => setCustomCake(cake => ({...cake, topping: toppingOptions.find(c => c._id === e.target.value)!}))}
-                                className="w-full p-2 rounded bg-white border"
-                            >
-                                {toppingOptions.map(component => (
-                                    <option key={component._id} value={component._id}>
-                                        {component.name[language]}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
 
                         {/* Size */}
                         <div className="mb-6">
@@ -189,7 +162,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
 
                         {/* Add to Cart Button */}
                         <button
-                            onClick={addCustomCake}
+                            onClick={addProduct}
                             className="w-full block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
                         >
                             {language === 'en' ? 'Add to Cart' : 'Adicionar ao carrinho'}
@@ -217,4 +190,4 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
     );
 }
 
-export default CustomCakePage;
+export default ProductPage;
