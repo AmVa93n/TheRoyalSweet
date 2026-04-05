@@ -1,7 +1,8 @@
 import { useStore } from '../store';
+import { Order } from '../types';
 import OrderSummaryItem from './OrderSummaryItem';
 
-function OrderSummary({ orderData }: { orderData: { pickup: boolean } }) {
+function OrderSummary({ orderData }: { orderData: Partial<Order> }) {
     const { language, cart, setIsCartOpen } = useStore()
     const deliveryFee = orderData.pickup ? 0 : 5
     const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
