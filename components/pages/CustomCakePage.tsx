@@ -7,7 +7,7 @@ import { getCustomCakePrice, sizes } from '@/utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import CustomCakeImage from '../assets/customcake.webp';
+import CustomCakeImage from '@/assets/customcake.webp';
 
 function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();

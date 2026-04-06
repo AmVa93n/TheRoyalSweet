@@ -7,7 +7,7 @@ import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '
 import type { JSX } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import CustomCakeImage from '../assets/customcake.webp';
+import CustomCakeImage from '@/assets/customcake.webp';
 import useMediaQuery from '../../hooks/useMediaQuery';
 
 const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
