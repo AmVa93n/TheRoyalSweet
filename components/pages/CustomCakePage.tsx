@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useStore } from '@/store';
-import type { CakeComponent, CustomCake } from '../types';
+import type { CakeComponent, CustomCake } from '../../types';
 import { getCustomCakePrice, sizes } from '@/utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';

@@ -1,4 +1,4 @@
-import HomePage from "@/pages/HomePage";
+import HomePage from "@/components/pages/HomePage";
 import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product.model";
 import "@/models/Ingredient.model";

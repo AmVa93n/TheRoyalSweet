@@ -1,4 +1,4 @@
-import CustomCakePage from "@/pages/CustomCakePage";
+import CustomCakePage from "@/components/pages/CustomCakePage";
 import dbConnect from "@/lib/mongodb";
 import CakeComponent from "@/models/CakeComponent.model";
 import "@/models/Ingredient.model";

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useStore } from '@/store';
-import type { Product } from '../types';
+import type { Product } from '../../types';
 import { getProductPrice, sizes } from '@/utils';
 import { PlusIcon, MinusIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';

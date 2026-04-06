@@ -1,14 +1,14 @@
 "use client";
 
 import { useStore } from '@/store';
-import type { Product, ProductCategory } from '../types';
-import ProductCard from '../components/ProductCard';
+import type { Product, ProductCategory } from '../../types';
+import ProductCard from '../ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
 import type { JSX } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import CustomCakeImage from '../assets/customcake.webp';
-import useMediaQuery from '../hooks/useMediaQuery';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
     { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },

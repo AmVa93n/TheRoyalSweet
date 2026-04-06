@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import OrderSummary from '../components/OrderSummary';
-import OrderForm from '../components/OrderForm';
-import { Order } from '../types';
+import OrderSummary from '../OrderSummary';
+import OrderForm from '../OrderForm';
+import { Order } from '../../types';
 
 function CheckoutPage() {
   const dayAfterTomorrow = new Date();
