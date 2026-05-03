@@ -16,7 +16,6 @@ const productSchema = new Schema(
     }],
     recipeComponents: [{
       name: String,
-      multiplier: Number,
     }],
     category: String,
     workHours: Number,

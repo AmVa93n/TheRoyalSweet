@@ -44,7 +44,6 @@ export type Product = {
     }[],
     recipeComponents: {
         name: string,
-        multiplier: number,
     }[],
     category: ProductCategory
     workHours: number,
