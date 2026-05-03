@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useStore } from '@/store';
-import type { Product } from '../../types';
+import type { Product, Size } from '../../types';
 import { getProductPrice, sizes } from '@/utils';
 import { PlusIcon, MinusIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 function ProductPage({ product }: { product: Product }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();
-    const [size, setSize] = useState<'small' | 'standard'>('small');
+    const [size, setSize] = useState<Size>('medium');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
 
@@ -106,7 +106,7 @@ function ProductPage({ product }: { product: Product }) {
                             <label className="block mb-1 font-semibold">{language === 'en' ? 'Size' : 'Tamanho'}</label>
                             <select
                                 value={size}
-                                onChange={e => setSize(e.target.value as 'small' | 'standard')}
+                                onChange={e => setSize(e.target.value as Size)}
                                 className="w-[50%] p-2 rounded bg-white border"
                             >
                                 {Object.entries(sizes).map(([key, value]) => (

@@ -1,15 +1,16 @@
-import type { CakeComponent, CustomCake, Product } from '@/types'
+import type { CakeComponent, CustomCake, Product, Size } from '@/types'
 
-const cakeComponentCategories = {
-    dough: { en: 'Dough', pt: 'Massa', multiplier: 1.5 },
-    filling: { en: 'Filling', pt: 'Recheio', multiplier: 2 },
-    frosting: { en: 'Frosting', pt: 'Cobertura', multiplier: 1.5 },
-    topping: { en: 'Topping', pt: 'Decoração', multiplier: 1.5 },
+export const cakeComponentCategories = {
+    dough: { en: 'Dough', pt: 'Massa' },
+    filling: { en: 'Filling', pt: 'Recheio' },
+    frosting: { en: 'Frosting', pt: 'Cobertura' },
+    topping: { en: 'Topping', pt: 'Decoração' },
 };
 
 export const sizes = {
-    small: { en: "Small", pt: "Pequeno" },
-    standard: { en: "Standard", pt: "Padrão" },
+    small: { en: "Small", pt: "Pequeno", multiplier: 0.67 },
+    medium: { en: "Medium", pt: "Médio", multiplier: 1 },
+    big: { en: "Big", pt: "Grande", multiplier: 1.5 },
 }
 
 const workHourPrice = 8
@@ -36,22 +37,21 @@ function roundToNextWholeOrHalf(num: number) {
 
 // Product
 
-function getProductIngredientsCost(product: Product, size: string = "small") {
+function getProductIngredientsCost(product: Product, size: Size) {
+    const multiplier = sizes[size].multiplier;
     const ingredientCost = product.recipe.reduce((total, item) => {
-        const component = product.recipeComponents.find(rc => rc.name === item.component);
-        const multiplier = size === "standard" && component ? component.multiplier : 1; // Use component multiplier if size is standard
         return total + (item.ingredient.pricePerUnit * item.amount * multiplier);
     }, 0);
     return ingredientCost;
 }
 
-function getTotalProductCost(product: Product, size: string = "small") {
+function getTotalProductCost(product: Product, size: Size) {
     const electricityCost = getElectricityCost(product)
     const ingredientsCost = getProductIngredientsCost(product, size)
     return ingredientsCost + electricityCost + fixedCostsPerItem
 }
 
-export function getProductPrice(product: Product, size: string = "small") {
+export function getProductPrice(product: Product, size: Size) {
     const totalCost = getTotalProductCost(product, size)
     const workHoursValue = getWorkHoursValue(product)
     const rawPrice = (totalCost + workHoursValue) * gainMultiplier
@@ -60,21 +60,21 @@ export function getProductPrice(product: Product, size: string = "small") {
 
 // Cake Component
 
-function getCakeComponentIngredientsCost(product: CakeComponent, size: string = "small") {
-    const multiplier = size === "standard" ? cakeComponentCategories[product.category].multiplier : 1 // Use category multiplier if size is standard
+function getCakeComponentIngredientsCost(product: CakeComponent, size: Size) {
+    const multiplier = sizes[size].multiplier;
     const ingredientCost = product.recipe.reduce((total, item) => {
         return total + (item.ingredient.pricePerUnit * item.amount * multiplier);
     }, 0);
     return ingredientCost;
 }
 
-function getTotalCakeComponentCost(cakeComponent: CakeComponent, size: string = "small") {
+function getTotalCakeComponentCost(cakeComponent: CakeComponent, size: Size) {
     const electricityCost = getElectricityCost(cakeComponent)
     const ingredientsCost = getCakeComponentIngredientsCost(cakeComponent, size)
     return ingredientsCost + electricityCost
 }
 
-export function getCakeComponentPrice(component: CakeComponent, size: string = "small") {
+export function getCakeComponentPrice(component: CakeComponent, size: Size) {
     const totalCost = getTotalCakeComponentCost(component, size)
     const workHoursValue = getWorkHoursValue(component)
     const rawPrice = (totalCost + workHoursValue) * gainMultiplier
@@ -83,7 +83,7 @@ export function getCakeComponentPrice(component: CakeComponent, size: string = "
 
 // Custom Cake
 
-export function getCustomCakePrice(customCake: CustomCake, size: string = "small") {
+export function getCustomCakePrice(customCake: CustomCake, size: Size) {
     const { dough, filling, frosting, topping } = customCake
     const components = topping ? [dough, filling, frosting, topping] : [dough, filling, frosting]
     const totalCost = components.reduce((total, component) => total + getTotalCakeComponentCost(component, size), 0) + fixedCostsPerItem

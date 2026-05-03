@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useStore } from '@/store';
-import type { CakeComponent, CustomCake } from '../../types';
-import { getCustomCakePrice, sizes } from '@/utils';
+import type { CakeComponent, CustomCake, Size } from '../../types';
+import { getCustomCakePrice, sizes, cakeComponentCategories } from '@/utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -23,7 +23,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
         topping: undefined,
     });
     const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
-    const [size, setSize] = useState<'small' | 'standard'>('small');
+    const [size, setSize] = useState<Size>('medium');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
 
@@ -69,7 +69,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
 
                         {/* Components */}
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Dough' : 'Massa'}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.dough[language]}</label>
                             <select
                                 value={customCake.dough._id}
                                 onChange={e => setCustomCake(cake => ({...cake, dough: doughOptions.find(c => c._id === e.target.value)!}))}
@@ -84,7 +84,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Filling' : 'Recheio'}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.filling[language]}</label>
                             <select
                                 value={customCake.filling._id}
                                 onChange={e => setCustomCake(cake => ({...cake, filling: fillingOptions.find(c => c._id === e.target.value)!}))}
@@ -99,7 +99,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Frosting' : 'Cobertura'}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.frosting[language]}</label>
                             <select
                                 value={customCake.frosting._id}
                                 onChange={e => setCustomCake(cake => ({...cake, frosting: frostingOptions.find(c => c._id === e.target.value)!}))}
@@ -114,7 +114,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{language === 'en' ? 'Topping (Optional)' : 'Decoração (Opcional)'}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.topping[language]} ({language === 'en' ? 'Optional' : 'Opcional'})</label>
                             <select
                                 value={customCake.topping?._id}
                                 onChange={e => setCustomCake(cake => ({...cake, topping: toppingOptions.find(c => c._id === e.target.value)!}))}
@@ -133,7 +133,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                             <label className="block mb-1 font-semibold">{language === 'en' ? 'Size' : 'Tamanho'}</label>
                             <select
                                 value={size}
-                                onChange={e => setSize(e.target.value as 'small' | 'standard')}
+                                onChange={e => setSize(e.target.value as Size)}
                                 className="w-[50%] p-2 rounded bg-white border"
                             >
                                 {Object.entries(sizes).map(([key, value]) => (

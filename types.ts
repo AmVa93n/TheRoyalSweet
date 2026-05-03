@@ -93,7 +93,7 @@ export type Order = {
 export type CartItem = {
     product?: Product,
     customCake?: CustomCake,
-    size: 'small' | 'standard',
+    size: Size,
     quantity: number,
     price: number,
     note?: string
@@ -107,5 +107,6 @@ export type CustomCake = {
     topping?: CakeComponent,
 }
 
+export type Size = "small" | "medium" | "big"
 export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "mini";
 export type CakeComponentCategory = "dough" | "filling" | "frosting" | "topping";
