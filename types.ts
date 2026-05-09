@@ -83,6 +83,7 @@ export type Order = {
         ingredient: Ingredient,
         amount: number
     }[]
+    pending?: boolean
 }
 
 export type CartItem = {

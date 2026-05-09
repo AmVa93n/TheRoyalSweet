@@ -30,7 +30,8 @@ const orderSchema = new Schema(
     additionalIngredients: [{
         ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
         amount: Number
-    }]
+    }],
+    pending: { type: Boolean, default: false }
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
