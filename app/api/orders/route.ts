@@ -3,6 +3,7 @@ import orderModel from "@/models/Order.model";
 import transporter from "@/lib/nodemailer";
 import { render } from "@react-email/render";
 import ConfirmationEmail from "@/components/email/ConfirmationEmail";
+import PendingRequestEmail from "@/components/email/PendingRequestEmail";
 import "@/models/Product.model";
 import "@/models/CakeComponent.model";
 
@@ -26,13 +27,23 @@ export async function POST(req: Request) {
       ]
     });
 
-    // Send email confirmation to the user
-    await transporter.sendMail({
-      from: `"The Royal Sweet Team" <theroyalsweetcakeshop@gmail.com>`,
-      to: newOrder.email,
-      subject: newOrder.language === 'en' ? 'Order Confirmation' : 'Confirmação de Pedido',
-      html: await render(ConfirmationEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),
-    });
+    if (newOrder.pending) {
+      // Send email to the user about pending request
+      await transporter.sendMail({
+        from: `"The Royal Sweet Team" <theroyalsweetcakeshop@gmail.com>`,
+        to: newOrder.email,
+        subject: newOrder.language === 'en' ? 'Request Pending' : 'Pedido Pendente',
+        html: await render(PendingRequestEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),
+      });
+    } else {
+      // Send email to the user about order confirmation
+      await transporter.sendMail({
+        from: `"The Royal Sweet Team" <theroyalsweetcakeshop@gmail.com>`,
+        to: newOrder.email,
+        subject: newOrder.language === 'en' ? 'Order Confirmation' : 'Confirmação de Pedido',
+        html: await render(ConfirmationEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),
+      });
+    }
 
     return Response.json(newOrder);
   } catch (error) {

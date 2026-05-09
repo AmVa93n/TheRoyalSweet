@@ -23,6 +23,7 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
   const isAddressValid = orderData.pickup || orderData.shipping && (orderData.shipping.address && orderData.shipping.city && orderData.shipping.zip)
   const isFormValid = orderData.name && orderData.email && orderData.phone && isAddressValid;
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -35,14 +36,38 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
   }
 
   async function createPayment() {
-    const { client_secret } = await appService.createPayment({ ...orderData, items: cart, language });
-    setClientSecret(client_secret);
+    setLoading(true);
+    try {
+      const { client_secret } = await appService.createPayment({ ...orderData, items: cart, language });
+      setClientSecret(client_secret);
+    } catch (error) {
+      console.error('Error creating payment:', error);
+    }
+    setLoading(false);
   };
 
   async function onPaymentComplete() {
-    await appService.createOrder({ ...orderData, items: cart, language });
-    setCart([]);
-    router.push('/');
+    setLoading(true);
+    try {
+      await appService.createOrder({ ...orderData, items: cart, language });
+      setCart([]);
+      router.push('/');
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
+    setLoading(false);
+  }
+
+  async function sendRequest() {
+    setLoading(true);
+    try {
+      await appService.createOrder({ ...orderData, items: cart, language, pending: true });
+      setCart([]);
+      router.push('/');
+    } catch (error) {
+      console.error('Error sending request:', error);
+    }
+    setLoading(false);
   }
 
   const stripeOptions = {
@@ -162,13 +187,22 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
           <PaymentForm onPaymentComplete={onPaymentComplete} onCancel={() => setClientSecret('')} />
         </Elements>
       ) : (
-        <button
-          onClick={createPayment}
-          className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={!isFormValid || cart.length === 0}
-        >
-          {language === 'en' ? 'Continue' : 'Continuar'}
-        </button>
+        <div className='flex items-center justify-between gap-2'>
+          <button
+            onClick={createPayment}
+            className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!isFormValid || cart.length === 0 || loading}
+          >
+            {language === 'en' ? 'Continue' : 'Continuar'}
+          </button>
+          <button
+            onClick={sendRequest}
+            className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!isFormValid || cart.length === 0 || loading}
+          >
+            {language === 'en' ? 'Send Request' : 'Enviar Pedido'}
+          </button>
+        </div>
       )}
     </div>
   )
