@@ -1,24 +1,24 @@
 import type { CakeComponent, CustomCake, Product, Size } from '@/types'
 
 export const productCategories = {
-    cake: { en: 'Cakes', pt: 'Bolos' },
-    pie: { en: 'Pies', pt: 'Tartes' },
-    cheesecake: { en: 'Cheesecakes', pt: 'Cheesecakes' },
-    dessert: { en: 'Desserts', pt: 'Sobremesas' },
-    brigadeiro: { en: 'Brigadeiros', pt: 'Brigadeiros' },
+    cake: { en: 'Cakes', pt: 'Bolos', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    pie: { en: 'Pies', pt: 'Tartes', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    cheesecake: { en: 'Cheesecakes', pt: 'Cheesecakes', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    dessert: { en: 'Desserts', pt: 'Sobremesas', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    brigadeiro: { en: 'Brigadeiros', pt: 'Brigadeiros', multipliers: { small: 0.5, medium: 1, big: 2 } },
 };
 
 export const cakeComponentCategories = {
-    dough: { en: 'Dough', pt: 'Massa' },
-    filling: { en: 'Filling', pt: 'Recheio' },
-    frosting: { en: 'Frosting', pt: 'Cobertura' },
-    topping: { en: 'Topping', pt: 'Decoração' },
+    dough: { en: 'Dough', pt: 'Massa', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    filling: { en: 'Filling', pt: 'Recheio', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    frosting: { en: 'Frosting', pt: 'Cobertura', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
+    topping: { en: 'Topping', pt: 'Decoração', multipliers: { small: 0.67, medium: 1, big: 1.5 } },
 };
 
 export const sizes = {
-    small: { en: "Small", pt: "Pequeno", multiplier: 0.67 },
-    medium: { en: "Medium", pt: "Médio", multiplier: 1 },
-    big: { en: "Big", pt: "Grande", multiplier: 1.5 },
+    small: { en: "Small", pt: "Pequeno" },
+    medium: { en: "Medium", pt: "Médio" },
+    big: { en: "Big", pt: "Grande" },
 }
 
 const workHourPrice = 8
@@ -37,7 +37,7 @@ function getWorkHoursValue(product: Product | CakeComponent) {
 // Product
 
 function getProductIngredientsCost(product: Product, size: Size) {
-    const multiplier = sizes[size].multiplier;
+    const multiplier = productCategories[product.category].multipliers[size];
     const ingredientCost = product.recipe.reduce((total, item) => {
         return total + (item.ingredient.pricePerUnit * item.amount * multiplier);
     }, 0);
@@ -60,7 +60,7 @@ export function getProductPrice(product: Product, size: Size) {
 // Cake Component
 
 function getCakeComponentIngredientsCost(product: CakeComponent, size: Size) {
-    const multiplier = sizes[size].multiplier;
+    const multiplier = cakeComponentCategories[product.category].multipliers[size];
     const ingredientCost = product.recipe.reduce((total, item) => {
         return total + (item.ingredient.pricePerUnit * item.amount * multiplier);
     }, 0);
