@@ -1,24 +1,25 @@
 "use client";
 
 import { useStore } from '@/store';
-import type { Product, ProductCategory } from '../../types';
+import type { Product, ProductCategory } from '@/types';
 import ProductCard from '../ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
-import type { JSX } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import CustomCakeImage from '@/assets/customcake.webp';
-import useMediaQuery from '../../hooks/useMediaQuery';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { productCategories } from '@/utils';
 
-const categories: { cat: ProductCategory; en: string; pt: string, icon: JSX.Element }[] = [
-    { cat: 'cake', en: 'Cakes', pt: 'Bolos', icon: <CakeIcon size={24} /> },
-    { cat: 'pie', en: 'Pies', pt: 'Tartes', icon: < ChartPieSliceIcon size={24} /> },
-    { cat: 'cheesecake', en: 'Cheesecakes', pt: 'Cheesecakes', icon: <CheeseIcon size={24} /> },
-    { cat: 'dessert', en: 'Desserts', pt: 'Sobremesas', icon: <KnifeIcon size={24} /> },
-    { cat: 'mini', en: 'Minis', pt: 'Individuais', icon: <CookieIcon size={24} /> },
-];
+const categoryIcons = {
+    cake: <CakeIcon size={24} />,
+    pie: <ChartPieSliceIcon size={24} />,
+    cheesecake: <CheeseIcon size={24} />,
+    dessert: <KnifeIcon size={24} />,
+    mini: <CookieIcon size={24} />,
+};
 
 function ShopPage({ products }: { products: Product[] }) {
+    const categories = Object.keys(productCategories) as ProductCategory[];
     const { language } = useStore();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -26,39 +27,39 @@ function ShopPage({ products }: { products: Product[] }) {
         <div className="pt-24 lg:px-24 w-full">
         {/* Top Navigation */}
         <nav className="flex justify-center gap-2 lg:gap-8 lg:my-6 max-w-4xl mx-auto overflow-auto flex-wrap">
-            {categories.map((category) => (
+            {categories.map((c) => (
             <button
-                key={category.cat}
-                onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
+                key={c}
+                onClick={() => window.scrollTo({ top: (document.getElementById(c)?.offsetTop || 0) - 80, behavior: 'smooth' })}
                 className="flex items-center gap-2 text-[#593b3e] border border-[#593b3e] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#593b3e] px-4 py-2 rounded-full duration-300"
             >
-                {!isMobile && category.icon}
-                {category[language]}
+                {!isMobile && categoryIcons[c]}
+                {productCategories[c][language]}
             </button>
             ))}
         </nav>
 
         {/* Fixed Sidebar Navigation */}
         <aside className="fixed top-1/2 left-4 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 space-y-2 z-50 border border-gray-200 dark:border-gray-700 hidden sm:block">
-            {categories.map((category) => (
+            {categories.map((c) => (
                 <button
-                    key={category.cat}
-                    onClick={() => window.scrollTo({ top: (document.getElementById(category.cat)?.offsetTop || 0) - 80, behavior: 'smooth' })}
+                    key={c}
+                    onClick={() => window.scrollTo({ top: (document.getElementById(c)?.offsetTop || 0) - 80, behavior: 'smooth' })}
                     className="block text-sm text-gray-700 dark:text-gray-300 hover:text-[#593b3e] transition-colors cursor-pointer"
                 >
-                    {category[language]}
+                    {productCategories[c][language]}
                 </button>
             ))}
         </aside>
 
         {/* Category Sections */}
-        {categories.map((category) => (
-            <section key={category.cat} id={category.cat} className="my-20">
+        {categories.map((c) => (
+            <section key={c} id={c} className="my-20">
                 <div className="flex items-center justify-center gap-2 mb-6">
-                    <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{category[language]}</h2>
+                    <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{productCategories[c][language]}</h2>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6 w-full">
-                    {products.filter((product) => product.category === category.cat).map((product) => (
+                    {products.filter((product) => product.category === c).map((product) => (
                         <ProductCard key={product._id} product={product} />
                     ))}
                 </div>

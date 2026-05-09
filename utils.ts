@@ -1,5 +1,13 @@
 import type { CakeComponent, CustomCake, Product, Size } from '@/types'
 
+export const productCategories = {
+    cake: { en: 'Cakes', pt: 'Bolos' },
+    pie: { en: 'Pies', pt: 'Tartes' },
+    cheesecake: { en: 'Cheesecakes', pt: 'Cheesecakes' },
+    dessert: { en: 'Desserts', pt: 'Sobremesas' },
+    mini: { en: 'Minis', pt: 'Individuais' },
+};
+
 export const cakeComponentCategories = {
     dough: { en: 'Dough', pt: 'Massa' },
     filling: { en: 'Filling', pt: 'Recheio' },
