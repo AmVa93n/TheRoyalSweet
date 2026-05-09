@@ -69,7 +69,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
 
                         {/* Components */}
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.dough[language]}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.dough.name[language]}</label>
                             <select
                                 value={customCake.dough._id}
                                 onChange={e => setCustomCake(cake => ({...cake, dough: doughOptions.find(c => c._id === e.target.value)!}))}
@@ -84,7 +84,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.filling[language]}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.filling.name[language]}</label>
                             <select
                                 value={customCake.filling._id}
                                 onChange={e => setCustomCake(cake => ({...cake, filling: fillingOptions.find(c => c._id === e.target.value)!}))}
@@ -99,7 +99,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.frosting[language]}</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.frosting.name[language]}</label>
                             <select
                                 value={customCake.frosting._id}
                                 onChange={e => setCustomCake(cake => ({...cake, frosting: frostingOptions.find(c => c._id === e.target.value)!}))}
@@ -114,7 +114,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.topping[language]} ({language === 'en' ? 'Optional' : 'Opcional'})</label>
+                            <label className="block mb-1 font-semibold">{cakeComponentCategories.topping.name[language]} ({language === 'en' ? 'Optional' : 'Opcional'})</label>
                             <select
                                 value={customCake.topping?._id}
                                 onChange={e => setCustomCake(cake => ({...cake, topping: toppingOptions.find(c => c._id === e.target.value)!}))}

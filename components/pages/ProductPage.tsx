@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useStore } from '@/store';
 import type { Product, Size } from '../../types';
-import { getProductPrice, sizes } from '@/utils';
+import { getProductPrice, sizes, productCategories } from '@/utils';
 import { PlusIcon, MinusIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ function ProductPage({ product }: { product: Product }) {
     const [size, setSize] = useState<Size>('medium');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
+    const category = productCategories[product.category]
 
     function addProduct() {
         if (cart.some(item => item.product?._id === product._id)) {
@@ -82,9 +83,6 @@ function ProductPage({ product }: { product: Product }) {
                         <b>{language === 'en' ? 'Description' : 'Descrição'}:</b> {product.description?.[language]}
                     </p>
                     <p className="mb-4">
-                        <b>{language === 'en' ? 'Serve' : 'Servir'}:</b> {product.serve?.[language]}
-                    </p>
-                    <p className="mb-4">
                         <b>{language === 'en' ? 'Store' : 'Conservar'}:</b> {product.store?.[language]}
                     </p>
                     <p className="mb-4">
@@ -111,7 +109,7 @@ function ProductPage({ product }: { product: Product }) {
                             >
                                 {Object.entries(sizes).map(([key, value]) => (
                                     <option key={key} value={key}>
-                                        {value[language]}
+                                        {value[language]} ({category.serving[key as Size][language]})
                                     </option>
                                 ))}
                             </select>

@@ -24,10 +24,6 @@ export type Product = {
         en: string, 
         pt: string
     },
-    serve: {
-        en: string, 
-        pt: string
-    },
     store: {
         en: string, 
         pt: string

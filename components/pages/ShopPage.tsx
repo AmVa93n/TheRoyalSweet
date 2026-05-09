@@ -34,7 +34,7 @@ function ShopPage({ products }: { products: Product[] }) {
                 className="flex items-center gap-2 text-[#593b3e] border border-[#593b3e] text-lg font-medium hover:text-white transition-colors cursor-pointer hover:bg-[#593b3e] px-4 py-2 rounded-full duration-300"
             >
                 {!isMobile && categoryIcons[c]}
-                {productCategories[c][language]}
+                {productCategories[c].name[language]}
             </button>
             ))}
         </nav>
@@ -47,7 +47,7 @@ function ShopPage({ products }: { products: Product[] }) {
                     onClick={() => window.scrollTo({ top: (document.getElementById(c)?.offsetTop || 0) - 80, behavior: 'smooth' })}
                     className="block text-sm text-gray-700 dark:text-gray-300 hover:text-[#593b3e] transition-colors cursor-pointer"
                 >
-                    {productCategories[c][language]}
+                    {productCategories[c].name[language]}
                 </button>
             ))}
         </aside>
@@ -56,7 +56,7 @@ function ShopPage({ products }: { products: Product[] }) {
         {categories.map((c) => (
             <section key={c} id={c} className="my-20">
                 <div className="flex items-center justify-center gap-2 mb-6">
-                    <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{productCategories[c][language]}</h2>
+                    <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">{productCategories[c].name[language]}</h2>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6 w-full">
                     {products.filter((product) => product.category === c).map((product) => (
