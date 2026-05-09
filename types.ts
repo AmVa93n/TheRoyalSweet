@@ -107,5 +107,5 @@ export type CustomCake = {
 }
 
 export type Size = "small" | "medium" | "big"
-export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "mini";
+export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "brigadeiro";
 export type CakeComponentCategory = "dough" | "filling" | "frosting" | "topping";

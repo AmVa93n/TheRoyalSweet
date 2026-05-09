@@ -5,7 +5,7 @@ export const productCategories = {
     pie: { en: 'Pies', pt: 'Tartes' },
     cheesecake: { en: 'Cheesecakes', pt: 'Cheesecakes' },
     dessert: { en: 'Desserts', pt: 'Sobremesas' },
-    mini: { en: 'Minis', pt: 'Individuais' },
+    brigadeiro: { en: 'Brigadeiros', pt: 'Brigadeiros' },
 };
 
 export const cakeComponentCategories = {

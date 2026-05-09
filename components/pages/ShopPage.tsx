@@ -15,7 +15,7 @@ const categoryIcons = {
     pie: <ChartPieSliceIcon size={24} />,
     cheesecake: <CheeseIcon size={24} />,
     dessert: <KnifeIcon size={24} />,
-    mini: <CookieIcon size={24} />,
+    brigadeiro: <CookieIcon size={24} />,
 };
 
 function ShopPage({ products }: { products: Product[] }) {
