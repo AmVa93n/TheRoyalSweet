@@ -31,19 +31,19 @@ function Contacts() {
   }
 
   return (
-    <section className="bg-[#593b3e25]" id='contacts'>
+    <section className="bg-brown/25" id='contacts'>
       <div className='max-w-6xl mx-auto px-4 py-10 text-center'>
-        <h2 className="text-3xl font-montserrat italic mb-8 text-[#593b3e]">
+        <h2 className="text-3xl font-montserrat italic mb-8 text-brown">
           {language === 'en' ? 'Contacts' : 'Contactos'}
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-[#593b3e]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-brown">
           {/* Email */}
           <div className="space-y-2">
             <h3 className="text-xl font-semibold">{text.email}</h3>
             <button
               onClick={handleMailTo}
-              className="text-[#593b3e] hover:underline transition-all font-medium"
+              className="text-brown hover:underline transition-all font-medium"
             >
               {text.emailValue}
             </button>

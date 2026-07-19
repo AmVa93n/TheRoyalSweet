@@ -55,7 +55,7 @@ function ShopPreview({ products }: { products: Product[] }) {
 
   return (
     <section className="mx-auto py-10 scroll-mt-16 w-full" id='products'>
-      <h2 className="text-3xl text-center italic font-montserrat text-[#593b3e]">
+      <h2 className="text-3xl text-center italic font-montserrat text-brown">
         {language === 'en' ? 'Our Desserts' : 'Os Nossos Doces'}
       </h2>
 
@@ -92,7 +92,7 @@ function ShopPreview({ products }: { products: Product[] }) {
 
       <Link
         href={"/shop"}
-        className="block mx-auto w-44 text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
+        className="block mx-auto w-44 text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
       >
         {language === 'en' ? 'See more...' : 'Ver Mais...'}
       </Link>

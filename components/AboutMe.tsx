@@ -25,7 +25,7 @@ function AboutMe() {
     ]
 
     return (
-        <section className="scroll-mt-16 bg-[#593b3e25]" id='aboutme'>
+        <section className="scroll-mt-16 bg-brown/25" id='aboutme'>
             <div className="flex flex-col md:flex-row gap-10 items-center max-w-6xl mx-auto px-4 py-10">
                 {/* Image Section */}
                 <div className="w-full md:w-1/3 flex justify-center md:justify-start">
@@ -38,11 +38,11 @@ function AboutMe() {
 
                 {/* Text Section */}
                 <div className="w-full md:w-2/3">
-                  <h2 className="text-3xl mb-6 font-montserrat italic text-[#593b3e]">
+                  <h2 className="text-3xl mb-6 font-montserrat italic text-brown">
                     Gonçalo Xavier
                   </h2>
 
-                  <div className="space-y-4 text-[#593b3e] font-montserrat italic leading-relaxed">
+                  <div className="space-y-4 text-brown font-montserrat italic leading-relaxed">
                     {text.map((line) => line[language])}
                   </div>
                 </div>

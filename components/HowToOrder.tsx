@@ -41,14 +41,14 @@ function HowToOrder() {
     return (
         <section className="scroll-mt-16" id='how-to-order'>
             <div className="max-w-6xl mx-auto px-4 py-10">
-                <h2 className="text-3xl text-center font-montserrat italic text-[#593b3e]">
+                <h2 className="text-3xl text-center font-montserrat italic text-brown">
                     {language === 'en' ? 'How to Order' : 'Como Encomendar'}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-12 w-4/5 mx-auto my-8">
                     {text.map((step, index) => (
                     <div key={index} className="flex flex-col items-center w-full gap-2">
-                        <step.icon size={80} className="text-[#593b3e]" />
-                        <p className="text-medium mt-2 text-[#593b3e] text-center">
+                        <step.icon size={80} className="text-brown" />
+                        <p className="text-medium mt-2 text-brown text-center">
                         {step[language]}
                         </p>
                     </div>
@@ -56,7 +56,7 @@ function HowToOrder() {
                 </div>
                 <Link
                     href={"/shop"}
-                    className="block mx-auto w-44 text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
+                    className="block mx-auto w-44 text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
                 >
                     {language === 'en' ? 'See all desserts' : 'Ver todos os doces'}
                 </Link>

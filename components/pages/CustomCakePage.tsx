@@ -190,7 +190,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         {/* Add to Cart Button */}
                         <button
                             onClick={addCustomCake}
-                            className="w-full block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
+                            className="w-full block mx-auto text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
                         >
                             {language === 'en' ? 'Add to Cart' : 'Adicionar ao carrinho'}
                         </button>
@@ -202,13 +202,13 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
             <div className="my-8 w-full md:w-[35%] mx-auto flex flex-col sm:flex-row justify-between gap-4">
                 <Link
                     href="/shop"
-                    className="block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
+                    className="block mx-auto text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
                 </Link>
                 <Link
                     href="/checkout"
-                    className="block mx-auto text-center bg-transparent text-[#593b3e] font-bold py-2 px-4 rounded-full border border-[#593b3e] hover:bg-[#593b3e] hover:text-white transition hover:cursor-pointer"
+                    className="block mx-auto text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
                 </Link>
