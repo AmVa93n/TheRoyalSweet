@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body>
+      <body className="bg-brownLightest">
         <Navbar />
         <Cart />
         <main>{children}</main>

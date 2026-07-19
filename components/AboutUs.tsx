@@ -33,11 +33,11 @@ export default function AboutUs() {
             <div className="flex flex-col md:flex-row gap-10 items-center">
                 {/* Text Section */}
                 <div className="w-full md:w-2/3">
-                  <h2 className="text-3xl mb-6 font-montserrat italic text-brown">
+                  <h2 className="text-3xl mb-6 font-montserrat italic text-brownPrimary">
                     {language === 'en' ? 'About Us' : 'Sobre nós'}
                   </h2>
 
-                  <div className="space-y-4 text-brown font-montserrat italic leading-relaxed">
+                  <div className="space-y-4 text-brownDark font-montserrat italic leading-relaxed">
                     {text.map((line) => line[language])}
                   </div>
                 </div>

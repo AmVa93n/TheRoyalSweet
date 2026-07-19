@@ -36,7 +36,7 @@ function ProductPage({ product }: { product: Product }) {
         <div className="pt-24 px-4 max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Product Image and Description */}
-                <div>
+                <div className="text-brownDark">
                     <div className="mb-4 w-full lg:w-[400px] h-auto">
                       <Carousel
                         showThumbs={false}
@@ -48,7 +48,7 @@ function ProductPage({ product }: { product: Product }) {
                             <button
                               onClick={onClickHandler}
                               aria-label={label}
-                              className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 text-brown"
+                              className="absolute top-1/2 left-2 transform -translate-y-1/2 z-10 text-brownDark"
                             >
                               <CaretLeftIcon size={30} />
                             </button>
@@ -59,7 +59,7 @@ function ProductPage({ product }: { product: Product }) {
                             <button
                               onClick={onClickHandler}
                               aria-label={label}
-                              className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 text-brown"
+                              className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10 text-brownDark"
                             >
                               <CaretRightIcon size={30} />
                             </button>
@@ -92,9 +92,9 @@ function ProductPage({ product }: { product: Product }) {
 
                 {/* Order Info */}
                 <div>
-                    <h2 className="text-3xl font-semibold mb-4">{product.name?.[language]}</h2>
+                    <h2 className="text-3xl font-semibold mb-4 text-brownPrimary">{product.name?.[language]}</h2>
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col text-brownDark">
                         <p className="text-2xl font-semibold mb-4">
                             {getProductPrice(product, size).toFixed(2).replace('.', ',')} €
                         </p>
@@ -161,7 +161,7 @@ function ProductPage({ product }: { product: Product }) {
                         {/* Add to Cart Button */}
                         <button
                             onClick={addProduct}
-                            className="w-full block mx-auto text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
+                            className="w-full block mx-auto text-center bg-transparent text-brownDark font-bold py-2 px-4 rounded-full border border-brownLighter hover:bg-brownLighter transition hover:cursor-pointer"
                         >
                             {language === 'en' ? 'Add to Cart' : 'Adicionar ao carrinho'}
                         </button>
@@ -173,13 +173,13 @@ function ProductPage({ product }: { product: Product }) {
             <div className="my-8 w-full md:w-[35%] mx-auto flex flex-col sm:flex-row justify-between gap-4">
                 <Link
                     href="/shop"
-                    className="block mx-auto text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
+                    className="block mx-auto text-center bg-transparent text-brownDark font-bold py-2 px-4 rounded-full border border-brownLighter hover:bg-brownLighter transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Continue Shopping' : 'Continuar a comprar'}
                 </Link>
                 <Link
                     href="/checkout"
-                    className="block mx-auto text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
+                    className="block mx-auto text-center bg-transparent text-brownDark font-bold py-2 px-4 rounded-full border border-brownLighter hover:bg-brownLighter transition hover:cursor-pointer"
                     >
                 {language === 'en' ? 'Proceed to Checkout' : 'Aceder ao checkout'}
                 </Link>

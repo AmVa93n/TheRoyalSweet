@@ -8,11 +8,11 @@
 @theme {
   --font-roboto: Roboto, "sans-serif";
 
-  --color-brown: #593b3e;
-}
-
-body {
-  background-color: #e6dcd5;
+  --color-brownLightest: #e5dece;
+  --color-brownLighter: #d6c1a4;
+  --color-brownLight: #bb9c7d;
+  --color-brownPrimary: #503323;
+  --color-brownDark: #231512;
 }
 
 @keyframes scroll {

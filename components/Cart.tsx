@@ -52,7 +52,7 @@ function Cart() {
           <div className="flex flex-col gap-4 p-4">
             <hr className='border-gray-300' />
 
-            <div className="flex justify-between text-brown">
+            <div className="flex justify-between text-brownDark">
               <p className="text-lg font-semibold">
                 {language === 'en' ? 'Estimated total' : 'Total estimado'}
               </p>
@@ -66,7 +66,7 @@ function Cart() {
                 router.push("/checkout")
                 setIsCartOpen(false)
               }}
-              className="w-full block mx-auto text-center bg-brown text-white font-bold py-2 px-4 rounded-full hover:bg-brown/75 transition hover:cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full block mx-auto text-center bg-brownLighter text-brownDark font-bold py-2 px-4 rounded-full hover:bg-brownLighter/75 transition hover:cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
               disabled={cart.length === 0}
             >
               {language === 'en' ? 'Proceed to Checkout' : 'Ir para o checkout'}

@@ -55,7 +55,7 @@ function ShopPreview({ products }: { products: Product[] }) {
 
   return (
     <section className="mx-auto py-10 scroll-mt-16 w-full" id='products'>
-      <h2 className="text-3xl text-center italic font-montserrat text-brown">
+      <h2 className="text-3xl text-center italic font-montserrat text-brownPrimary">
         {language === 'en' ? 'Our Desserts' : 'Os Nossos Doces'}
       </h2>
 
@@ -84,15 +84,15 @@ function ShopPreview({ products }: { products: Product[] }) {
         {/* Fade edges */}
         {!isMobile && (
           <>
-            <div className="pointer-events-none absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-[#e6dcd5] to-transparent z-10" />
-            <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-[#e6dcd5] to-transparent z-10" />
+            <div className="pointer-events-none absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-brownLightest to-transparent z-10" />
+            <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-brownLightest to-transparent z-10" />
           </>
         )}
       </div>
 
       <Link
         href={"/shop"}
-        className="block mx-auto w-44 text-center bg-transparent text-brown font-bold py-2 px-4 rounded-full border border-brown hover:bg-brown hover:text-white transition hover:cursor-pointer"
+        className="block mx-auto w-44 text-center bg-transparent text-brownDark font-bold py-2 px-4 rounded-full border border-brownLighter hover:bg-brownLighter transition hover:cursor-pointer"
       >
         {language === 'en' ? 'See more...' : 'Ver Mais...'}
       </Link>

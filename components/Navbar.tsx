@@ -7,7 +7,7 @@ import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon,
 import { useStore } from '@/store';
 import FacebookLogo from '../assets/icons8-facebook.svg';
 import InstagramLogo from '../assets/icons8-instagram-logo.svg';
-import Logo from '../assets/the-royal-sweet-high-resolution-logo-transparent.png';
+import Logo from '../assets/logo.png';
 import LangEn from '../assets/gb.png';
 import LangPt from '../assets/pt.png';
 import { usePathname } from 'next/navigation';
@@ -27,16 +27,16 @@ function Navbar() {
   ];
 
   return (
-    <header className="fixed w-full bg-brown shadow z-50">
+    <header className="fixed w-full bg-brownLight shadow z-50">
       <div className="container mx-auto px-3 py-2 flex items-center justify-between">
         {/* Mobile menu icon */}
         <button onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden">
-          <ListIcon size={28} className='text-white' />
+          <ListIcon size={28} className='text-brownPrimary' />
         </button>
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src={Logo} alt="The Royal Sweet Logo" className="w-12 h-12" />
+          <Image src={Logo} alt="The Royal Sweet Logo" className="h-16 w-auto ml-2" />
         </Link>
 
         {/* Desktop nav */}
@@ -45,7 +45,7 @@ function Navbar() {
               <Link
                 key={link.text + "-desktop"}
                 href={`${link.route !== pathname ? link.route : ''}${link.sectionId ? `#${link.sectionId}` : ''}`}
-                className="text-gray-800 hover:text-primary flex items-center gap-1 hover:bg-pink-100 hover:text-brown px-2 py-1 rounded transition-colors rounded-full text-white"
+                className="text-brownPrimary hover:text-brownPrimary flex items-center gap-1 hover:bg-brownLightest px-2 py-1 rounded transition-colors rounded-full"
                 target={link.external ? '_blank' : undefined}
               >
                 {link.icon}
@@ -57,16 +57,16 @@ function Navbar() {
         {/* Right section */}
         <div className="flex items-center gap-3">
           {/* Language Toggle */}
-          <div className="flex border border-[#e6dcd5] rounded-full overflow-hidden text-sm">
+          <div className="flex border border-brownLightest rounded-full overflow-hidden text-sm text-brownPrimary">
             <button
               onClick={() => setLanguage('en')}
-              className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-[#e6dcd5]' : 'cursor-pointer text-white'}`}
+              className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-brownLightest' : 'cursor-pointer'}`}
             >
               <Image src={LangEn} alt="EN" /> EN
             </button>
             <button
               onClick={() => setLanguage('pt')}
-              className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-[#e6dcd5]' : 'cursor-pointer text-white'}`}
+              className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-brownLightest' : 'cursor-pointer'}`}
             >
               <Image src={LangPt} alt="PT" /> PT
             </button>
@@ -82,7 +82,7 @@ function Navbar() {
 
           {/* Cart Icon */}
           <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative cursor-pointer">
-            <ShoppingCartIcon size={24} className='text-white' />
+            <ShoppingCartIcon size={24} className='text-brownPrimary' />
             {cart.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1">
                 {cart.length}
@@ -94,7 +94,7 @@ function Navbar() {
 
       {/* Mobile Menu */}
 
-        <div className={`md:hidden bg-[#e6dcd5] border-t shadow overflow-hidden transition-all duration-300 px-4
+        <div className={`md:hidden bg-brownLightest border-t shadow overflow-hidden transition-all duration-300 px-4
           ${isMobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
           <nav className="flex flex-col gap-3 h-">
             {navLinks.map((link) => (
@@ -104,7 +104,7 @@ function Navbar() {
                   onClick={() => {
                     setMobileMenuOpen(false);
                   }}
-                  className="text-brown flex items-center gap-2"
+                  className="text-brownDark flex items-center gap-2"
                   target={link.external ? '_blank' : undefined}
                 >
                   {link.icon}

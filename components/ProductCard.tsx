@@ -14,7 +14,7 @@ function ProductCard({ product, width = 340 }: ProductCardProps) {
     return (
         <Link
             href={`/product/${product._id}`}
-            className={`bg-pink-50 rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-brown/50 group mx-auto`}
+            className={`bg-white rounded-xl shadow-lg cursor-pointer overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-brownLighter/50 group mx-auto`}
             style={{ width }}
         >
             <div className="w-full h-auto overflow-hidden relative">
@@ -28,10 +28,10 @@ function ProductCard({ product, width = 340 }: ProductCardProps) {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
             <div className="p-4">
-                <h3 className="text-xl text-brown mb-2 truncate">
+                <h3 className="text-xl text-brownDark mb-2 truncate">
                     {product.name[language]}
                 </h3>
-                <p className="text-sm text-gray-700 line-clamp-2 font-light leading-relaxed">
+                <p className="text-sm text-brownDark line-clamp-2 font-light leading-relaxed">
                     {product.description[language]}
                 </p>
             </div>

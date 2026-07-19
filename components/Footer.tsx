@@ -7,11 +7,11 @@ function Footer() {
     const { language } = useStore();
 
     return (
-        <footer className={`text-center py-6 px-4 mt-auto bg-brown`}>
-            <p className={`text-base text-white`}>
+        <footer className={`text-center py-6 px-4 mt-auto bg-brownLight`}>
+            <p className={`text-base text-brownPrimary`}>
                 © {new Date().getFullYear()} The Royal Sweet. {language === 'en' ? 'All rights reserved.' : 'Todos os direitos reservados.'}
             </p>
-            <p className={`text-sm mt-2 text-white`}>
+            <p className={`text-sm mt-2 text-brownPrimary`}>
                 <Link href="/privacy-policy" className="hover:underline">
                     {language === 'en' ? 'Privacy Policy' : 'Política de Privacidade'}
                 </Link>
