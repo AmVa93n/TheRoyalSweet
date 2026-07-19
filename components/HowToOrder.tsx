@@ -22,8 +22,8 @@ function HowToOrder() {
             icon: CreditCardIcon
         },
         {
-            en: '4. Collect your order at our address in the Areeiro area, Lisbon, or choose delivery via Ubereats.',
-            pt: '4. Recolha a sua encomenda na nossa morada na zona do Areeiro, em Lisboa, ou opte por entrega por Ubereats.', 
+            en: '4. Collect your order at our address in the Areeiro area, Lisbon.',
+            pt: '4. Recolha a sua encomenda na nossa morada na zona do Areeiro, em Lisboa.', 
             icon: MapPinIcon
         },
         {

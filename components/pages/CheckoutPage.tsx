@@ -14,7 +14,7 @@ function CheckoutPage() {
     email: '',
     phone: '',
     deliveryDate: dayjs(dayAfterTomorrow).format('YYYY-MM-DD'),
-    pickup: false,
+    pickup: true,
     shipping: {
       address: '',
       city: '',

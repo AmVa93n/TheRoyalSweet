@@ -145,7 +145,7 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
               checked={orderData.pickup}
               onChange={() => setOrderData((prev) => ({ ...prev, pickup: !prev.pickup }))}
               className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:cursor-not-allowed"
-              disabled={!!clientSecret}
+              disabled
           />
           <label>{language === 'en' ? 'Pickup' : 'Recolha no local'}</label>
       </div>
