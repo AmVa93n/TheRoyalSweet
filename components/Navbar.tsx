@@ -3,13 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon } from '@phosphor-icons/react';
+import { ShoppingCartIcon, ListIcon, StorefrontIcon, ShoppingBagIcon, PhoneIcon, ChefHatIcon, ForkKnifeIcon, PencilCircleIcon, FacebookLogoIcon, InstagramLogoIcon } from '@phosphor-icons/react';
 import { useStore } from '@/store';
-import FacebookLogo from '../assets/icons8-facebook.svg';
-import InstagramLogo from '../assets/icons8-instagram-logo.svg';
 import Logo from '../assets/logo.png';
-import LangEn from '../assets/gb.png';
-import LangPt from '../assets/pt.png';
 import { usePathname } from 'next/navigation';
 
 function Navbar() {
@@ -28,7 +24,7 @@ function Navbar() {
 
   return (
     <header className="fixed w-full bg-brownLight shadow z-50">
-      <div className="container mx-auto px-3 py-2 flex items-center justify-between">
+      <div className="container mx-auto px-3 py-1 flex items-center justify-between">
         {/* Mobile menu icon */}
         <button onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden">
           <ListIcon size={28} className='text-brownPrimary' />
@@ -36,7 +32,7 @@ function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src={Logo} alt="Logo" className="h-16 w-auto ml-2" />
+          <Image src={Logo} alt="Logo" className="h-16 w-auto" />
         </Link>
 
         {/* Desktop nav */}
@@ -57,27 +53,19 @@ function Navbar() {
         {/* Right section */}
         <div className="flex items-center gap-3">
           {/* Language Toggle */}
-          <div className="flex border border-brownLightest rounded-full overflow-hidden text-sm text-brownPrimary">
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-2 py-1 flex items-center gap-1 ${language === 'en' ? 'bg-brownLightest' : 'cursor-pointer'}`}
-            >
-              <Image src={LangEn} alt="EN" /> EN
-            </button>
-            <button
-              onClick={() => setLanguage('pt')}
-              className={`px-2 py-1 flex items-center gap-1 ${language === 'pt' ? 'bg-brownLightest' : 'cursor-pointer'}`}
-            >
-              <Image src={LangPt} alt="PT" /> PT
-            </button>
-          </div>
+          <button
+            onClick={() => setLanguage(language === 'en' ? 'pt' : 'en')}
+            className={`border border-brownLightest rounded-md overflow-hidden text-sm text-brownPrimary px-2 py-1 flex items-center gap-1 bg-brownLightest cursor-pointer`}
+          >
+            {language === 'en' ? 'PT' : 'EN'}
+          </button>
 
           {/* Social Icons */}
           <a href="https://www.facebook.com/profile.php?id=100087485048469" target="_blank" rel="noopener noreferrer">
-            <Image src={FacebookLogo} alt="Facebook" className="w-8 h-8" />
+            <FacebookLogoIcon size={24} className='text-brownPrimary' />
           </a>
           <a href="https://www.instagram.com/theroyalsweetblog/" target="_blank" rel="noopener noreferrer">
-            <Image src={InstagramLogo} alt="Instagram" className="w-8 h-8" />
+            <InstagramLogoIcon size={24} className='text-brownPrimary' />
           </a>
 
           {/* Cart Icon */}
