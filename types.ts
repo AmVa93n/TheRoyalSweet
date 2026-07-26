@@ -86,6 +86,12 @@ export type Order = {
     status: OrderStatus,
 }
 
+export type Testimonial = {
+    _id: string,
+    text: string,
+    order: Order,
+}
+
 export type CartItem = {
     product?: Product,
     customCake?: CustomCake,
