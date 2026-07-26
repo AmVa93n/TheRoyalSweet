@@ -7,7 +7,7 @@ export default function OrderSummary({ order, language }: { order: Order; langua
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#e6dcd5', padding: '16px', borderRadius: '8px', maxWidth: '600px', margin: '0 auto', border: '1px solid #e5e7eb' }}>
+    <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#e5dece', padding: '16px', borderRadius: '8px', maxWidth: '600px', margin: '0 auto', border: '1px solid #e5e7eb' }}>
       
       <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
         {language === 'en' ? 'Order Summary' : 'Resumo do Pedido'} ({totalItems})

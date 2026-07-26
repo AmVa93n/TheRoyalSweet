@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       await transporter.sendMail({
         from: `"The Royal Sweet Team" <theroyalsweetcakeshop@gmail.com>`,
         to: newOrder.email,
-        subject: newOrder.language === 'en' ? 'Request Pending' : 'Pedido Pendente',
+        subject: newOrder.language === 'en' ? 'We have received your request' : 'Recebemos o seu pedido',
         html: await render(PendingRequestEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),
       });
     } else {

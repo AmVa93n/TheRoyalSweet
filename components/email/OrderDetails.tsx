@@ -8,6 +8,7 @@ export default function OrderDetails({ order, language }: { order: Order; langua
       style={{
         maxWidth: '600px',
         margin: '0 auto',
+        marginBottom: '24px',
         backgroundColor: '#ffffff',
         borderRadius: '12px',
         border: '1px solid #e5e7eb',
