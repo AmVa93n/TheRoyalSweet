@@ -6,7 +6,7 @@ import ProductCard from '../ProductCard';
 import { CakeIcon, CheeseIcon, ChartPieSliceIcon, CookieIcon, KnifeIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import CustomCakeImage from '@/assets/customcake.webp';
+import CustomCakeImage from '@/assets/bolo-personalizado.jpg';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { productCategories } from '@/utils';
 

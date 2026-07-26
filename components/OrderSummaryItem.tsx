@@ -1,6 +1,6 @@
 import type { CartItem } from "../types";
 import { useStore } from "@/store";
-import CustomCakeImage from '../assets/customcake.webp';
+import CustomCakeImage from '../assets/bolo-personalizado.jpg';
 
 type Props = {
   item: CartItem;

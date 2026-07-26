@@ -1,7 +1,7 @@
 import type { CartItem as CartItemType } from "../types";
 import { PlusIcon, MinusIcon, TrashIcon } from '@phosphor-icons/react';
 import { useStore } from "@/store";
-import CustomCakeImage from '../assets/customcake.webp';
+import CustomCakeImage from '../assets/bolo-personalizado.jpg';
 
 type Props = {
     item: CartItemType;
