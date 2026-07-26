@@ -1,4 +1,5 @@
 import { useStore } from '@/store';
+import { WhatsappLogoIcon } from '@phosphor-icons/react';
 
 function Contacts() {
   const { language } = useStore();
@@ -30,6 +31,10 @@ function Contacts() {
     window.open(`mailto:${text.emailValue}`, '_blank');
   }
 
+  function handleWhatsApp() {
+    window.open(`https://wa.me/L7KMQJTLGANBO1`, '_blank');
+  }
+
   return (
     <section className="bg-brownLighter" id='contacts'>
       <div className='max-w-6xl mx-auto px-4 py-10 text-center'>
@@ -53,7 +58,14 @@ function Contacts() {
           <div className="space-y-2">
             <h3 className="text-xl font-semibold">{text.phone}</h3>
             <p>{text.phoneValue}</p>
-            <p className="text-sm">{text.phoneTimes}</p>
+            {/* <p className="text-sm">{text.phoneTimes}</p> */}
+            <button
+              onClick={handleWhatsApp}
+              className="flex items-center gap-2 mx-auto rounded-full px-3 py-1 bg-brownLight text-brownDark cursor-pointer"
+            >
+              <WhatsappLogoIcon size={24} />
+              WhatsApp
+            </button>
           </div>
 
           {/* Address */}
