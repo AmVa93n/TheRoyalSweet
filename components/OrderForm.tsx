@@ -1,5 +1,5 @@
 import { useStore } from '@/store';
-import { Order } from '../types';
+import { Order, OrderStatus } from '../types';
 import { useState } from 'react';
 import appService from '../service'
 import { Elements } from '@stripe/react-stripe-js';
@@ -49,7 +49,7 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
   async function onPaymentComplete() {
     setLoading(true);
     try {
-      await appService.createOrder({ ...orderData, items: cart, language });
+      await appService.createOrder({ ...orderData, items: cart, language, status: OrderStatus.PAID });
       setCart([]);
       router.push('/');
     } catch (error) {
@@ -61,7 +61,7 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
   async function sendRequest() {
     setLoading(true);
     try {
-      await appService.createOrder({ ...orderData, items: cart, language, pending: true });
+      await appService.createOrder({ ...orderData, items: cart, language, status: OrderStatus.PENDING });
       setCart([]);
       router.push('/');
     } catch (error) {

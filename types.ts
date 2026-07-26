@@ -83,7 +83,7 @@ export type Order = {
         ingredient: Ingredient,
         amount: number
     }[]
-    pending?: boolean
+    status: OrderStatus,
 }
 
 export type CartItem = {
@@ -106,3 +106,12 @@ export type CustomCake = {
 export type Size = "small" | "medium" | "big"
 export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "brigadeiro";
 export type CakeComponentCategory = "dough" | "filling" | "frosting" | "topping";
+
+export enum OrderStatus {
+  PENDING = 1,
+  CONFIRMED = 2,
+  PAID = 3,
+  DELIVERED = 4,
+  DECLINED = 5,
+  CANCELED = 6
+}

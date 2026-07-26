@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/mongodb";
 import orderModel from "@/models/Order.model";
+import { OrderStatus } from "@/types";
 import transporter from "@/lib/nodemailer";
 import { render } from "@react-email/render";
 import ConfirmationEmail from "@/components/email/ConfirmationEmail";
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
       ]
     });
 
-    if (newOrder.pending) {
+    if (newOrder.status === OrderStatus.PENDING) {
       // Send email to the user about pending request
       await transporter.sendMail({
         from: `"Gonçalo Xavier" <goncaloxavierdocaria@gmail.com>`,
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
         subject: newOrder.language === 'en' ? 'We have received your request' : 'Recebemos o seu pedido',
         html: await render(PendingRequestEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),
       });
-    } else {
+    } else if (newOrder.status === OrderStatus.PAID) {
       // Send email to the user about order confirmation
       await transporter.sendMail({
         from: `"Gonçalo Xavier" <goncaloxavierdocaria@gmail.com>`,
