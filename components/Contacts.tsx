@@ -32,7 +32,7 @@ function Contacts() {
   }
 
   function handleWhatsApp() {
-    window.open(`https://wa.me/L7KMQJTLGANBO1`, '_blank');
+    window.open(`https://wa.me/message/L7KMQJTLGANBO1`, '_blank');
   }
 
   return (
