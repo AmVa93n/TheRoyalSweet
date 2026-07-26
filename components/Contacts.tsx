@@ -8,7 +8,7 @@ function Contacts() {
       email: 'Email',
       phone: 'Phone',
       address: 'Address',
-      emailValue: 'theroyalsweetcakeshop@gmail.com',
+      emailValue: 'goncaloxavierdocaria@gmail.com',
       phoneValue: '+351 963783279',
       phoneTimes: 'Tuesday - Sunday; 9h - 19h',
       addressValue: 'Avenida Paris, 1000-228 Lisbon',
@@ -17,7 +17,7 @@ function Contacts() {
       email: 'E-mail',
       phone: 'Telefone',
       address: 'Endereço',
-      emailValue: 'theroyalsweetcakeshop@gmail.com',
+      emailValue: 'goncaloxavierdocaria@gmail.com',
       phoneValue: '+351 963783279',
       phoneTimes: 'Terça - Domingo; 9h - 19h',
       addressValue: 'Avenida Paris, 1000-228 Lisboa',
@@ -43,7 +43,7 @@ function Contacts() {
             <h3 className="text-xl font-semibold">{text.email}</h3>
             <button
               onClick={handleMailTo}
-              className="text-brownDark hover:underline transition-all font-medium"
+              className="text-brownDark hover:underline transition-all"
             >
               {text.emailValue}
             </button>
@@ -52,14 +52,14 @@ function Contacts() {
           {/* Phone */}
           <div className="space-y-2">
             <h3 className="text-xl font-semibold">{text.phone}</h3>
-            <p className="font-medium">{text.phoneValue}</p>
+            <p>{text.phoneValue}</p>
             <p className="text-sm">{text.phoneTimes}</p>
           </div>
 
           {/* Address */}
           <div className="space-y-2">
             <h3 className="text-xl font-semibold">{text.address}</h3>
-            <p className="font-medium">{text.addressValue}</p>
+            <p>{text.addressValue}</p>
           </div>
         </div>
       </div>

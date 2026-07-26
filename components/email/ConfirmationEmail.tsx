@@ -29,7 +29,7 @@ export default function ConfirmationEmail({ order }: { order: Order }) {
       <p style={{ fontSize: '16px', marginBottom: '16px' }}>
         {language === 'en' ? 'Best regards,' : 'Atenciosamente,'}
         <br />
-        {language === 'en' ? 'The Royal Sweet Team' : 'Equipe The Royal Sweet'}
+        Gonçalo Xavier
       </p>
     </div>
   )

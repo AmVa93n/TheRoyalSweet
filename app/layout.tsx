@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Royal Sweet",
+  title: "Gonçalo Xavier Doçaria",
   description: "Gourmet desserts worthy of the crown",
 };
 

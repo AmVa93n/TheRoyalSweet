@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     if (newOrder.pending) {
       // Send email to the user about pending request
       await transporter.sendMail({
-        from: `"The Royal Sweet Team" <theroyalsweetcakeshop@gmail.com>`,
+        from: `"Gonçalo Xavier" <goncaloxavierdocaria@gmail.com>`,
         to: newOrder.email,
         subject: newOrder.language === 'en' ? 'We have received your request' : 'Recebemos o seu pedido',
         html: await render(PendingRequestEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     } else {
       // Send email to the user about order confirmation
       await transporter.sendMail({
-        from: `"The Royal Sweet Team" <theroyalsweetcakeshop@gmail.com>`,
+        from: `"Gonçalo Xavier" <goncaloxavierdocaria@gmail.com>`,
         to: newOrder.email,
         subject: newOrder.language === 'en' ? 'Order Confirmation' : 'Confirmação de Pedido',
         html: await render(ConfirmationEmail({ order: JSON.parse(JSON.stringify(newOrder)) })),

@@ -9,7 +9,7 @@ function PrivacyPolicyPage() {
         en: [
             {
                 title: '1. Data Collection',
-                content: 'The Royal Sweet only collects data strictly necessary to process orders and communicate with the client: name, contact, and email. This data is not shared with third parties.'
+                content: 'Gonçalo Xavier Doçaria only collects data strictly necessary to process orders and communicate with the client: name, contact, and email. This data is not shared with third parties.'
             },
             {
                 title: '2. Purpose',
@@ -35,7 +35,7 @@ function PrivacyPolicyPage() {
         pt: [
             {
                 title: '1. Recolha de Dados',
-                content: 'The Royal Sweet apenas recolhe os dados estritamente necessários para processamento das encomendas e comunicação com o cliente: nome, contacto e email. Estes dados não são partilhados com terceiros.'
+                content: 'Gonçalo Xavier Doçaria apenas recolhe os dados estritamente necessários para processamento das encomendas e comunicação com o cliente: nome, contacto e email. Estes dados não são partilhados com terceiros.'
             },
             {
                 title: '2. Finalidade',

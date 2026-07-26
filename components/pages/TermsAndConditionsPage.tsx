@@ -9,7 +9,7 @@ function TermsAndConditionsPage() {
         en: [
             {
                 title: '1. Company Information',
-                content: 'The Royal Sweet online store is operated by Gonçalo Xavier as a sole proprietor, registered in Portugal under CAE 10712 – Manufacture of cakes and pastry products. Additional information can be provided upon request via the contact form.'
+                content: 'Gonçalo Xavier Doçaria online store is operated by Gonçalo Xavier as a sole proprietor, registered in Portugal under CAE 10712 – Manufacture of cakes and pastry products. Additional information can be provided upon request via the contact form.'
             },
             {
                 title: '2. Products',
@@ -29,7 +29,7 @@ function TermsAndConditionsPage() {
             },
             {
                 title: '6. Liability',
-                content: 'The Royal Sweet is not responsible for any damage to products after delivery, especially if transported by the customer. In the event of a proven error on our part, a fair and appropriate solution will be provided.'
+                content: 'Gonçalo Xavier Doçaria is not responsible for any damage to products after delivery, especially if transported by the customer. In the event of a proven error on our part, a fair and appropriate solution will be provided.'
             },
             {
                 title: '7. Governing Law',
@@ -37,13 +37,13 @@ function TermsAndConditionsPage() {
             },
             {
                 title: '8. Complaints',
-                content: 'In compliance with Portuguese legislation, The Royal Sweet provides access to the Electronic Complaints Book. You may submit a complaint through the official platform: www.livroreclamacoes.pt'
+                content: 'In compliance with Portuguese legislation, Gonçalo Xavier Doçaria provides access to the Electronic Complaints Book. You may submit a complaint through the official platform: www.livroreclamacoes.pt'
             }
         ],
         pt: [
             {
                 title: '1. Informações da Empresa',
-                content: 'A loja online The Royal Sweet é gerida por Gonçalo Xavier, em nome individual, registado em Portugal com o CAE 10712 – Fabricação de bolos e produtos de pastelaria. Dados adicionais podem ser fornecidos mediante pedido através do formulário de contacto.'
+                content: 'A loja online Gonçalo Xavier Doçaria é gerida por Gonçalo Xavier, em nome individual, registado em Portugal com o CAE 10712 – Fabricação de bolos e produtos de pastelaria. Dados adicionais podem ser fornecidos mediante pedido através do formulário de contacto.'
             },
             {
                 title: '2. Produtos',
@@ -63,7 +63,7 @@ function TermsAndConditionsPage() {
             },
             {
                 title: '6. Responsabilidade',
-                content: 'The Royal Sweet não se responsabiliza por danos nos produtos após a entrega, especialmente se forem transportados pelo cliente. Em caso de erro comprovado da nossa parte, será apresentada uma solução justa e adequada.'
+                content: 'Gonçalo Xavier Doçaria não se responsabiliza por danos nos produtos após a entrega, especialmente se forem transportados pelo cliente. Em caso de erro comprovado da nossa parte, será apresentada uma solução justa e adequada.'
             },
             {
                 title: '7. Legislação Aplicável',
@@ -71,7 +71,7 @@ function TermsAndConditionsPage() {
             },
             {
                 title: '8. Reclamações',
-                content: 'Em conformidade com a legislação portuguesa, a The Royal Sweet disponibiliza o acesso ao Livro de Reclamações Eletrónico. Pode submeter uma reclamação através da plataforma oficial: www.livroreclamacoes.pt.'
+                content: 'Em conformidade com a legislação portuguesa, a Gonçalo Xavier Doçaria disponibiliza o acesso ao Livro de Reclamações Eletrónico. Pode submeter uma reclamação através da plataforma oficial: www.livroreclamacoes.pt.'
             }
         ]
     }

@@ -9,7 +9,7 @@ function Footer() {
     return (
         <footer className={`text-center py-6 px-4 mt-auto bg-brownLight`}>
             <p className={`text-base text-brownPrimary`}>
-                © {new Date().getFullYear()} The Royal Sweet. {language === 'en' ? 'All rights reserved.' : 'Todos os direitos reservados.'}
+                © {new Date().getFullYear()} Gonçalo Xavier Doçaria. {language === 'en' ? 'All rights reserved.' : 'Todos os direitos reservados.'}
             </p>
             <p className={`text-sm mt-2 text-brownPrimary`}>
                 <Link href="/privacy-policy" className="hover:underline">

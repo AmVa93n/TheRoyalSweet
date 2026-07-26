@@ -36,7 +36,7 @@ function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src={Logo} alt="The Royal Sweet Logo" className="h-16 w-auto ml-2" />
+          <Image src={Logo} alt="Logo" className="h-16 w-auto ml-2" />
         </Link>
 
         {/* Desktop nav */}
