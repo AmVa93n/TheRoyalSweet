@@ -4,7 +4,6 @@ import { useState } from 'react';
 import appService from '../service'
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, type StripeElementsOptions } from '@stripe/stripe-js';
-import { useRouter } from 'next/navigation';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs';
@@ -15,14 +14,14 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 type Props = {
   orderData: Partial<Order>
   setOrderData: React.Dispatch<React.SetStateAction<Partial<Order>>>
+  setDisplayConfirmation: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function OrderForm({ orderData, setOrderData }: Props) {
+export default function OrderForm({ orderData, setOrderData, setDisplayConfirmation }: Props) {
   const { language, cart, setCart } = useStore()
   const [clientSecret, setClientSecret] = useState('');
   const isAddressValid = orderData.pickup || orderData.shipping && (orderData.shipping.address && orderData.shipping.city && orderData.shipping.zip)
   const isFormValid = orderData.name && orderData.email && orderData.phone && isAddressValid;
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   function handleDataChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -51,7 +50,6 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
     try {
       await appService.createOrder({ ...orderData, items: cart, language, status: OrderStatus.PAID });
       setCart([]);
-      router.push('/');
     } catch (error) {
       console.error('Error creating order:', error);
     }
@@ -63,7 +61,7 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
     try {
       await appService.createOrder({ ...orderData, items: cart, language, status: OrderStatus.PENDING });
       setCart([]);
-      router.push('/');
+      setDisplayConfirmation(true);
     } catch (error) {
       console.error('Error sending request:', error);
     }
@@ -188,13 +186,13 @@ export default function OrderForm({ orderData, setOrderData }: Props) {
         </Elements>
       ) : (
         <div className='flex items-center justify-between gap-2'>
-          <button
+          {/*<button
             onClick={createPayment}
             className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!isFormValid || cart.length === 0 || loading}
           >
             {language === 'en' ? 'Continue' : 'Continuar'}
-          </button>
+          </button> */}
           <button
             onClick={sendRequest}
             className="w-full py-2 px-4 mt-2 rounded bg-gray-900 text-white font-semibold hover:bg-gray-700 transition duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"

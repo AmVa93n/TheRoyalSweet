@@ -82,9 +82,9 @@ function Navbar() {
 
       {/* Mobile Menu */}
 
-        <div className={`md:hidden bg-brownLightest border-t shadow overflow-hidden transition-all duration-300 px-4
+        <div className={`md:hidden bg-brownLightest shadow overflow-hidden transition-all duration-300 px-4
           ${isMobileMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
-          <nav className="flex flex-col gap-3 h-">
+          <nav className="flex flex-col gap-3">
             {navLinks.map((link) => (
                 <Link
                   key={link.text + "-mobile"}
