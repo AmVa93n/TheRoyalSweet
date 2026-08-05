@@ -3,14 +3,13 @@ import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Testimonial } from '../types';
 
-const reviews = [
-  {name: 'Francisca X.', text: 'Fiz a encomenda de uma Pavlova de Framboesa que estava absolutamente divinal. Simpatia no atendimento e sabor 5*'},
-  {name: 'João A.', text: 'Já tinha ouvido boas recomendações e decidimos encomendar uma pavlova grande, com frutos vermelhos, para fazer a vez dos típicos bolos de batizado. E era divinal! Um saborzinho a leite condensado maravilhoso. Aquela montra dá vontade de trazer um de cada. Atendimento muito simpático. Vou fazer mais encomendas certamente.'},
-  {name: 'Beatriz B.', text: 'Só conheci pelo meu bolo de aniversário e foi absolutamente perfeito! Bolo de chocolate com bolinhas de caramelo salgado. Recomendo e vou querer conhecer mais!'},
-  {name: 'Ricardo L.', text: 'Encomendei uma delícia de chocolate grande e superou as expectativas... dos melhores bolos de chocolate que já comi. Sabor intenso e denso. Comprei também um de noz individual e também gostei muito. Recomendo e espero voltar em breve para poder experimentar todas as outras especialidades.'},
-];
-
 function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+
+  function formatName(name: string) {
+    const [firstName, lastName] = name.split(' ');
+    return `${firstName} ${lastName.charAt(0)}.`;
+  }
+
   return (
     <section className="relative" id='testimonials'>
       <Carousel
@@ -41,16 +40,16 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
           )
         }
       >
-        {reviews.map((review, index) => (
+        {testimonials.filter(testimonial => testimonial.order).map(testimonial => (
           <div
-            key={index}
+            key={testimonial._id}
             className="flex flex-col justify-center items-start gap-4 py-12 px-12 lg:px-60 h-150 lg:h-100 bg-opacity-10 bg-brownLighter"
           >
             <p className="italic mb-4 text-xl text-brownDark text-center mx-auto">
-              "{review.text}"
+              "{testimonial.text}"
             </p>
             <p className="text-sm font-bold text-brownDark mx-auto">
-              {review.name}
+              {formatName(testimonial.order.name)}
             </p>
           </div>
         ))}
