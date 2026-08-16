@@ -64,7 +64,7 @@ function PrivacyPolicyPage() {
         <main className="mx-auto max-w-6xl px-4 pt-28 pb-16">
             <header className="mb-8">
                 <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">
                         {language === "pt" ? "Política de Privacidade" : "Privacy Policy"}
                     </h1>
                 </div>
@@ -75,14 +75,14 @@ function PrivacyPolicyPage() {
                     {text[language].map((term) => (
                         <article
                             key={term.title}
-                            className="group scroll-mt-28 rounded-2xl border border-gray-200 bg-white/80 p-5 shadow-sm ring-1 ring-black/5 transition hover:shadow-md dark:border-gray-700 dark:bg-gray-900/60"
+                            className="group scroll-mt-28 rounded-2xl border border-gray-200 bg-white/80 p-5 shadow-sm ring-1 ring-black/5 transition hover:shadow-md"
                         >
                             <div className="flex items-start justify-between gap-3">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                <h3 className="text-lg font-semibold text-gray-900">
                                     {term.title}
                                 </h3>
                             </div>
-                            <p className="mt-2 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
+                            <p className="mt-2 text-[15px] leading-relaxed text-gray-700">
                                 {term.content}
                             </p>
                         </article>

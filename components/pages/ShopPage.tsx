@@ -40,12 +40,12 @@ function ShopPage({ products }: { products: Product[] }) {
         </nav>
 
         {/* Fixed Sidebar Navigation */}
-        <aside className="fixed top-1/2 left-4 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-3 space-y-2 z-50 border border-gray-200 dark:border-gray-700 hidden sm:block">
+        <aside className="fixed top-1/2 left-4 -translate-y-1/2 bg-white shadow-lg rounded-lg p-3 space-y-2 z-50 border border-gray-200 hidden sm:block">
             {categories.map((c) => (
                 <button
                     key={c}
                     onClick={() => window.scrollTo({ top: (document.getElementById(c)?.offsetTop || 0) - 80, behavior: 'smooth' })}
-                    className="block text-sm text-gray-700 dark:text-gray-300 hover:text-brownDark transition-colors cursor-pointer"
+                    className="block text-sm text-gray-700 hover:text-brownDark transition-colors cursor-pointer"
                 >
                     {productCategories[c].name[language]}
                 </button>
