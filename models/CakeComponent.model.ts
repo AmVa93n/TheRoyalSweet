@@ -7,7 +7,7 @@ const cakeComponentSchema = new Schema(
       ingredient: { type: Schema.Types.ObjectId, ref: 'Ingredient'},
       amount: Number
     }],
-    category: String,
+    category: { type: Schema.Types.ObjectId, ref: 'CakeComponentCategory' },
     workHours: Number,
     electricityHours: Number,
     internal: { type: Boolean, default: false },

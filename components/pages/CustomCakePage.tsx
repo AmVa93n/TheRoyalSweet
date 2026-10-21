@@ -2,19 +2,23 @@
 
 import { useState } from 'react';
 import { useStore } from '@/store';
-import type { CakeComponent, CustomCake, Size } from '../../types';
-import { getCustomCakePrice, sizes, cakeComponentCategories } from '@/utils';
+import type { CakeComponent, CustomCake, Size, CakeComponentCategory } from '../../types';
+import { getCustomCakePrice, sizes } from '@/utils';
 import { PlusIcon, MinusIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import CustomCakeImage from '@/assets/bolo-personalizado.jpg';
 
-function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] }) {
+function CustomCakePage({ cakeComponents, cakeComponentCategories }: { cakeComponents: CakeComponent[], cakeComponentCategories: CakeComponentCategory[] }) {
     const { setIsCartOpen, language, cart, setCart } = useStore();
-    const doughOptions = cakeComponents.filter(component => component.category === 'dough');
-    const fillingOptions = cakeComponents.filter(component => component.category === 'filling');
-    const frostingOptions = cakeComponents.filter(component => component.category === 'frosting');
-    const toppingOptions = cakeComponents.filter(component => component.category === 'topping');
+    const doughCategory = cakeComponentCategories.find(category => category.name.en === 'Dough');
+    const doughOptions = cakeComponents.filter(component => component.category?._id === doughCategory?._id);
+    const fillingCategory = cakeComponentCategories.find(category => category.name.en === 'Filling');
+    const fillingOptions = cakeComponents.filter(component => component.category?._id === fillingCategory?._id);
+    const frostingCategory = cakeComponentCategories.find(category => category.name.en === 'Frosting');
+    const frostingOptions = cakeComponents.filter(component => component.category?._id === frostingCategory?._id);
+    const toppingCategory = cakeComponentCategories.find(category => category.name.en === 'Topping');
+    const toppingOptions = cakeComponents.filter(component => component.category?._id === toppingCategory?._id);
     const [customCake, setCustomCake] = useState<CustomCake>({
         label: '',
         dough: doughOptions[0],
@@ -22,7 +26,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
         frosting: frostingOptions[0],
         topping: undefined,
     });
-    const label = `${customCake.dough.name.en}, ${customCake.filling.name.en}, ${customCake.frosting.name.en}, ${customCake.topping?.name.en || ""}`
+    const label = `${customCake.dough?.name.en}, ${customCake.filling?.name.en}, ${customCake.frosting?.name.en}, ${customCake.topping?.name.en || ""}`
     const [size, setSize] = useState<Size>('medium');
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState('')
@@ -69,7 +73,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
 
                         {/* Components */}
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.dough.name[language]}</label>
+                            <label className="block mb-1 font-semibold">{doughCategory?.name[language]}</label>
                             <select
                                 value={customCake.dough._id}
                                 onChange={e => setCustomCake(cake => ({...cake, dough: doughOptions.find(c => c._id === e.target.value)!}))}
@@ -84,7 +88,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.filling.name[language]}</label>
+                            <label className="block mb-1 font-semibold">{fillingCategory?.name[language]}</label>
                             <select
                                 value={customCake.filling._id}
                                 onChange={e => setCustomCake(cake => ({...cake, filling: fillingOptions.find(c => c._id === e.target.value)!}))}
@@ -99,7 +103,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.frosting.name[language]}</label>
+                            <label className="block mb-1 font-semibold">{frostingCategory?.name[language]}</label>
                             <select
                                 value={customCake.frosting._id}
                                 onChange={e => setCustomCake(cake => ({...cake, frosting: frostingOptions.find(c => c._id === e.target.value)!}))}
@@ -114,7 +118,7 @@ function CustomCakePage({ cakeComponents }: { cakeComponents: CakeComponent[] })
                         </div>
 
                         <div className="mb-6">
-                            <label className="block mb-1 font-semibold">{cakeComponentCategories.topping.name[language]} ({language === 'en' ? 'Optional' : 'Opcional'})</label>
+                            <label className="block mb-1 font-semibold">{toppingCategory?.name[language]} ({language === 'en' ? 'Optional' : 'Opcional'})</label>
                             <select
                                 value={customCake.topping?._id}
                                 onChange={e => setCustomCake(cake => ({...cake, topping: toppingOptions.find(c => c._id === e.target.value)!}))}

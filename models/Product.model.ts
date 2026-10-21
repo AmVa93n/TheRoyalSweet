@@ -17,7 +17,7 @@ const productSchema = new Schema(
     recipeComponents: [{
       name: String,
     }],
-    category: String,
+    category: { type: Schema.Types.ObjectId, ref: 'ProductCategory' },
     workHours: Number,
     electricityHours: Number,
     internal: { type: Boolean, default: false },

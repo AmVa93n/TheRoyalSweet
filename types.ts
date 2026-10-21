@@ -92,6 +92,46 @@ export type Testimonial = {
     order: Order,
 }
 
+export type ProductCategory = {
+    _id: string,
+    name: {
+        en: string,
+        pt: string
+    },
+    multipliers: {
+        small: number,
+        medium: number,
+        big: number
+    }
+    serving: {
+        small: {
+            en: string,
+            pt: string
+        },
+        medium: {
+            en: string,
+            pt: string
+        },
+        big: {
+            en: string,
+            pt: string
+        }
+    }
+}
+
+export type CakeComponentCategory = {
+    _id: string,
+    name: {
+        en: string,
+        pt: string
+    },
+    multipliers: {
+        small: number,
+        medium: number,
+        big: number
+    }
+}
+
 export type CartItem = {
     product?: Product,
     customCake?: CustomCake,
@@ -110,8 +150,6 @@ export type CustomCake = {
 }
 
 export type Size = "small" | "medium" | "big"
-export type ProductCategory = "cake" | "pie" | "cheesecake" | "dessert" | "brigadeiro";
-export type CakeComponentCategory = "dough" | "filling" | "frosting" | "topping";
 
 export enum OrderStatus {
   PENDING = 1,

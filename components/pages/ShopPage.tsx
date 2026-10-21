@@ -8,18 +8,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import CustomCakeImage from '@/assets/bolo-personalizado.jpg';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { productCategories } from '@/utils';
+import { JSX } from 'react';
 
-const categoryIcons = {
-    cake: <CakeIcon size={24} />,
-    pie: <ChartPieSliceIcon size={24} />,
-    cheesecake: <CheeseIcon size={24} />,
-    dessert: <KnifeIcon size={24} />,
-    brigadeiro: <CookieIcon size={24} />,
+const categoryIcons: Record<string, JSX.Element> = {
+  "Cakes": <CakeIcon size={24} />,
+  "Pies": <ChartPieSliceIcon size={24} />,
+  "Cheesecakes": <CheeseIcon size={24} />,
+  "Desserts": <KnifeIcon size={24} />,
+  "Brigadeiros": <CookieIcon size={24} />,
 };
 
-function ShopPage({ products }: { products: Product[] }) {
-    const categories = Object.keys(productCategories) as ProductCategory[];
+function ShopPage({ products, productCategories }: { products: Product[], productCategories: ProductCategory[] }) {
     const { language } = useStore();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -27,39 +26,39 @@ function ShopPage({ products }: { products: Product[] }) {
         <div className="pt-24 lg:px-24 w-full">
         {/* Top Navigation */}
         <nav className="flex justify-center gap-2 lg:gap-8 lg:my-6 max-w-4xl mx-auto overflow-auto flex-wrap">
-            {categories.map((c) => (
+            {productCategories.map((c) => (
             <button
-                key={c}
-                onClick={() => window.scrollTo({ top: (document.getElementById(c)?.offsetTop || 0) - 80, behavior: 'smooth' })}
+                key={c._id}
+                onClick={() => window.scrollTo({ top: (document.getElementById(c._id)?.offsetTop || 0) - 80, behavior: 'smooth' })}
                 className="flex items-center gap-2 text-brownDark border border-brownLighter text-lg font-medium transition-colors cursor-pointer hover:bg-brownLighter px-4 py-2 rounded-full duration-300"
             >
-                {!isMobile && categoryIcons[c]}
-                {productCategories[c].name[language]}
+                {!isMobile && categoryIcons[c.name.en]}
+                {c.name[language]}
             </button>
             ))}
         </nav>
 
         {/* Fixed Sidebar Navigation */}
         <aside className="fixed top-1/2 left-4 -translate-y-1/2 bg-white shadow-lg rounded-lg p-3 space-y-2 z-50 border border-gray-200 hidden sm:block">
-            {categories.map((c) => (
+            {productCategories.map((c) => (
                 <button
-                    key={c}
-                    onClick={() => window.scrollTo({ top: (document.getElementById(c)?.offsetTop || 0) - 80, behavior: 'smooth' })}
+                    key={c._id}
+                    onClick={() => window.scrollTo({ top: (document.getElementById(c._id)?.offsetTop || 0) - 80, behavior: 'smooth' })}
                     className="block text-sm text-gray-700 hover:text-brownDark transition-colors cursor-pointer"
                 >
-                    {productCategories[c].name[language]}
+                    {c.name[language]}
                 </button>
             ))}
         </aside>
 
         {/* Category Sections */}
-        {categories.map((c) => (
-            <section key={c} id={c} className="my-20">
+        {productCategories.map((c) => (
+            <section key={c._id} id={c._id} className="my-20">
                 <div className="flex items-center justify-center gap-2 mb-6">
-                    <h2 className="text-3xl text-center font-montserrat italic text-brownPrimary">{productCategories[c].name[language]}</h2>
+                    <h2 className="text-3xl text-center font-montserrat italic text-brownPrimary">{c.name[language]}</h2>
                 </div>
                 <div className="flex flex-wrap justify-center gap-6 w-full">
-                    {products.filter((product) => product.category === c).map((product) => (
+                    {products.filter((product) => product.category._id === c._id).map((product) => (
                         <ProductCard key={product._id} product={product} />
                     ))}
                 </div>
